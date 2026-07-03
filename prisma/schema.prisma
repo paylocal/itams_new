@@ -1,0 +1,284 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  role          String   @default("EMPLOYEE")
+  department    String?
+  position      String?
+  managerId     String?
+  manager       User?    @relation("ManagerEmployee", fields: [managerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subordinates  User[]   @relation("ManagerEmployee")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  requestsCreated    AssetRequest[] @relation("Requester")
+  approvalsGiven     ApprovalStep[]
+  assetsAssigned     Asset[]        @relation("CurrentHolder")
+  handoverAsEmployee Handover[]     @relation("EmployeeHandover")
+  handoverAsIT       Handover[]     @relation("ITHandover")
+}
+
+model AssetRequest {
+  id            String     @id @default(cuid())
+  requestNumber String     @unique
+  requesterId   String
+  requester     User       @relation("Requester", fields: [requesterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  title         String
+  reason        String
+  priority      String     @default("NORMAL")
+  status        String     @default("DRAFT")
+  currentStep   Int        @default(1)
+  isLocked      Boolean    @default(false)
+  totalAmount   Decimal?  @db.Decimal(18, 2)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  completedAt   DateTime?
+
+  approvalSteps  ApprovalStep[]
+  items          RequestItem[]
+  purchaseOrders PurchaseOrderRequest[]
+  assets         Asset[]
+}
+
+model RequestItem {
+  id            String   @id @default(cuid())
+  requestId     String
+  request       AssetRequest @relation(fields: [requestId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId    String
+  category      DeviceCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deviceModelId String?
+  deviceModel   DeviceModel?  @relation(fields: [deviceModelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  customName    String?
+  quantity      Int      @default(1)
+  unitPrice     Decimal? @db.Decimal(18, 2)
+  totalPrice    Decimal? @db.Decimal(18, 2)
+  specs         String?
+
+  poItems POItem[]
+}
+
+model ApprovalStep {
+  id         String       @id @default(cuid())
+  requestId  String
+  request    AssetRequest @relation(fields: [requestId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stepNumber Int
+  approverId String
+  approver   User         @relation(fields: [approverId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  decision   String?
+  comment    String?
+  decidedAt  DateTime?
+  createdAt  DateTime     @default(now())
+
+  @@unique([requestId, stepNumber])
+}
+
+model PurchaseOrder {
+  id              String       @id @default(cuid())
+  poNumber        String       @unique
+  supplierName    String
+  supplierContact String?
+  supplierPhone   String?
+  supplierId      String?
+  supplier        Supplier?    @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  orderDate       DateTime     @default(now())
+  expectedDate    DateTime?
+  actualDate      DateTime?
+  totalAmount     Decimal     @db.Decimal(18, 2)
+  poDocument      String?
+  invoiceDocument String?
+  notes           String?
+  status          String       @default("DRAFT")
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  items    POItem[]
+  requests PurchaseOrderRequest[]
+  assets   Asset[]
+}
+
+model PurchaseOrderRequest {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  requestId       String
+  request         AssetRequest  @relation(fields: [requestId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt       DateTime      @default(now())
+
+  @@unique([purchaseOrderId, requestId])
+}
+
+model POItem {
+  id            String   @id @default(cuid())
+  poId          String
+  po            PurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  requestItemId String?
+  requestItem   RequestItem?  @relation(fields: [requestItemId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productName   String
+  quantity      Int      @default(1)
+  unitPrice     Decimal  @db.Decimal(18, 2)
+  totalPrice    Decimal  @db.Decimal(18, 2)
+}
+
+model Asset {
+  id              String        @id @default(cuid())
+  assetTag        String        @unique
+  qrCode          String        @unique
+  name            String
+  category        String
+  brand           String?
+  model           String?
+  serialNumber    String?
+  status          String        @default("NEW")
+  requestId       String?
+  request         AssetRequest? @relation(fields: [requestId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  purchaseOrderId String?
+  purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  currentHolderId String?
+  currentHolder   User?         @relation("CurrentHolder", fields: [currentHolderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assignedDate    DateTime?
+  location        String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  handoverItems HandoverItem[]
+  assetHistory  AssetHistory[]
+}
+
+model AssetHistory {
+  id          String   @id @default(cuid())
+  assetId     String
+  asset       Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  action      String
+  toUserId    String?
+  performedBy String
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
+model Handover {
+  id                String       @id @default(cuid())
+  handoverNumber    String       @unique
+  requestId         String
+  employeeId        String
+  employee          User         @relation("EmployeeHandover", fields: [employeeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  itStaffId         String
+  itStaff           User         @relation("ITHandover", fields: [itStaffId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  employeeSignature String?
+  employeeSignedAt  DateTime?
+  itSignature       String?
+  itSignedAt        DateTime?
+  status            String       @default("PENDING_EMPLOYEE_SIGN")
+  handoverDate      DateTime
+  pdfUrl            String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  items HandoverItem[]
+}
+
+model HandoverItem {
+  id         String   @id @default(cuid())
+  handoverId String
+  handover   Handover @relation(fields: [handoverId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assetId    String
+  asset      Asset    @relation(fields: [assetId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  condition  String?
+}
+
+model DeviceCategory {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  hasModel  Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  models       DeviceModel[]
+  requestItems RequestItem[]
+}
+
+model DeviceModel {
+  id         String   @id @default(cuid())
+  categoryId String
+  category   DeviceCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  brand      String
+  name       String
+  avgPrice   Decimal? @db.Decimal(18, 2)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  requestItems RequestItem[]
+}
+
+model Supplier {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  contactName String?
+  phone       String?
+  email       String?
+  address     String?
+  taxCode     String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  purchaseOrders PurchaseOrder[]
+}
+
+model Language {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  flag      String?
+  isActive  Boolean  @default(true)
+  isDefault Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  translations Translation[]
+}
+
+model Translation {
+  id          String   @id @default(cuid())
+  languageId  String
+  language    Language @relation(fields: [languageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  key         String
+  value       String
+  category    String?
+  updatedAt   DateTime @updatedAt
+
+  @@unique([languageId, key])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String
+  userName    String
+  action      String
+  entity      String
+  entityId    String
+  oldData     String?
+  newData     String?
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model SLAConfig {
+  id              String   @id @default(cuid())
+  stepName        String   @unique
+  hoursToApprove  Int
+  updatedAt       DateTime @updatedAt
+}

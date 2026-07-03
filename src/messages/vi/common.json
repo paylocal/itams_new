@@ -1,0 +1,58 @@
+{
+  "common": {
+    "appName": "ITAMS",
+    "welcome": "Chào mừng",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "create": "Tạo",
+    "search": "Tìm kiếm",
+    "loading": "Đang tải...",
+    "total": "Tổng",
+    "status": "Trạng thái",
+    "actions": "Thao tác",
+    "back": "Quay lại"
+  },
+  "nav": {
+    "dashboard": "Trang chính",
+    "requests": "Yêu cầu",
+    "createRequest": "Tạo yêu cầu",
+    "approvals": "Chờ phê duyệt",
+    "assets": "Kho tài sản",
+    "purchaseOrders": "Đơn mua hàng",
+    "categories": "Danh mục",
+    "suppliers": "Nhà cung cấp",
+    "users": "Người dùng",
+    "handovers": "Bàn giao",
+    "reports": "Báo cáo"
+  },
+  "roles": {
+    "ADMIN": "Quản trị viên",
+    "MANAGER": "Quản lý",
+    "IT_STAFF": "IT",
+    "PURCHASING": "Mua sắm",
+    "EMPLOYEE": "Nhân viên"
+  },
+  "status": {
+    "DRAFT": "Nháp",
+    "PENDING_MANAGER": "Chờ quản lý",
+    "PENDING_IT": "Chờ IT",
+    "ORDERED": "Đã đặt hàng",
+    "COMPLETED": "Hoàn thành",
+    "REJECTED": "Bị từ chối"
+  },
+  "dashboard": {
+    "title": "Trang chính",
+    "welcome": "Xin chào",
+    "totalRequests": "Tổng yêu cầu",
+    "pending": "Đang xử lý",
+    "completed": "Hoàn thành",
+    "myAssets": "Tài sản của tôi"
+  },
+  "po": {
+    "create": "Tạo PO từ YC"
+  }
+}
