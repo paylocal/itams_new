@@ -81,7 +81,15 @@ export function Header({ user }: { user: HeaderUser }) {
           {user.name && user.name[0] ? user.name[0].toUpperCase() : "?"}
         </div>
         <button
-          onClick={function () { signOut({ callbackUrl: "/login" }); }}
+          onClick={async function () {
+            if (typeof window === "undefined") {
+              signOut({ callbackUrl: "/login" });
+              return;
+            }
+
+            await signOut({ redirect: false });
+            window.location.href = window.location.origin + "/login";
+          }}
           className="p-2 hover:bg-red-50 rounded-full text-red-600"
         >
           <LogOut className="w-5 h-5" />
