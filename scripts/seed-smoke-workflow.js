@@ -84,12 +84,18 @@ async function main() {
   const requester = await prisma.user.findUnique({
     where: { email: "employee1@company.com" },
   });
+  const purchasing = await prisma.user.findUnique({
+    where: { email: "purchase@company.com" },
+  });
 
   if (!manager) {
     throw new Error("Missing manager@company.com user");
   }
   if (!requester) {
     throw new Error("Missing employee1@company.com user");
+  }
+  if (!purchasing) {
+    throw new Error("Missing purchase@company.com user");
   }
 
   if (requester.managerId !== manager.id) {
