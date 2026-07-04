@@ -8,12 +8,29 @@ import { useI18n } from "@/components/i18n-provider";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { locale, setLocale, t } = useI18n();
+  const { locale, setLocale, t, languages } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showLang, setShowLang] = useState(false);
+
+  const activeLanguages =
+    Array.isArray(languages) && languages.length > 0
+      ? languages
+      : [
+          { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
+          { code: "en", name: "English", flag: "🇬🇧" },
+        ];
+
+  const currentLang =
+    activeLanguages.find((l: { code: string }) => l.code === locale) ||
+    activeLanguages[0];
+
+  const tt = (key: string, fallback: string) => {
+    const translated = t(key);
+    return translated === key ? fallback : translated;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +38,12 @@ export default function LoginPage() {
     setError("");
     const res = await signIn("credentials", { email, password, redirect: false });
     if (res?.error) {
-      setError(locale === "vi" ? "Email hoặc mật khẩu không đúng" : "Invalid email or password");
+      setError(
+        tt(
+          "auth.invalidCredentials",
+          locale === "vi" ? "Tên đăng nhập hoặc mật khẩu không đúng" : "Invalid username or password"
+        )
+      );
       setLoading(false);
     } else {
       router.push("/dashboard");
@@ -38,28 +60,24 @@ export default function LoginPage() {
             className="flex items-center gap-1 px-2 py-1 border rounded text-sm hover:bg-gray-50"
           >
             <Globe className="w-3 h-3" />
-            {locale === "vi" ? "VI" : "EN"}
+            {String(currentLang?.code || locale).toUpperCase()}
           </button>
           {showLang && (
             <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-lg z-10">
-              <button
-                onClick={() => {
-                  setLocale("vi");
-                  setShowLang(false);
-                }}
-                className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50"
-              >
-                🇻🇳 Tiếng Việt
-              </button>
-              <button
-                onClick={() => {
-                  setLocale("en");
-                  setShowLang(false);
-                }}
-                className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50"
-              >
-                🇬🇧 English
-              </button>
+              {activeLanguages.map(
+                (lang: { code: string; name?: string; flag?: string | null }) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLocale(lang.code);
+                      setShowLang(false);
+                    }}
+                    className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50"
+                  >
+                    {(lang.flag || "🌐") + " " + (lang.name || lang.code.toUpperCase())}
+                  </button>
+                )
+              )}
             </div>
           )}
         </div>
@@ -68,13 +86,13 @@ export default function LoginPage() {
           {t("common.appName")}
         </h1>
         <p className="text-gray-500 text-center mt-2 mb-6">
-          {locale === "vi" ? "Quản lý Tài sản CNTT" : "IT Asset Management"}
+          {tt("auth.subtitle", locale === "vi" ? "Quản lý Tài sản CNTT" : "IT Asset Management")}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("user.email")}
+              {tt("auth.username", locale === "vi" ? "Tên đăng nhập" : "User")}
             </label>
             <input
               type="email"
@@ -88,7 +106,7 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {locale === "vi" ? "Mật khẩu" : "Password"}
+              {tt("common.password", locale === "vi" ? "Mật khẩu" : "Password")}
             </label>
             <input
               type="password"
@@ -117,13 +135,13 @@ export default function LoginPage() {
 
         <div className="mt-6 p-3 bg-gray-50 rounded-md text-xs text-gray-600">
           <p className="font-semibold mb-1">
-            {locale === "vi" ? "Tài khoản test:" : "Test accounts:"}
+            {tt("auth.testAccounts", locale === "vi" ? "Tài khoản test:" : "Test accounts:")}
           </p>
-          <p>👑 {locale === "vi" ? "Quản trị viên" : "Admin"}: admin@company.com / password123</p>
-          <p>👔 {locale === "vi" ? "Quản lý" : "Manager"}: manager@company.com / password123</p>
+          <p>👑 {tt("roles.ADMIN", locale === "vi" ? "Quản trị viên" : "Admin")}: admin@company.com / password123</p>
+          <p>👔 {tt("roles.MANAGER", locale === "vi" ? "Quản lý" : "Manager")}: manager@company.com / password123</p>
           <p>💻 IT: it1@company.com / password123</p>
-          <p>🛒 {locale === "vi" ? "Mua sắm" : "Purchasing"}: purchase@company.com / password123</p>
-          <p>👤 {locale === "vi" ? "Nhân viên" : "Employee"}: employee1@company.com / password123</p>
+          <p>🛒 {tt("roles.PURCHASING", locale === "vi" ? "Mua sắm" : "Purchasing")}: purchase@company.com / password123</p>
+          <p>👤 {tt("roles.EMPLOYEE", locale === "vi" ? "Nhân viên" : "Employee")}: employee1@company.com / password123</p>
         </div>
       </div>
     </div>
