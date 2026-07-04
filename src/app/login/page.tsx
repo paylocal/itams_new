@@ -32,6 +32,12 @@ export default function LoginPage() {
     return translated === key ? fallback : translated;
   };
 
+  const fallbackText = {
+    loading: locale === "vi" ? "Đang xử lý..." : locale === "fr" ? "Chargement..." : "Loading...",
+    login: locale === "vi" ? "Đăng nhập" : locale === "fr" ? "Se connecter" : "Login",
+    password: locale === "vi" ? "Mật khẩu" : locale === "fr" ? "Mot de passe" : "Password",
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -83,7 +89,7 @@ export default function LoginPage() {
         </div>
 
         <h1 className="text-3xl font-bold text-blue-600 text-center">
-          {t("common.appName")}
+          {tt("common.appName", "ITAMS")}
         </h1>
         <p className="text-gray-500 text-center mt-2 mb-6">
           {tt("auth.subtitle", locale === "vi" ? "Quản lý Tài sản CNTT" : "IT Asset Management")}
@@ -106,7 +112,7 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {tt("common.password", locale === "vi" ? "Mật khẩu" : "Password")}
+              {tt("common.password", fallbackText.password)}
             </label>
             <input
               type="password"
@@ -129,7 +135,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? t("common.loading") : t("common.login")}
+            {loading ? tt("common.loading", fallbackText.loading) : tt("common.login", fallbackText.login)}
           </button>
         </form>
 

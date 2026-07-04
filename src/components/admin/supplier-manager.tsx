@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, X, Save, Building2 } from "lucide-react";
+import { Plus, Edit, Trash2, X, Building2 } from "lucide-react";
 import { useI18n } from "../i18n-provider";
 
 interface Supplier {

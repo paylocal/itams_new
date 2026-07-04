@@ -8,7 +8,13 @@ import { useI18n } from "../i18n-provider";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-const menuByRole: any = {
+type MenuItem = {
+  href: string;
+  labelKey: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+const menuByRole: Record<string, MenuItem[]> = {
   EMPLOYEE: [
     { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
     { href: "/requests", labelKey: "nav.requests", icon: FileText },
@@ -59,7 +65,7 @@ export function Sidebar({ role }: { role: string }) {
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
-        {menu.map((item: any, idx: number) => {
+        {menu.map((item, idx: number) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           const label = t(item.labelKey);

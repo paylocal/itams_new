@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, X, Save, Tag } from "lucide-react";
+import { Plus, Edit, Trash2, X, Tag } from "lucide-react";
 import { useI18n } from "../i18n-provider";
 
 interface Category {

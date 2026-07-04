@@ -4,19 +4,29 @@ import { LogOut, Globe } from "lucide-react";
 import { useState } from "react";
 import { useI18n } from "../i18n-provider";
 
-export function Header({ user }: { user: any }) {
+type HeaderUser = {
+  name?: string | null;
+  role?: string | null;
+};
+
+type HeaderLanguage = {
+  code: string;
+  name?: string | null;
+  flag?: string | null;
+};
+
+export function Header({ user }: { user: HeaderUser }) {
   const i18n = useI18n();
   const locale = i18n ? i18n.locale : "vi";
   const setLocale = i18n ? i18n.setLocale : function () {};
-  const languages = i18n && i18n.languages ? i18n.languages : [];
-  const t = i18n && i18n.t ? i18n.t : function (k: string) { return k; };
+  const languages: HeaderLanguage[] = i18n && i18n.languages ? i18n.languages : [];
   const [show, setShow] = useState(false);
 
   const langs = languages && languages.length > 0
     ? languages
       : [{ code: "vi", name: "Tiếng Việt", flag: "VN" }];
 
-  const cur = langs.find((l: any) => l.code === locale) || null;
+  const cur = langs.find((l) => l.code === locale) || null;
 
   function switchLang(code: string) {
     if (code === locale) return;
@@ -46,7 +56,7 @@ export function Header({ user }: { user: any }) {
               className="absolute right-0 top-full mt-1 bg-white border rounded shadow-lg z-50 min-w-[150px]"
               onMouseLeave={function () { setShow(false); }}
             >
-              {langs.map(function (l: any) {
+              {langs.map(function (l) {
                 return (
                   <button
                     key={l.code}

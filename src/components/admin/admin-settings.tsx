@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Globe, Users, Tags, Building2, FileText, BarChart3 } from "lucide-react";
+import { Globe, Users, Tags, Building2, BarChart3 } from "lucide-react";
 import { useI18n } from "../i18n-provider";
 
 export function AdminSettings() {
