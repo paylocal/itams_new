@@ -5,6 +5,7 @@ type LanguageItem = {
   code: string;
   name?: string | null;
   flag?: string | null;
+  isDefault?: boolean;
 };
 
 type TranslationMap = Record<string, string>;
@@ -20,33 +21,45 @@ const I18nContext = createContext<I18nValue | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState("vi");
-  const [data, setData] = useState<{ languages: LanguageItem[]; translations: TranslationMap; fallbackTranslations: TranslationMap }>({
+  const [data, setData] = useState<{ languages: LanguageItem[]; translations: TranslationMap }>({
     languages: [],
     translations: {},
-    fallbackTranslations: {},
   });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const stored = localStorage.getItem("locale");
-    if (stored && stored !== locale) {
+    if (stored) {
       setLocale(stored);
     }
-  }, [locale]);
+  }, []);
 
   // Load languages
   useEffect(() => {
     fetch("/api/languages")
       .then(r => r.json())
-      .then((l: LanguageItem[]) => setData(d => ({ ...d, languages: Array.isArray(l) ? l : [] })))
-      .catch(() => {});
-  }, []);
+      .then((l: LanguageItem[]) => {
+        const list = Array.isArray(l) ? l : [];
+        setData(d => ({ ...d, languages: list }));
 
-  // Load Vietnamese fallback dictionary once so missing locale keys never render raw key text.
-  useEffect(() => {
-    fetch("/api/translations/vi")
-      .then(r => r.json())
-      .then((t: TranslationMap) => setData(d => ({ ...d, fallbackTranslations: t || {} })))
+        if (list.length === 0) return;
+
+        setLocale((prev) => {
+          // Keep current locale if still active.
+          if (list.some((x) => x.code === prev)) return prev;
+
+          // Prefer stored locale if valid.
+          const stored = typeof window !== "undefined" ? localStorage.getItem("locale") : null;
+          if (stored && list.some((x) => x.code === stored)) return stored;
+
+          // Else use default language from admin settings.
+          const next = list.find((x) => x.isDefault)?.code || list[0].code;
+          if (typeof window !== "undefined") {
+            localStorage.setItem("locale", next);
+          }
+          return next;
+        });
+      })
       .catch(() => {});
   }, []);
 
@@ -83,7 +96,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("locale", l);
       }
     },
-    t: (key: string) => data.translations[key] || data.fallbackTranslations[key] || key,
+    t: (key: string) => data.translations[key] || key,
     languages: data.languages,
   };
 

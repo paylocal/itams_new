@@ -96,7 +96,7 @@ export function LanguageManager() {
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
             <Globe className="w-5 h-5" />
-            {t("admin.languages")}
+            {t("admin.tabLanguages")}
           </h2>
           <p className="text-sm text-gray-500 mt-1">
             {t("admin.subtitle")}
