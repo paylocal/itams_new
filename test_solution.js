@@ -1,85 +1,32 @@
-const fs = require('fs');
-const path = require('../path'); // Adjust the path to your actual module location
+const createTranslation = require('./createTranslation'); // Adjust the import path as necessary
 
-// Mocking fs.promises and path for testing
-jest.mock('fs', () => ({
-    promises: {
-        readFile: jest.fn(),
-        readdir: jest.fn()
-    }
-}));
-
-jest.mock('path', () => ({
-    join: jest.fn((a, b) => `${a}/${b}`)
-}));
-
-describe('isValidFileName', () => {
-    it('should return true for valid file names', () => {
-        expect(isValidFileName('script1.js')).toBe(true);
-        expect(isValidFileName('_script2.js')).toBe(true);
+describe('createTranslation', () => {
+    it('should throw an error for empty source text', async () => {
+        await expect(createTranslation('', 'en')).rejects.toThrow('Source text is required and must be a non-empty string.');
     });
 
-    it('should return false for invalid file names', () => {
-        expect(isValidFileName('script!@.js')).toBe(false);
-        expect(isValidFileName('script..js')).toBe(false);
-        expect(isValidFileName('script.js ')).toBe(false);
-    });
-});
-
-describe('readFile', () => {
-    it('should read and log file content', async () => {
-        fs.promises.readFile.mockResolvedValueOnce('file content');
-        await readFile('/path/to/file.js');
-        expect(fs.promises.readFile).toHaveBeenCalledWith('/path/to/file.js', 'utf8');
-        console.log = jest.fn();
-        expect(console.log).toHaveBeenCalledWith('Content of /path/to/file.js:');
-        expect(console.log).toHaveBeenCalledWith('file content');
+    it('should throw an error for invalid source text type', async () => {
+        await expect(createTranslation(123, 'en')).rejects.toThrow('Source text is required and must be a non-empty string.');
     });
 
-    it('should log error if file read fails', async () => {
-        fs.promises.readFile.mockRejectedValueOnce(new Error('Error'));
-        await readFile('/path/to/file.js');
-        console.error = jest.fn();
-        expect(console.error).toHaveBeenCalledWith('Error reading file /path/to/file.js:', 'Error');
-    });
-});
-
-describe('processFiles', () => {
-    it('should process valid files in directory', async () => {
-        fs.promises.readdir.mockResolvedValueOnce(['script1.js', 'script2.js']);
-        fs.lstatSync.mockReturnValueOnce({ isFile: () => true });
-        fs.promises.readFile.mockResolvedValueOnce('content1');
-        fs.promises.readFile.mockResolvedValueOnce('content2');
-
-        const consoleLog = jest.spyOn(console, 'log');
-        await processFiles('/path/to/dir');
-        expect(fs.promises.readdir).toHaveBeenCalledWith('/path/to/dir');
-        expect(fs.lstatSync).toHaveBeenCalledWith('/path/to/dir/script1.js');
-        expect(fs.promises.readFile).toHaveBeenCalledWith('/path/to/dir/script1.js', 'utf8');
-        expect(consoleLog).toHaveBeenCalledWith('Content of /path/to/dir/script1.js:');
-        expect(consoleLog).toHaveBeenCalledWith('content1');
-        expect(consoleLog).toHaveBeenCalledWith('Content of /path/to/dir/script2.js:');
-        expect(consoleLog).toHaveBeenCalledWith('content2');
+    it('should throw an error for empty target language', async () => {
+        await expect(createTranslation('hello', '')).rejects.toThrow('Target language is required and must be a valid ISO 639-1 language code.');
     });
 
-    it('should skip invalid files', async () => {
-        fs.promises.readdir.mockResolvedValueOnce(['script1.js', 'script!@.js']);
-        fs.lstatSync.mockReturnValueOnce({ isFile: () => true });
-        fs.lstatSync.mockReturnValueOnce({ isFile: () => false });
-
-        const consoleLog = jest.spyOn(console, 'log');
-        await processFiles('/path/to/dir');
-        expect(fs.promises.readdir).toHaveBeenCalledWith('/path/to/dir');
-        expect(fs.lstatSync).toHaveBeenCalledWith('/path/to/dir/script1.js');
-        expect(fs.promises.readFile).not.toHaveBeenCalled();
-        expect(consoleLog).toHaveBeenCalledWith('Skipping invalid file: /path/to/dir/script!@.js');
+    it('should throw an error for invalid target language type', async () => {
+        await expect(createTranslation('hello', 123)).rejects.toThrow('Target language is required and must be a valid ISO 639-1 language code.');
     });
 
-    it('should log error if directory read fails', async () => {
-        fs.promises.readdir.mockRejectedValueOnce(new Error('Error'));
-        await processFiles('/path/to/dir');
-        const consoleError = jest.spyOn(console, 'error');
-        expect(fs.promises.readdir).toHaveBeenCalledWith('/path/to/dir');
-        expect(consoleError).toHaveBeenCalledWith('Error processing files:', 'Error');
+    it('should throw an error for unsupported source text', async () => {
+        await expect(createTranslation('unknown', 'en')).rejects.toThrow('Translation not available for the provided source text and target language.');
+    });
+
+    it('should throw an error for unsupported target language', async () => {
+        await expect(createTranslation('hello', 'pt')).rejects.toThrow('Target language is required and must be a valid ISO 639-1 language code.');
+    });
+
+    it('should return the correct translation', async () => {
+        const result = await createTranslation('hello', 'es');
+        expect(result).toEqual({ translation: 'Hola' });
     });
 });
