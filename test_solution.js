@@ -1,54 +1,40 @@
-const deleteTranslation = require('./deleteTranslation');
+const fixEnv = require('./fixEnv'); // Adjust the import path as necessary
 
-describe('deleteTranslation function', () => {
-  it('should return an error for invalid parameters', (done) => {
-    deleteTranslation({}, (err, result) => {
-      expect(err).toBeInstanceOf(Error);
-      expect(err.message).toBe('Invalid parameters');
-      done();
+describe('fixEnv function', () => {
+    it('should throw an error if env is not an object', () => {
+        expect(() => fixEnv(null)).toThrowError('Invalid input: env must be an object');
+        expect(() => fixEnv('not an object')).toThrowError('Invalid input: env must be an object');
+        expect(() => fixEnv(123)).toThrowError('Invalid input: env must be an object');
     });
-  });
 
-  it('should return an error for negative translation ID', (done) => {
-    deleteTranslation({ translationId: -1 }, (err, result) => {
-      expect(err).toBeInstanceOf(Error);
-      expect(err.message).toBe('Invalid translation ID');
-      done();
+    it('should return the original object if no changes are needed', () => {
+        const env = { key1: 'value1', key2: 456 };
+        expect(fixEnv(env)).toEqual({ key1: 'value1', key2: 456 });
     });
-  });
 
-  it('should return an error for zero translation ID', (done) => {
-    deleteTranslation({ translationId: 0 }, (err, result) => {
-      expect(err).toBeInstanceOf(Error);
-      expect(err.message).toBe('Invalid translation ID');
-      done();
+    it('should fix typos in string values', () => {
+        const env = { key1: 'typo', key2: 'typo_value' };
+        expect(fixEnv(env)).toEqual({ key1: 'type', key2: 'type_value' });
     });
-  });
 
-  it('should return an error for non-numeric translation ID', (done) => {
-    deleteTranslation({ translationId: 'abc' }, (err, result) => {
-      expect(err).toBeInstanceOf(Error);
-      expect(err.message).toBe('Invalid translation ID');
-      done();
+    it('should handle empty objects', () => {
+        const env = {};
+        expect(fixEnv(env)).toEqual({});
     });
-  });
 
-  it('should return a success message and ID for valid translation ID', (done) => {
-    deleteTranslation({ translationId: 123 }, (err, result) => {
-      expect(err).toBeNull();
-      expect(result).toEqual({ message: 'Translation deleted', id: 123 });
-      done();
+    it('should handle large objects', () => {
+        const env = { ...Array.from({ length: 1000 }, (_, i) => ({ key: `key${i}`, value: `value${i}` })) };
+        const fixedEnv = fixEnv(env);
+        expect(fixedEnv).toEqual({ ...Array.from({ length: 1000 }, (_, i) => ({ key: `key${i}`, value: `value${i}` })) });
     });
-  });
 
-  it('should handle large translation ID correctly', (done) => {
-    deleteTranslation({ translationId: Number.MAX_SAFE_INTEGER }, (err, result) => {
-      expect(err).toBeNull();
-      expect(result).toEqual({
-        message: 'Translation deleted',
-        id: Number.MAX_SAFE_INTEGER
-      });
-      done();
+    it('should handle negative and zero values', () => {
+        const env = { key1: -1, key2: 0, key3: 'no-typo' };
+        expect(fixEnv(env)).toEqual({ key1: -1, key2: 0, key3: 'no-typo' });
     });
-  });
+
+    it('should handle non-string values', () => {
+        const env = { key1: 'value1', key2: 456, key3: true, key4: null };
+        expect(fixEnv(env)).toEqual({ key1: 'value1', key2: 456, key3: true, key4: null });
+    });
 });
