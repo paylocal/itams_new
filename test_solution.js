@@ -1,32 +1,54 @@
-const createTranslation = require('./createTranslation'); // Adjust the import path as necessary
+const deleteTranslation = require('./deleteTranslation');
 
-describe('createTranslation', () => {
-    it('should throw an error for empty source text', async () => {
-        await expect(createTranslation('', 'en')).rejects.toThrow('Source text is required and must be a non-empty string.');
+describe('deleteTranslation function', () => {
+  it('should return an error for invalid parameters', (done) => {
+    deleteTranslation({}, (err, result) => {
+      expect(err).toBeInstanceOf(Error);
+      expect(err.message).toBe('Invalid parameters');
+      done();
     });
+  });
 
-    it('should throw an error for invalid source text type', async () => {
-        await expect(createTranslation(123, 'en')).rejects.toThrow('Source text is required and must be a non-empty string.');
+  it('should return an error for negative translation ID', (done) => {
+    deleteTranslation({ translationId: -1 }, (err, result) => {
+      expect(err).toBeInstanceOf(Error);
+      expect(err.message).toBe('Invalid translation ID');
+      done();
     });
+  });
 
-    it('should throw an error for empty target language', async () => {
-        await expect(createTranslation('hello', '')).rejects.toThrow('Target language is required and must be a valid ISO 639-1 language code.');
+  it('should return an error for zero translation ID', (done) => {
+    deleteTranslation({ translationId: 0 }, (err, result) => {
+      expect(err).toBeInstanceOf(Error);
+      expect(err.message).toBe('Invalid translation ID');
+      done();
     });
+  });
 
-    it('should throw an error for invalid target language type', async () => {
-        await expect(createTranslation('hello', 123)).rejects.toThrow('Target language is required and must be a valid ISO 639-1 language code.');
+  it('should return an error for non-numeric translation ID', (done) => {
+    deleteTranslation({ translationId: 'abc' }, (err, result) => {
+      expect(err).toBeInstanceOf(Error);
+      expect(err.message).toBe('Invalid translation ID');
+      done();
     });
+  });
 
-    it('should throw an error for unsupported source text', async () => {
-        await expect(createTranslation('unknown', 'en')).rejects.toThrow('Translation not available for the provided source text and target language.');
+  it('should return a success message and ID for valid translation ID', (done) => {
+    deleteTranslation({ translationId: 123 }, (err, result) => {
+      expect(err).toBeNull();
+      expect(result).toEqual({ message: 'Translation deleted', id: 123 });
+      done();
     });
+  });
 
-    it('should throw an error for unsupported target language', async () => {
-        await expect(createTranslation('hello', 'pt')).rejects.toThrow('Target language is required and must be a valid ISO 639-1 language code.');
+  it('should handle large translation ID correctly', (done) => {
+    deleteTranslation({ translationId: Number.MAX_SAFE_INTEGER }, (err, result) => {
+      expect(err).toBeNull();
+      expect(result).toEqual({
+        message: 'Translation deleted',
+        id: Number.MAX_SAFE_INTEGER
+      });
+      done();
     });
-
-    it('should return the correct translation', async () => {
-        const result = await createTranslation('hello', 'es');
-        expect(result).toEqual({ translation: 'Hola' });
-    });
+  });
 });
