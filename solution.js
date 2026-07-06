@@ -1,43 +1,57 @@
+const fs = require('fs');
+const path = require('path');
+
 /**
- * Create translations API endpoint.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {void}
+ * Validates a file's name against specific criteria.
+ * @param {string} fileName - The name of the file to validate.
+ * @returns {boolean} True if valid, false otherwise.
  */
-function createTranslationsAPI(req, res) {
-  const { text } = req.body;
-
-  if (!text) {
-    res.status(400).send('Text is required');
-    return;
-  }
-
-  if (typeof text !== 'string') {
-    res.status(400).send('Invalid text format');
-    return;
-  }
-
-  // Handle edge cases: empty string, whitespace
-  if (!text.trim()) {
-    res.status(400).send('Text cannot be empty or whitespace');
-    return;
-  }
-
-  try {
-    // Simulate translation logic
-    const translatedText = translate(text);
-    res.json({ originalText: text, translatedText });
-  } catch (error) {
-    res.status(500).send('Error processing translation');
-  }
+function isValidFileName(fileName) {
+    const allowedChars = /^[a-zA-Z0-9_]+$/;
+    return allowedChars.test(fileName);
 }
 
 /**
- * Translate the provided text.
- * @param {string} text - The text to translate.
- * @returns {string} - The translated text.
+ * Reads a file and logs its content with error handling.
+ * @param {string} filePath - The path to the file to read.
  */
-function translate(text) {
-  // Placeholder for actual translation logic
-  return text.toUpperCase(); // Example transformation
+async function readFile(filePath) {
+    try {
+        const data = await fs.promises.readFile(filePath, 'utf8');
+        console.log(`Content of ${filePath}:`);
+        console.log(data);
+    } catch (error) {
+        console.error(`Error reading file ${filePath}:`, error.message);
+    }
 }
+
+/**
+ * Processes all files in a directory with error handling and validation.
+ * @param {string} dirPath - The path to the directory containing the files.
+ */
+async function processFiles(dirPath) {
+    try {
+        const files = await fs.promises.readdir(dirPath);
+        for (const file of files) {
+            const filePath = path.join(dirPath, file);
+            if (fs.lstatSync(filePath).isFile() && isValidFileName(file)) {
+                await readFile(filePath);
+            } else {
+                console.warn(`Skipping invalid file: ${filePath}`);
+            }
+        }
+    } catch (error) {
+        console.error('Error processing files:', error.message);
+    }
+}
+
+// Example usage:
+const legacyScriptsDir = path.join(__dirname, 'tools', 'legacy-scripts');
+processFiles(legacyScriptsDir).catch(console.error);
+```
+
+This code includes:
+1. Validation for file names to ensure they contain only allowed characters.
+2. Error handling when reading files.
+3. A loop to process all files in the specified directory.
+4. Logging of errors and warnings.
