@@ -13,9 +13,13 @@ export default async function UsersPage() {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      manager: { select: { name: true } },
+      manager: { select: { id: true, name: true } },
     },
   });
 
-  return <UsersManager users={users} />;
+  const managers = users
+    .filter((u) => u.role === "MANAGER" || u.role === "LEAD")
+    .map((u) => ({ id: u.id, name: u.name, role: u.role }));
+
+  return <UsersManager users={users} managers={managers} />;
 }

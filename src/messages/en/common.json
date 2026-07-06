@@ -26,12 +26,14 @@
     "categories": "Categories",
     "suppliers": "Suppliers",
     "users": "Users",
+    "userGroups": "User Groups",
     "handovers": "Handovers",
     "reports": "Reports"
   },
   "roles": {
     "ADMIN": "Administrator",
     "MANAGER": "Manager",
+    "LEAD": "Lead",
     "IT_STAFF": "IT Staff",
     "PURCHASING": "Purchasing",
     "EMPLOYEE": "Employee"
@@ -39,6 +41,7 @@
   "status": {
     "DRAFT": "Draft",
     "PENDING_MANAGER": "Pending Manager",
+    "PENDING_LEAD": "Pending Lead",
     "PENDING_IT": "Pending IT",
     "ORDERED": "Ordered",
     "COMPLETED": "Completed",

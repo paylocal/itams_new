@@ -31,8 +31,10 @@ export function getStatusColor(status: string) {
   const map: Record<string, string> = {
     DRAFT: "bg-gray-100 text-gray-700",
     PENDING_MANAGER: "bg-yellow-100 text-yellow-700",
+    PENDING_LEAD: "bg-amber-100 text-amber-700",
     PENDING_IT: "bg-blue-100 text-blue-700",
     PENDING_PURCHASING: "bg-purple-100 text-purple-700",
+    PENDING_ADMIN: "bg-rose-100 text-rose-700",
     PURCHASING_CREATED_PO: "bg-orange-100 text-orange-700",
     ORDERED: "bg-indigo-100 text-indigo-700",
     DELIVERED: "bg-cyan-100 text-cyan-700",
@@ -48,8 +50,10 @@ export function getStatusLabel(status: string) {
   const map: Record<string, string> = {
     DRAFT: "Nhap",
     PENDING_MANAGER: "Cho Quan ly",
+    PENDING_LEAD: "Cho Lead",
     PENDING_IT: "Cho IT",
     PENDING_PURCHASING: "Cho Mua sam",
+    PENDING_ADMIN: "Cho Admin",
     PURCHASING_CREATED_PO: "Da tao PO",
     ORDERED: "Da dat hang",
     DELIVERED: "Da nhan hang",

@@ -42,6 +42,16 @@ export default async function DashboardPage() {
         status: "COMPLETED",
       },
     });
+  } else if (session.user.role === "LEAD") {
+    stats.pending = await prisma.assetRequest.count({
+      where: { status: "PENDING_LEAD" },
+    });
+    stats.total = await prisma.assetRequest.count({
+      where: { status: { in: ["PENDING_MANAGER", "PENDING_LEAD", "PENDING_IT", "ORDERED", "COMPLETED"] } },
+    });
+    stats.completed = await prisma.assetRequest.count({
+      where: { status: "COMPLETED" },
+    });
   } else if (session.user.role === "IT_STAFF") {
     stats.pending = await prisma.assetRequest.count({
       where: { status: "PENDING_IT" },
@@ -59,7 +69,7 @@ export default async function DashboardPage() {
     stats.total = await prisma.assetRequest.count();
     stats.pending = await prisma.assetRequest.count({
       where: {
-        status: { in: ["PENDING_MANAGER", "PENDING_IT", "ORDERED"] },
+        status: { in: ["PENDING_MANAGER", "PENDING_LEAD", "PENDING_IT", "ORDERED"] },
       },
     });
     stats.completed = await prisma.assetRequest.count({

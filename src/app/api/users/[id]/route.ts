@@ -16,7 +16,7 @@ export async function PUT(
   }
 
   try {
-    const { name, role, department, password } = await req.json();
+    const { name, role, department, password, managerId } = await req.json();
     const old = await prisma.user.findUnique({ where: { id: params.id } });
     if (!old) {
       return NextResponse.json({ error: "Khong tim thay" }, { status: 404 });
@@ -26,6 +26,7 @@ export async function PUT(
     if (name !== undefined) data.name = name;
     if (role !== undefined) data.role = role;
     if (department !== undefined) data.department = department || null;
+    if (managerId !== undefined) data.managerId = managerId || null;
     if (password) data.passwordHash = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.update({
@@ -39,7 +40,7 @@ export async function PUT(
       action: "UPDATE",
       entity: "User",
       entityId: params.id,
-      oldData: { name: old.name, role: old.role, department: old.department },
+      oldData: { name: old.name, role: old.role, department: old.department, managerId: old.managerId },
       newData: data,
       description: "Cap nhat nguoi dung: " + user.name,
       req,

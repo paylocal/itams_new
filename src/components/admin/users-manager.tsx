@@ -12,14 +12,16 @@ interface User {
   role: string;
   department: string | null;
   isActive: boolean;
-  manager: { name: string } | null;
+  managerId?: string | null;
+  manager: { id: string; name: string } | null;
 }
 
 interface Props {
   users: User[];
+  managers: Array<{ id: string; name: string; role: string }>;
 }
 
-export function UsersManager({ users: initial }: Props) {
+export function UsersManager({ users: initial, managers }: Props) {
   const router = useRouter();
   const { t } = useI18n();
   const [users, setUsers] = useState(initial);
@@ -30,6 +32,7 @@ export function UsersManager({ users: initial }: Props) {
     email: "",
     name: "",
     role: "EMPLOYEE",
+    managerId: "",
     department: "",
     password: "",
   });
@@ -50,6 +53,7 @@ export function UsersManager({ users: initial }: Props) {
       email: user.email,
       name: user.name,
       role: user.role,
+      managerId: user.managerId || "",
       department: user.department || "",
       password: "",
     });
@@ -58,7 +62,7 @@ export function UsersManager({ users: initial }: Props) {
 
   const resetForm = () => {
     setEditing(null);
-    setForm({ email: "", name: "", role: "EMPLOYEE", department: "", password: "" });
+    setForm({ email: "", name: "", role: "EMPLOYEE", managerId: "", department: "", password: "" });
     setShowForm(false);
     setError("");
   };
@@ -81,11 +85,15 @@ export function UsersManager({ users: initial }: Props) {
         ? "/api/users/" + editing.id
         : "/api/users";
       const method = editing ? "PUT" : "POST";
+      const payload = {
+        ...form,
+        managerId: form.role === "EMPLOYEE" ? form.managerId || null : null,
+      };
 
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -127,6 +135,7 @@ export function UsersManager({ users: initial }: Props) {
   const roleColors: Record<string, string> = {
     ADMIN: "bg-red-100 text-red-700",
     MANAGER: "bg-blue-100 text-blue-700",
+    LEAD: "bg-indigo-100 text-indigo-700",
     IT_STAFF: "bg-green-100 text-green-700",
     PURCHASING: "bg-yellow-100 text-yellow-700",
     EMPLOYEE: "bg-gray-100 text-gray-700",
@@ -207,9 +216,23 @@ export function UsersManager({ users: initial }: Props) {
             >
               <option value="EMPLOYEE">EMPLOYEE</option>
               <option value="MANAGER">MANAGER</option>
+              <option value="LEAD">LEAD</option>
               <option value="IT_STAFF">IT_STAFF</option>
               <option value="PURCHASING">PURCHASING</option>
               <option value="ADMIN">ADMIN</option>
+            </select>
+            <select
+              value={form.managerId}
+              onChange={(e) => setForm({ ...form, managerId: e.target.value })}
+              className="border rounded px-3 py-2 text-sm"
+              disabled={form.role !== "EMPLOYEE"}
+            >
+              <option value="">Khong gan manager</option>
+              {managers.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name} ({m.role})
+                </option>
+              ))}
             </select>
             {!editing && (
               <input

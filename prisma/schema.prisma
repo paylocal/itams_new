@@ -22,11 +22,52 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  requestsCreated    AssetRequest[] @relation("Requester")
+  requestsCreated    AssetRequest[]      @relation("Requester")
   approvalsGiven     ApprovalStep[]
-  assetsAssigned     Asset[]        @relation("CurrentHolder")
-  handoverAsEmployee Handover[]     @relation("EmployeeHandover")
-  handoverAsIT       Handover[]     @relation("ITHandover")
+  assetsAssigned     Asset[]             @relation("CurrentHolder")
+  handoverAsEmployee Handover[]          @relation("EmployeeHandover")
+  handoverAsIT       Handover[]          @relation("ITHandover")
+  userGroups         UserGroupMember[]
+}
+
+model UserGroup {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  level       Int      @default(1)
+  description String?
+  createdAt   DateTime @default(now())
+
+  members  UserGroupMember[]
+  workflows WorkflowRule[]
+}
+
+model UserGroupMember {
+  id        String   @id @default(cuid())
+  groupId   String
+  group     UserGroup @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  joinedAt  DateTime @default(now())
+
+  @@unique([groupId, userId])
+}
+
+model WorkflowRule {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  conditionType   String
+  operator        String
+  value           Decimal  @db.Decimal(18, 2)
+  category        String?
+  priority        String?
+  requiredLevel   Int
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  groupId   String?
+  group     UserGroup? @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model AssetRequest {
@@ -64,8 +105,6 @@ model RequestItem {
   unitPrice     Decimal? @db.Decimal(18, 2)
   totalPrice    Decimal? @db.Decimal(18, 2)
   specs         String?
-
-  poItems POItem[]
 }
 
 model ApprovalStep {
@@ -89,8 +128,6 @@ model PurchaseOrder {
   supplierName    String
   supplierContact String?
   supplierPhone   String?
-  supplierId      String?
-  supplier        Supplier?    @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   orderDate       DateTime     @default(now())
   expectedDate    DateTime?
   actualDate      DateTime?
@@ -212,7 +249,7 @@ model DeviceCategory {
 model DeviceModel {
   id         String   @id @default(cuid())
   categoryId String
-  category   DeviceCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  category   DeviceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   brand      String
   name       String
   avgPrice   Decimal? @db.Decimal(18, 2)

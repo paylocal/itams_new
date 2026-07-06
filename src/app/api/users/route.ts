@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { email, name, role, department, password } = await req.json();
+    const { email, name, role, department, password, managerId } = await req.json();
 
     if (!email || !name || !password) {
       return NextResponse.json({ error: "Thieu thong tin" }, { status: 400 });
@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
         name,
         role: role || "EMPLOYEE",
         department: department || null,
+        managerId: managerId || null,
         passwordHash,
       },
     });
@@ -43,7 +44,7 @@ export async function POST(req: NextRequest) {
       action: "CREATE",
       entity: "User",
       entityId: user.id,
-      newData: { email, name, role, department },
+      newData: { email, name, role, department, managerId: managerId || null },
       description: "Tao nguoi dung: " + name,
       req,
     });

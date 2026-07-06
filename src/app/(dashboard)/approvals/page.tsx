@@ -16,10 +16,12 @@ export default async function ApprovalsPage() {
       status: "PENDING_MANAGER",
       requester: { managerId: session.user.id },
     };
+  } else if (session.user.role === "LEAD") {
+    where = { status: "PENDING_LEAD" };
   } else if (session.user.role === "IT_STAFF") {
     where = { status: "PENDING_IT" };
   } else if (session.user.role === "ADMIN") {
-    where = { status: { in: ["PENDING_MANAGER", "PENDING_IT", "PENDING_PURCHASING"] } };
+    where = { status: { in: ["PENDING_MANAGER", "PENDING_LEAD", "PENDING_IT", "PENDING_ADMIN", "PENDING_PURCHASING"] } };
   } else {
     redirect("/dashboard");
   }

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Globe, Users, Tags, Building2, BarChart3 } from "lucide-react";
+import { Globe, Users, Tags, Building2, BarChart3, CheckSquare } from "lucide-react";
 import { useI18n } from "../i18n-provider";
 
 export function AdminSettings() {
@@ -13,6 +13,13 @@ export function AdminSettings() {
       icon: Users,
       label: t("nav.users"),
       desc: "Quan ly nguoi dung, phan quyen",
+    },
+    {
+      key: "groups",
+      href: "/admin/groups",
+      icon: Users,
+      label: t("nav.userGroups"),
+      desc: "Quan ly nhom user: nhom 1, nhom manager, nhom leader...",
     },
     {
       key: "categories",
@@ -34,6 +41,13 @@ export function AdminSettings() {
       icon: Globe,
       label: t("nav.languages"),
       desc: "Quan ly ngon ngu va ban dich",
+    },
+    {
+      key: "workflow",
+      href: "/admin/workflow",
+      icon: CheckSquare,
+      label: "Workflow Config",
+      desc: "Cau hinh nguong duyet Lead theo gia tri don",
     },
     {
       key: "reports",

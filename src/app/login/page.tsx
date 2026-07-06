@@ -71,7 +71,7 @@ export default function LoginPage() {
           {showLang && (
             <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-lg z-10">
               {activeLanguages.map(
-                (lang: { code: string; name?: string; flag?: string | null }) => (
+                (lang) => (
                   <button
                     key={lang.code}
                     onClick={() => {

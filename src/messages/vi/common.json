@@ -26,12 +26,14 @@
     "categories": "Danh mục",
     "suppliers": "Nhà cung cấp",
     "users": "Người dùng",
+    "userGroups": "Nhóm user",
     "handovers": "Bàn giao",
     "reports": "Báo cáo"
   },
   "roles": {
     "ADMIN": "Quản trị viên",
     "MANAGER": "Quản lý",
+    "LEAD": "Truong nhom",
     "IT_STAFF": "IT",
     "PURCHASING": "Mua sắm",
     "EMPLOYEE": "Nhân viên"
@@ -39,6 +41,7 @@
   "status": {
     "DRAFT": "Nháp",
     "PENDING_MANAGER": "Chờ quản lý",
+    "PENDING_LEAD": "Cho Lead",
     "PENDING_IT": "Chờ IT",
     "ORDERED": "Đã đặt hàng",
     "COMPLETED": "Hoàn thành",

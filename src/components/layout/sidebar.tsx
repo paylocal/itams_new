@@ -26,6 +26,11 @@ const menuByRole: Record<string, MenuItem[]> = {
     { href: "/approvals", labelKey: "nav.approvals", icon: CheckSquare },
     { href: "/requests", labelKey: "nav.requests", icon: FileText },
   ],
+  LEAD: [
+    { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
+    { href: "/approvals", labelKey: "nav.approvals", icon: CheckSquare },
+    { href: "/requests", labelKey: "nav.requests", icon: FileText },
+  ],
   IT_STAFF: [
     { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
     { href: "/approvals", labelKey: "nav.approvals", icon: CheckSquare },
@@ -40,12 +45,14 @@ const menuByRole: Record<string, MenuItem[]> = {
   ],
   ADMIN: [
     { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
+    { href: "/admin/dashboard", labelKey: "Admin Dashboard", icon: BarChart3 },
+    { href: "/admin/workflow", labelKey: "Workflow Config", icon: CheckSquare },
     { href: "/admin/languages", labelKey: "nav.languages", icon: Globe },
+    { href: "/admin/groups", labelKey: "nav.userGroups", icon: Users },
     { href: "/admin/users", labelKey: "nav.users", icon: Users },
     { href: "/admin/categories", labelKey: "nav.categories", icon: Tag },
     { href: "/admin/suppliers", labelKey: "nav.suppliers", icon: Users },
     { href: "/requests", labelKey: "nav.requests", icon: FileText },
-    { href: "/approvals", labelKey: "nav.approvals", icon: CheckSquare },
     { href: "/assets", labelKey: "nav.assets", icon: Package },
     { href: "/handovers", labelKey: "nav.handovers", icon: FileSignature },
     { href: "/purchase-orders", labelKey: "nav.purchaseOrders", icon: ShoppingCart },

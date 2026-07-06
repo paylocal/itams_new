@@ -23,6 +23,7 @@ export function AdminDashboard({ stats, role }: Props) {
   const roleLabels: Record<string, string> = {
     ADMIN: t("Quản trị viên", "Administrator"),
     MANAGER: t("Quản lý", "Manager"),
+    LEAD: t("Truong nhom", "Lead"),
     IT_STAFF: t("IT", "IT Staff"),
     PURCHASING: t("Mua sắm", "Purchasing"),
     EMPLOYEE: t("Nhân viên", "Employee"),
@@ -94,6 +95,17 @@ export function AdminDashboard({ stats, role }: Props) {
               <Clock className="w-8 h-8 mx-auto text-yellow-600 mb-2" />
               <p className="font-medium text-yellow-700">
                 {t("Duyet yeu cau", "Approve Requests")}
+              </p>
+            </Link>
+          )}
+          {role === "LEAD" && (
+            <Link
+              href="/approvals"
+              className="p-4 border-2 border-dashed border-amber-300 rounded-lg hover:bg-amber-50 text-center"
+            >
+              <Clock className="w-8 h-8 mx-auto text-amber-600 mb-2" />
+              <p className="font-medium text-amber-700">
+                {t("Duyet vuot nguong", "Approve High-Value Requests")}
               </p>
             </Link>
           )}
