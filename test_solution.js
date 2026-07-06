@@ -1,85 +1,47 @@
-const { createTranslationsAPI } = require('./path_to_your_module'); // Adjust the path accordingly
+const processUserData = require('./path-to-your-script');
 
-describe('createTranslationsAPI', () => {
-  it('should return 400 status when text is missing', async () => {
-    const req = { body: {} };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn()
-    };
+describe('processUserData', () => {
+  it('should resolve with processed user data for valid userId', async () => {
+    const mockUserId = 'user123';
+    const mockUserData = { id: mockUserId, name: 'John Doe', age: '30', isAdmin: true };
+    jest.spyOn(global, 'fetchUserDataFromDatabase').mockResolvedValue(mockUserData);
 
-    createTranslationsAPI(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith('Text is required');
+    const result = await processUserData(mockUserId);
+    expect(result).toEqual({ ...mockUserData, age: 30, isAdmin: true });
+    expect(fetchUserDataFromDatabase).toHaveBeenCalledWith(mockUserId);
   });
 
-  it('should return 400 status when text is not a string', async () => {
-    const req = { body: { text: 123 } };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn()
-    };
-
-    createTranslationsAPI(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith('Invalid text format');
+  it('should reject with error for invalid userId', async () => {
+    const mockUserId = '';
+    try {
+      await processUserData(mockUserId);
+      fail('Expected an error to be thrown');
+    } catch (error) {
+      expect(error.message).toBe('Invalid user ID');
+    }
   });
 
-  it('should return 400 status when text is empty', async () => {
-    const req = { body: { text: '' } };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn()
-    };
+  it('should reject with error if user not found', async () => {
+    const mockUserId = 'user123';
+    jest.spyOn(global, 'fetchUserDataFromDatabase').mockResolvedValue(null);
 
-    createTranslationsAPI(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith('Text cannot be empty or whitespace');
+    try {
+      await processUserData(mockUserId);
+      fail('Expected an error to be thrown');
+    } catch (error) {
+      expect(error.message).toBe(`User not found: ${mockUserId}`);
+    }
   });
 
-  it('should return 400 status when text is whitespace', async () => {
-    const req = { body: { text: '   ' } };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn()
-    };
+  it('should reject with error if database fetch fails', async () => {
+    const mockUserId = 'user123';
+    jest.spyOn(global, 'fetchUserDataFromDatabase').mockRejectedValue(new Error('Database error'));
 
-    createTranslationsAPI(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith('Text cannot be empty or whitespace');
-  });
-
-  it('should return the translated text', async () => {
-    const req = { body: { text: 'hello' } };
-    const res = {
-      json: jest.fn()
-    };
-
-    createTranslationsAPI(req, res);
-
-    expect(res.json).toHaveBeenCalledWith({ originalText: 'hello', translatedText: 'HELLO' });
-  });
-
-  it('should return 500 status on translation error', async () => {
-    const req = { body: { text: 'hello' } };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn()
-    };
-
-    const translateMock = jest.spyOn(global, 'translate').mockImplementation(() => {
-      throw new Error('Translation error');
-    });
-
-    createTranslationsAPI(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.send).toHaveBeenCalledWith('Error processing translation');
-
-    translateMock.mockRestore();
+    try {
+      await processUserData(mockUserId);
+      fail('Expected an error to be thrown');
+    } catch (error) {
+      expect(error.message).toBe('Database error');
+    }
   });
 });
