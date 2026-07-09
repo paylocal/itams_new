@@ -39,3 +39,7 @@ public/uploads/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# test cookies
+cookies*.txt
+test-mcp.txt

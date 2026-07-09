@@ -31,7 +31,27 @@ export async function POST(req: NextRequest) {
     const totalAmountUsd = fx.effectiveVndPerUsd > 0 ? totalAmount / fx.effectiveVndPerUsd : totalAmount;
 
     await ensureGroupWorkflowTables();
-    const dynamicChain = await buildApprovalChain(session.user.id, totalAmountUsd);
+    let dynamicChain = await buildApprovalChain(session.user.id, totalAmountUsd);
+
+    // Neu dynamic chain co buoc thieu approver, thu fallback ve quan ly truc tiep
+    if (dynamicChain.length > 0) {
+      const firstStep = dynamicChain[0];
+      const hasMissingApprover = !firstStep.approverId || dynamicChain.some((step) => !step.approverId);
+      if (hasMissingApprover) {
+        const fallbackUser = await prisma.user.findUnique({
+          where: { id: session.user.id },
+          select: { managerId: true },
+        });
+        if (fallbackUser?.managerId) {
+          dynamicChain = [];
+        } else {
+          return NextResponse.json(
+            { error: "Flow co buoc chua map duoc nguoi duyet theo quan he manager" },
+            { status: 400 }
+          );
+        }
+      }
+    }
 
     const count = await prisma.assetRequest.count();
     const year = new Date().getFullYear();
@@ -39,15 +59,6 @@ export async function POST(req: NextRequest) {
 
     if (dynamicChain.length > 0) {
       const firstStep = dynamicChain[0];
-      if (!firstStep.approverId) {
-        return NextResponse.json({ error: "Chua co nguoi duyet hop le trong flow" }, { status: 400 });
-      }
-      if (dynamicChain.some((step) => !step.approverId)) {
-        return NextResponse.json(
-          { error: "Flow co buoc chua map duoc nguoi duyet theo quan he manager" },
-          { status: 400 }
-        );
-      }
 
       const request = await prisma.assetRequest.create({
         data: {

@@ -102,15 +102,29 @@ npm install
 
 ### 6.3 Cấu hình môi trường
 
-```env
-DATABASE_URL="sqlserver://<HOST>:1433;database=<DB_NAME>;user=<USER>;password=<PASSWORD>;encrypt=true;trustServerCertificate=true"
-NEXTAUTH_SECRET="<YOUR_SECRET>"
-NEXTAUTH_URL="http://localhost:3000"
+1. Copy file môi trường mẫu:
+
+```bash
+cp .env.example .env
+```
+
+2. Cập nhật các biến trong `.env`:
+
+| Biến | Mô tả | Cách lấy giá trị |
+|------|-------|------------------|
+| `DATABASE_URL` | Chuỗi kết nối SQL Server | Thay `YOUR_PASSWORD`, host, database theo SQL Server của bạn |
+| `NEXTAUTH_SECRET` | Secret ký session/token | Chạy `openssl rand -base64 32` và dán kết quả |
+| `NEXTAUTH_URL` | URL ứng dụng local | Giữ `http://localhost:3000` hoặc thay bằng IP LAN nếu cần |
+
+3. Kiểm tra kết nối database:
+
+```bash
+npx prisma db pull
 ```
 
 Ghi chú:
-- Không commit thông tin thật trong .env.
-- Xem thêm README_SQLSERVER.md nếu cần cấu hình SQL Server chi tiết.
+- Không commit file `.env` chứa thông tin thật (`.env` đã được ignore trong `.gitignore`).
+- Xem thêm `README_SQLSERVER.md` nếu cần cấu hình SQL Server chi tiết.
 
 ## 7. Chạy ứng dụng
 

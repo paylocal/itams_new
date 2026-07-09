@@ -35,8 +35,8 @@ const PRESETS: Preset[] = [
     code: "MANAGER_GROUP_CORE",
     name: "Nhom Manager 1",
     level: 3,
-    managesLevel: 2,
-    description: "Manager quan ly nhom lead",
+    managesLevel: 1,
+    description: "Manager quan ly nhom nhan vien",
     roles: ["MANAGER"],
   },
   {
@@ -122,10 +122,10 @@ export async function POST() {
 
     const groups = await getGroupsPayload();
     const groupByCode = new Map(groups.map((g) => [g.code, g]));
+    // Flow mac dinh phu hop voi du lieu test co san (khong co LEAD user)
     const flowSeeds = [
-      { from: "EMPLOYEE_GROUP_1", to: "LEADER_GROUP_CORE", minAmountUsd: 1000, description: "Nhan vien -> Lead" },
-      { from: "LEADER_GROUP_CORE", to: "MANAGER_GROUP_CORE", minAmountUsd: 5000, description: "Lead -> Manager" },
-      { from: "MANAGER_GROUP_CORE", to: "USER_GROUP_CORE", minAmountUsd: 7000, description: "Manager -> User/Admin" },
+      { from: "EMPLOYEE_GROUP_1", to: "MANAGER_GROUP_CORE", minAmountUsd: 0, description: "Nhan vien -> Manager" },
+      { from: "MANAGER_GROUP_CORE", to: "USER_GROUP_CORE", minAmountUsd: 0, description: "Manager -> Admin" },
     ];
 
     for (const seed of flowSeeds) {

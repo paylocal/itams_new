@@ -1,0 +1,52 @@
+# ITAMS - IT Asset Management System
+
+## Project Overview
+- Hệ thống quản lý tài sản IT (IT Asset Management System)
+- Cho phép theo dõi, quản lý, báo cáo tài sản IT của công ty
+- Stack: Next.js 14+ (App Router), TypeScript, Prisma, SQL Server, Tailwind CSS
+
+## Tech Stack
+- **Framework**: Next.js (App Router, Server Components)
+- **Language**: TypeScript
+- **ORM**: Prisma
+- **Database**: SQL Server (xem HUONG_DAN_SQLSERVER.md)
+- **Styling**: Tailwind CSS
+- **Testing**: Vitest
+- **Linting**: ESLint
+
+## Project Structure
+- `src/app/` - Next.js App Router (pages, layouts, API routes)
+- `src/components/` - React components tái sử dụng
+- `src/lib/` - Business logic, utilities
+- `src/types/` - TypeScript types/interfaces
+- `prisma/` - Prisma schema, migrations, seed
+- `scripts/` - Utility scripts (import, export, maintenance)
+- `tools/` - Internal tools
+- `public/` - Static assets
+
+## Coding Conventions
+- TypeScript strict mode
+- Use Server Components by default, Client Components khi cần
+- API routes trong `src/app/api/`
+- Prisma client singleton ở `src/lib/prisma.ts`
+- Tailwind cho styling, không dùng CSS modules
+- Comments bằng tiếng Việt khi cần giải thích logic
+
+## AI Working Rules
+- Nếu file AI-FIX-PLAN.md tồn tại, ƯU TIÊN đọc và thực hiện các issue trong đó trước khi làm task khác
+- LUÔN đọc README.md và cấu trúc project trước khi sửa code
+- KHÔNG tự ý thay đổi Prisma schema mà không xác nhận
+- KHÔNG xóa file, chỉ sửa hoặc thêm
+- Khi sửa file, GIẢI THÍCH trước khi apply
+- Build & test sau khi sửa: `npm run build`, `npm run test`
+- Chạy local: `npm run dev` (port 3000)
+- Database: dùng Prisma Migrate, không chạy SQL thủ công
+
+## Common Commands
+- Dev: `npm run dev`
+- Build: `npm run build`
+- Start: `npm start`
+- Test: `npm run test`
+- Lint: `npm run lint`
+- Prisma generate: `npx prisma generate`
+- Prisma migrate: `npx prisma migrate dev`
