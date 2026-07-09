@@ -13,28 +13,26 @@ const statusColors: Record<string, string> = {
   DISPOSED: "bg-red-100 text-red-700",
 };
 
-const statusLabels: Record<string, { vi: string; en: string }> = {
-  NEW: { vi: "Moi", en: "New" },
-  IN_STOCK: { vi: "Trong kho", en: "In Stock" },
-  ASSIGNED: { vi: "Da cap phat", en: "Assigned" },
-  IN_MAINTENANCE: { vi: "Bao tri", en: "Maintenance" },
-  RECOVERED: { vi: "Da thu hoi", en: "Recovered" },
-  DISPOSED: { vi: "Da thanh ly", en: "Disposed" },
-};
-
 export function AssetDetail({ asset }: { asset: any }) {
-  const { locale } = useI18n();
+  const { t } = useI18n();
 
   const getStatusLabel = (status: string) => {
-    const labels = statusLabels[status];
-    if (!labels) return status;
-    return locale === "vi" ? labels.vi : labels.en;
+    const labels: Record<string, { key: string; fallback: string }> = {
+      NEW: { key: "status.NEW", fallback: "New" },
+      IN_STOCK: { key: "status.IN_STOCK", fallback: "In Stock" },
+      ASSIGNED: { key: "status.ASSIGNED", fallback: "Assigned" },
+      IN_MAINTENANCE: { key: "status.IN_MAINTENANCE", fallback: "Maintenance" },
+      RECOVERED: { key: "status.RECOVERED", fallback: "Recovered" },
+      DISPOSED: { key: "status.DISPOSED", fallback: "Disposed" },
+    };
+    const label = labels[status];
+    return label ? t(label.key, label.fallback) : status;
   };
 
   return (
     <div className="max-w-4xl mx-auto space-y-4">
       <Link href="/assets" className="text-sm text-blue-600 hover:underline flex items-center gap-1">
-        <ArrowLeft className="w-4 h-4" /> {locale === "vi" ? "Quay lại" : "Back"}
+        <ArrowLeft className="w-4 h-4" /> {t("common.back", "Back")}
       </Link>
 
       <div className="flex items-start justify-between">
@@ -56,26 +54,26 @@ export function AssetDetail({ asset }: { asset: any }) {
         <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow space-y-3">
           <h2 className="font-bold text-lg flex items-center gap-2">
             <Package className="w-5 h-5" />
-            {locale === "vi" ? "Thông tin" : "Information"}
+            {t("asset.information", "Information")}
           </h2>
           <dl className="space-y-2 text-sm">
-            <Row label={locale === "vi" ? "Hãng" : "Brand"} value={asset.brand || "-"} />
-            <Row label={locale === "vi" ? "Model" : "Model"} value={asset.model || "-"} />
-            <Row label={locale === "vi" ? "Serial" : "Serial"} value={asset.serialNumber || "-"} />
-            <Row label={locale === "vi" ? "Vị trí" : "Location"} value={asset.location || "-"} />
+            <Row label={t("asset.brand", "Brand")} value={asset.brand || "-"} />
+            <Row label={t("asset.model", "Model")} value={asset.model || "-"} />
+            <Row label={t("asset.serial", "Serial")} value={asset.serialNumber || "-"} />
+            <Row label={t("asset.location", "Location")} value={asset.location || "-"} />
             <Row
-              label={locale === "vi" ? "Ngày mua" : "Purchase Date"}
+              label={t("asset.purchaseDate", "Purchase Date")}
               value={asset.purchaseDate ? new Date(asset.purchaseDate).toLocaleDateString() : "-"}
             />
             <Row
-              label={locale === "vi" ? "Bảo hành đến" : "Warranty Until"}
+              label={t("asset.warrantyUntil", "Warranty Until")}
               value={asset.warrantyExpiry ? new Date(asset.warrantyExpiry).toLocaleDateString() : "-"}
             />
           </dl>
 
           <h2 className="font-bold text-lg flex items-center gap-2 pt-4 border-t">
             <User className="w-5 h-5" />
-            {locale === "vi" ? "Nguoi su dung" : "Current Holder"}
+            {t("asset.currentHolder", "Current Holder")}
           </h2>
           {asset.currentHolder ? (
             <div className="p-3 bg-blue-50 rounded">
@@ -84,13 +82,13 @@ export function AssetDetail({ asset }: { asset: any }) {
               <p className="text-xs text-gray-500">{asset.currentHolder.email}</p>
               {asset.assignedDate && (
                 <p className="text-xs text-gray-500 mt-1">
-                  {locale === "vi" ? "Cấp phát từ" : "Assigned from"}: {new Date(asset.assignedDate).toLocaleDateString()}
+                  {t("asset.assignedFrom", "Assigned from")}: {new Date(asset.assignedDate).toLocaleDateString()}
                 </p>
               )}
             </div>
           ) : (
             <p className="text-gray-500 text-sm">
-              {locale === "vi" ? "Chưa cấp phát cho ai" : "Not assigned"}
+              {t("asset.notAssigned", "Not assigned")}
             </p>
           )}
         </div>
@@ -99,7 +97,7 @@ export function AssetDetail({ asset }: { asset: any }) {
           <div className="bg-white p-6 rounded-lg shadow text-center">
             <h3 className="font-bold mb-3 flex items-center justify-center gap-2">
               <QrCode className="w-5 h-5" />
-              {locale === "vi" ? "Mã QR" : "QR Code"}
+              {t("asset.qrCode", "QR Code")}
             </h3>
             <div className="bg-white border-2 border-dashed rounded p-4 inline-block">
               <img
@@ -113,7 +111,7 @@ export function AssetDetail({ asset }: { asset: any }) {
               onClick={() => window.print()}
               className="mt-3 px-4 py-2 bg-blue-600 text-white rounded text-sm w-full"
             >
-              {locale === "vi" ? "In mã QR" : "Print QR"}
+              {t("asset.printQR", "Print QR")}
             </button>
           </div>
         </div>
@@ -123,7 +121,7 @@ export function AssetDetail({ asset }: { asset: any }) {
       {asset.assetHistory && asset.assetHistory.length > 0 && (
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="font-bold text-lg mb-3">
-            {locale === "vi" ? "Lịch sử" : "History"}
+            {t("asset.history", "History")}
           </h2>
           <div className="space-y-2">
             {asset.assetHistory.map((h: any) => (

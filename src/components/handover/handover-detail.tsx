@@ -119,7 +119,7 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
 
   const handleSign = async () => {
     if (!hasSignature) {
-      setError(locale === "vi" ? "Vui lòng ký trước" : "Please sign first");
+      setError(t("common.please.sign.first", "Please sign first"));
       return;
     }
     setLoading(true);
@@ -139,7 +139,7 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
       if (!res.ok) {
         setError(data.error);
       } else {
-        alert(locale === "vi" ? "Ký thành công!" : "Signed successfully!");
+        alert(t("common.signed.successfully", "Signed successfully!"));
         router.refresh();
       }
     } catch (e) {
@@ -152,10 +152,10 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
 
   const statusText =
     handover.status === "PENDING_EMPLOYEE_SIGN"
-      ? locale === "vi" ? "Chờ NV ký" : "Pending Employee"
+      ? t("common.pending.employee", "Pending Employee")
       : handover.status === "PENDING_IT_SIGN"
-      ? locale === "vi" ? "Chờ IT ký" : "Pending IT"
-      : locale === "vi" ? "Hoàn thành" : "Completed";
+      ? t("common.pending.it", "Pending IT")
+      : t("common.completed", "Completed");
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">
@@ -163,12 +163,12 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
         onClick={() => router.back()}
         className="text-sm text-gray-600 hover:underline flex items-center gap-1"
       >
-        <ArrowLeft className="w-4 h-4" /> {locale === "vi" ? "Quay lại" : "Back"}
+        <ArrowLeft className="w-4 h-4" /> {t("common.back", "Back")}
       </button>
 
       <div>
         <h1 className="text-2xl font-bold">
-          {locale === "vi" ? "Biên bản Bàn giao" : "Handover Agreement"}
+          {t("common.handover.agreement", "Handover Agreement")}
         </h1>
         <p className="text-gray-500 font-mono text-sm mt-1">{handover.handoverNumber}</p>
         <span className="inline-block mt-2 px-2 py-1 rounded text-xs bg-blue-100 text-blue-700">
@@ -180,26 +180,26 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
       <div className="bg-white p-4 rounded-lg shadow">
         <h2 className="font-bold mb-3 flex items-center gap-2">
           <FileText className="w-5 h-5" />
-          {locale === "vi" ? "Thông tin" : "Information"}
+          {t("common.information", "Information")}
         </h2>
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
-            <p className="text-gray-500">{locale === "vi" ? "Người nhận" : "Receiver"}</p>
+            <p className="text-gray-500">{t("common.receiver", "Receiver")}</p>
             <p className="font-medium">{handover.employee.name}</p>
             <p className="text-xs text-gray-500">{handover.employee.department}</p>
           </div>
           <div>
-            <p className="text-gray-500">{locale === "vi" ? "Người giao (IT)" : "IT Staff"}</p>
+            <p className="text-gray-500">{t("common.it.staff", "IT Staff")}</p>
             <p className="font-medium">{handover.itStaff.name}</p>
           </div>
           <div>
-            <p className="text-gray-500">{locale === "vi" ? "Ngày bàn giao" : "Date"}</p>
+            <p className="text-gray-500">{t("common.date", "Date")}</p>
             <p className="font-medium">
               {new Date(handover.handoverDate).toLocaleDateString()}
             </p>
           </div>
           <div>
-            <p className="text-gray-500">{locale === "vi" ? "Tổng thiết bị" : "Total items"}</p>
+            <p className="text-gray-500">{t("common.total.items", "Total items")}</p>
             <p className="font-medium">{handover.items.length}</p>
           </div>
         </div>
@@ -208,13 +208,13 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
       {/* Danh sach tai san */}
       <div className="bg-white p-4 rounded-lg shadow">
         <h2 className="font-bold mb-3">
-          {locale === "vi" ? "Danh sách tài sản" : "Asset List"} ({handover.items.length})
+          {t("common.asset.list", "Asset List")} ({handover.items.length})
         </h2>
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="text-left p-2">{locale === "vi" ? "Mã TS" : "Tag"}</th>
-              <th className="text-left p-2">{locale === "vi" ? "Tên" : "Name"}</th>
+              <th className="text-left p-2">{t("common.tag", "Tag")}</th>
+              <th className="text-left p-2">{t("common.name", "Name")}</th>
               <th className="text-left p-2">Serial</th>
             </tr>
           </thead>
@@ -237,7 +237,7 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
         {/* Chu ky NV */}
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-bold mb-2 flex items-center justify-between">
-            <span>{locale === "vi" ? "Chữ ký NV" : "Employee Signature"}</span>
+            <span>{t("common.employee.signature", "Employee Signature")}</span>
             {handover.employeeSignature && <Check className="w-5 h-5 text-green-500" />}
           </h3>
           {handover.employeeSignature ? (
@@ -266,7 +266,7 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
                   onClick={clearCanvas}
                   className="px-3 py-1.5 border rounded text-sm hover:bg-gray-50 flex items-center gap-1"
                 >
-                  <Eraser className="w-3 h-3" /> {locale === "vi" ? "Xóa" : "Clear"}
+                  <Eraser className="w-3 h-3" /> {t("common.clear", "Clear")}
                 </button>
                 <button
                   onClick={handleSign}
@@ -275,25 +275,21 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
                 >
                   <Check className="w-3 h-3" />{" "}
                   {loading
-                    ? locale === "vi"
-                      ? "Dang ky..."
-                      : "Signing..."
-                    : locale === "vi"
-                    ? "Luu chu ky"
-                    : "Save Signature"}
+                    ? t("handover.signing", "Signing...")
+                    : t("handover.saveSignature", "Save Signature")}
                 </button>
               </div>
             </div>
           ) : (
             <div className="h-32 border-2 border-dashed rounded flex items-center justify-center text-gray-400 text-sm">
               {handover.employeeId === currentUserId
-                ? locale === "vi" ? "Chờ NV ký" : "Pending Employee"
-                : locale === "vi" ? "Chờ NV ký" : "Pending Employee"}
+                ? t("common.pending.employee2", "Pending Employee")
+                : t("common.pending.employee3", "Pending Employee")}
             </div>
           )}
           {handover.employeeSignedAt && (
             <p className="text-xs text-gray-500 mt-1">
-              {locale === "vi" ? "Ký lúc" : "Signed at"}:{" "}
+              {t("common.signed.at", "Signed at")}:{" "}
               {new Date(handover.employeeSignedAt).toLocaleString()}
             </p>
           )}
@@ -302,7 +298,7 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
         {/* Chu ky IT */}
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-bold mb-2 flex items-center justify-between">
-            <span>{locale === "vi" ? "Chữ ký IT" : "IT Signature"}</span>
+            <span>{t("common.it.signature", "IT Signature")}</span>
             {handover.itSignature && <Check className="w-5 h-5 text-green-500" />}
           </h3>
           {handover.itSignature ? (
@@ -331,7 +327,7 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
                   onClick={clearCanvas}
                   className="px-3 py-1.5 border rounded text-sm hover:bg-gray-50 flex items-center gap-1"
                 >
-                  <Eraser className="w-3 h-3" /> {locale === "vi" ? "Xóa" : "Clear"}
+                  <Eraser className="w-3 h-3" /> {t("common.clear2", "Clear")}
                 </button>
                 <button
                   onClick={handleSign}
@@ -340,25 +336,21 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
                 >
                   <Check className="w-3 h-3" />{" "}
                   {loading
-                    ? locale === "vi"
-                      ? "Dang ky..."
-                      : "Signing..."
-                    : locale === "vi"
-                    ? "Luu chu ky"
-                    : "Save Signature"}
+                    ? t("handover.signing", "Signing...")
+                    : t("handover.saveSignature", "Save Signature")}
                 </button>
               </div>
             </div>
           ) : (
             <div className="h-32 border-2 border-dashed rounded flex items-center justify-center text-gray-400 text-sm">
               {!handover.employeeSignature
-                ? locale === "vi" ? "Chờ NV ký trước" : "Pending Employee first"
-                : locale === "vi" ? "Chờ IT ký" : "Pending IT"}
+                ? t("common.pending.employee.first", "Pending Employee first")
+                : t("common.pending.it2", "Pending IT")}
             </div>
           )}
           {handover.itSignedAt && (
             <p className="text-xs text-gray-500 mt-1">
-              {locale === "vi" ? "Ký lúc" : "Signed at"}:{" "}
+              {t("common.signed.at2", "Signed at")}:{" "}
               {new Date(handover.itSignedAt).toLocaleString()}
             </p>
           )}
@@ -373,7 +365,7 @@ export function HandoverDetail({ handover, currentUserId, currentUserRole }: Pro
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
           <Check className="w-8 h-8 mx-auto text-green-500 mb-2" />
           <p className="font-medium text-green-700">
-            {locale === "vi" ? "Bàn giao đã hoàn thành" : "Handover completed"}
+            {t("common.handover.completed", "Handover completed")}
           </p>
         </div>
       )}

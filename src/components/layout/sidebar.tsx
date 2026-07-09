@@ -45,8 +45,8 @@ const menuByRole: Record<string, MenuItem[]> = {
   ],
   ADMIN: [
     { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
-    { href: "/admin/dashboard", labelKey: "Admin Dashboard", icon: BarChart3 },
-    { href: "/admin/workflow", labelKey: "Workflow Config", icon: CheckSquare },
+    { href: "/admin/dashboard", labelKey: "nav.adminDashboard", icon: BarChart3 },
+    { href: "/admin/workflow", labelKey: "nav.workflow", icon: CheckSquare },
     { href: "/admin/languages", labelKey: "nav.languages", icon: Globe },
     { href: "/admin/groups", labelKey: "nav.userGroups", icon: Users },
     { href: "/admin/users", labelKey: "nav.users", icon: Users },
@@ -68,14 +68,14 @@ export function Sidebar({ role }: { role: string }) {
   return (
     <aside key={locale} className="w-64 bg-white border-r min-h-screen flex flex-col">
       <div className="p-6 border-b">
-        <h1 className="text-xl font-bold text-blue-600">ITAMS</h1>
+        <h1 className="text-xl font-bold text-blue-600">{t("common.appName", "ITAMS")}</h1>
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
         {menu.map((item, idx: number) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-          const label = t(item.labelKey);
+          const label = t(item.labelKey, item.labelKey);
           return (
             <Link
               key={idx}

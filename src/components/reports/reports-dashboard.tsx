@@ -86,10 +86,10 @@ export function ReportsDashboard(props: Props) {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">
-          {locale === "vi" ? "Báo cáo & Thống kê" : "Reports & Analytics"}
+          {t("common.reports.analytics", "Reports & Analytics")}
         </h1>
         <p className="text-gray-500 mt-1">
-          {locale === "vi" ? "Tổng quan hệ thống" : "System overview"}
+          {t("common.system.overview", "System overview")}
         </p>
       </div>
 
@@ -97,27 +97,27 @@ export function ReportsDashboard(props: Props) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <KpiCard
           icon={FileText}
-          label={locale === "vi" ? "Tổng yêu cầu" : "Total Requests"}
+          label={t("common.total.requests", "Total Requests")}
           value={stats.totalRequests}
           sub={locale === "vi" ? `${stats.completedRequests} hoan thanh` : `${stats.completedRequests} done`}
           color="blue"
         />
         <KpiCard
           icon={Package}
-          label={locale === "vi" ? "Tổng tài sản" : "Total Assets"}
+          label={t("common.total.assets", "Total Assets")}
           value={stats.totalAssets}
           sub={locale === "vi" ? `${stats.assignedAssets} dang dung` : `${stats.assignedAssets} in use`}
           color="green"
         />
         <KpiCard
           icon={ShoppingCart}
-          label={locale === "vi" ? "Tổng PO" : "Total POs"}
+          label={t("common.total.pos", "Total POs")}
           value={stats.totalPOs}
           color="purple"
         />
         <KpiCard
           icon={CheckCircle2}
-          label={locale === "vi" ? "Tổng chi phí" : "Total Spent"}
+          label={t("common.total.spent", "Total Spent")}
           value={formatVND(stats.totalSpent) + " d"}
           color="orange"
         />
@@ -127,7 +127,7 @@ export function ReportsDashboard(props: Props) {
         {/* Bieu do tron: trang thai yeu cau */}
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-bold mb-3">
-            {locale === "vi" ? "Yêu cầu theo trạng thái" : "Requests by Status"}
+            {t("common.requests.by.status", "Requests by Status")}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
@@ -155,7 +155,7 @@ export function ReportsDashboard(props: Props) {
         {/* Bieu do tron: tai san theo trang thai */}
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-bold mb-3">
-            {locale === "vi" ? "Tài sản theo trạng thái" : "Assets by Status"}
+            {t("common.assets.by.status", "Assets by Status")}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
@@ -183,7 +183,7 @@ export function ReportsDashboard(props: Props) {
         {/* Bieu do cot: nguoi dung theo phong ban */}
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-bold mb-3">
-            {locale === "vi" ? "Người dùng theo phòng ban" : "Users by Department"}
+            {t("common.users.by.department", "Users by Department")}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={deptData}>
@@ -199,7 +199,7 @@ export function ReportsDashboard(props: Props) {
         {/* Bieu do cot: tai san theo danh muc */}
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-bold mb-3">
-            {locale === "vi" ? "Tài sản theo danh mục" : "Assets by Category"}
+            {t("common.assets.by.category", "Assets by Category")}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={assetsByCategory.map((c) => ({
@@ -218,7 +218,7 @@ export function ReportsDashboard(props: Props) {
         {/* Bieu do duong: yeu cau theo thang */}
         <div className="bg-white p-4 rounded-lg shadow lg:col-span-2">
           <h3 className="font-bold mb-3">
-            {locale === "vi" ? "Yêu cầu 6 tháng gần đây" : "Requests Last 6 Months"}
+            {t("common.requests.last.6.months", "Requests Last 6 Months")}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={monthlyData}>
@@ -232,7 +232,7 @@ export function ReportsDashboard(props: Props) {
                 dataKey="count"
                 stroke="#3b82f6"
                 strokeWidth={2}
-                name={locale === "vi" ? "Số yêu cầu" : "Requests"}
+                name={t("common.requests", "Requests")}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -242,7 +242,7 @@ export function ReportsDashboard(props: Props) {
         {costData.length > 0 && (
           <div className="bg-white p-4 rounded-lg shadow lg:col-span-2">
             <h3 className="font-bold mb-3">
-              {locale === "vi" ? "Chi phí mua sắm 6 tháng" : "Spending Last 6 Months"}
+              {t("common.spending.last.6.months", "Spending Last 6 Months")}
             </h3>
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={costData.map((c) => ({
@@ -253,7 +253,7 @@ export function ReportsDashboard(props: Props) {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip formatter={(value) => typeof value === "number" ? value.toFixed(1) + "M d" : ""} />
-                <Bar dataKey="amount" fill="#f59e0b" name={locale === "vi" ? "Triệu đồng" : "Million VND"} />
+                <Bar dataKey="amount" fill="#f59e0b" name={t("common.million.vnd", "Million VND")} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -15,47 +15,44 @@ interface Props {
 }
 
 export function AdminDashboard({ stats, role }: Props) {
-  const { locale } = useI18n();
-
-  // Helper chon text theo ngon ngu
-  const t = (vi: string, en: string) => (locale === "vi" ? vi : en);
+  const { t } = useI18n();
 
   const roleLabels: Record<string, string> = {
-    ADMIN: t("Quản trị viên", "Administrator"),
-    MANAGER: t("Quản lý", "Manager"),
-    LEAD: t("Truong nhom", "Lead"),
-    IT_STAFF: t("IT", "IT Staff"),
-    PURCHASING: t("Mua sắm", "Purchasing"),
-    EMPLOYEE: t("Nhân viên", "Employee"),
+    ADMIN: t("roles.ADMIN", "Administrator"),
+    MANAGER: t("roles.MANAGER", "Manager"),
+    LEAD: t("roles.LEAD", "Lead"),
+    IT_STAFF: t("roles.IT_STAFF", "IT Staff"),
+    PURCHASING: t("roles.PURCHASING", "Purchasing"),
+    EMPLOYEE: t("roles.EMPLOYEE", "Employee"),
   };
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">
-          {t("Trang chinh", "Dashboard")}
+          {t("dashboard.title", "Dashboard")}
         </h1>
         <p className="text-gray-500 mt-1">
-          {t("Xin chào", "Welcome")}, {role === "ADMIN" ? "Hệ thống Admin" : roleLabels[role]}
+          {t("dashboard.welcome", "Welcome")}, {role === "ADMIN" ? t("dashboard.systemAdmin", "System Admin") : roleLabels[role]}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard
           icon={FileText}
-          label={t("Tong yeu cau", "Total Requests")}
+          label={t("dashboard.totalRequests", "Total Requests")}
           value={stats.total}
           color="blue"
         />
         <StatCard
           icon={Clock}
-          label={t("Dang xu ly", "Pending")}
+          label={t("dashboard.pending", "Pending")}
           value={stats.pending}
           color="yellow"
         />
         <StatCard
           icon={CheckCircle2}
-          label={t("Hoan thanh", "Completed")}
+          label={t("dashboard.completed", "Completed")}
           value={stats.completed}
           color="green"
         />
@@ -63,8 +60,8 @@ export function AdminDashboard({ stats, role }: Props) {
           icon={Package}
           label={
             role === "EMPLOYEE"
-              ? t("Tai san cua toi", "My Assets")
-              : t("Kho tai san", "Assets")
+              ? t("dashboard.myAssets", "My Assets")
+              : t("dashboard.assetInventory", "Asset Inventory")
           }
           value={stats.myAssets}
           color="purple"
@@ -73,7 +70,7 @@ export function AdminDashboard({ stats, role }: Props) {
 
       <div className="bg-white p-6 rounded-lg shadow">
         <h2 className="font-bold text-lg mb-4">
-          {t("Hanh dong nhanh", "Quick Actions")}
+          {t("dashboard.quickActions", "Quick Actions")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {role === "EMPLOYEE" && (
@@ -83,7 +80,7 @@ export function AdminDashboard({ stats, role }: Props) {
             >
               <FileText className="w-8 h-8 mx-auto text-blue-600 mb-2" />
               <p className="font-medium text-blue-700">
-                {t("Tao yeu cau", "Create Request")}
+                {t("dashboard.createRequest", "Create Request")}
               </p>
             </Link>
           )}
@@ -94,7 +91,7 @@ export function AdminDashboard({ stats, role }: Props) {
             >
               <Clock className="w-8 h-8 mx-auto text-yellow-600 mb-2" />
               <p className="font-medium text-yellow-700">
-                {t("Duyet yeu cau", "Approve Requests")}
+                {t("dashboard.approveRequests", "Approve Requests")}
               </p>
             </Link>
           )}
@@ -105,7 +102,7 @@ export function AdminDashboard({ stats, role }: Props) {
             >
               <Clock className="w-8 h-8 mx-auto text-amber-600 mb-2" />
               <p className="font-medium text-amber-700">
-                {t("Duyet vuot nguong", "Approve High-Value Requests")}
+                {t("dashboard.approveHighValue", "Approve High-Value Requests")}
               </p>
             </Link>
           )}

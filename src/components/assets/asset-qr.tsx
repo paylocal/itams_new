@@ -6,7 +6,7 @@ import { useI18n } from "../i18n-provider";
 
 export function AssetQR({ asset }: { asset: any }) {
   const router = useRouter();
-  const { locale } = useI18n();
+  const { t } = useI18n();
 
   // Su dung API qrserver de tao QR (mien phi, khong can can install them)
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(asset.qrCode)}`;
@@ -23,7 +23,7 @@ export function AssetQR({ asset }: { asset: any }) {
           className="text-sm text-gray-600 hover:underline flex items-center gap-1"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="ml-1">{locale === "vi" ? "Quay lại" : "Back"}</span>
+          <span className="ml-1">{t("common.back", "Back")}</span>
         </button>
 
         <div className="flex gap-2">
@@ -32,7 +32,7 @@ export function AssetQR({ asset }: { asset: any }) {
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
           >
             <Printer className="w-4 h-4" />
-            <span>{locale === "vi" ? "In mã QR" : "Print QR"}</span>
+            <span>{t("asset.printQR", "Print QR")}</span>
           </button>
 
           <a
@@ -41,7 +41,7 @@ export function AssetQR({ asset }: { asset: any }) {
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 flex items-center justify-center gap-2"
           >
             <Download className="w-4 h-4" />
-            <span>{locale === "vi" ? "Tải PNG" : "Download"}</span>
+            <span>{t("common.download", "Download")}</span>
           </a>
         </div>
       </div>
@@ -64,12 +64,12 @@ export function AssetQR({ asset }: { asset: any }) {
 
         {asset.currentHolder && (
           <p className="text-sm text-gray-600 mt-2">
-            {locale === "vi" ? "Người sử dụng" : "Holder"}: {asset.currentHolder.name}
+            {t("asset.holder", "Holder")}: {asset.currentHolder.name}
           </p>
         )}
 
         <div className="text-xs text-gray-400 pt-4 border-t mt-4">
-          ITAMS - {locale === "vi" ? "Quản lý Tài sản CNTT" : "IT Asset Management"}
+          ITAMS - {t("common.appSubtitle", "IT Asset Management")}
         </div>
       </div>
 

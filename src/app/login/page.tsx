@@ -27,29 +27,13 @@ export default function LoginPage() {
     activeLanguages.find((l: { code: string }) => l.code === locale) ||
     activeLanguages[0];
 
-  const tt = (key: string, fallback: string) => {
-    const translated = t(key);
-    return translated === key ? fallback : translated;
-  };
-
-  const fallbackText = {
-    loading: locale === "vi" ? "Đang xử lý..." : locale === "fr" ? "Chargement..." : "Loading...",
-    login: locale === "vi" ? "Đăng nhập" : locale === "fr" ? "Se connecter" : "Login",
-    password: locale === "vi" ? "Mật khẩu" : locale === "fr" ? "Mot de passe" : "Password",
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     const res = await signIn("credentials", { email, password, redirect: false });
     if (res?.error) {
-      setError(
-        tt(
-          "auth.invalidCredentials",
-          locale === "vi" ? "Tên đăng nhập hoặc mật khẩu không đúng" : "Invalid username or password"
-        )
-      );
+      setError(t("auth.invalidCredentials", "Invalid username or password"));
       setLoading(false);
     } else {
       router.push("/dashboard");
@@ -89,16 +73,16 @@ export default function LoginPage() {
         </div>
 
         <h1 className="text-3xl font-bold text-blue-600 text-center">
-          {tt("common.appName", "ITAMS")}
+          {t("common.appName", "ITAMS")}
         </h1>
         <p className="text-gray-500 text-center mt-2 mb-6">
-          {tt("auth.subtitle", locale === "vi" ? "Quản lý Tài sản CNTT" : "IT Asset Management")}
+          {t("auth.subtitle", "IT Asset Management")}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {tt("auth.username", locale === "vi" ? "Tên đăng nhập" : "User")}
+              {t("auth.username", "Username")}
             </label>
             <input
               type="email"
@@ -112,7 +96,7 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {tt("common.password", fallbackText.password)}
+              {t("common.password", "Password")}
             </label>
             <input
               type="password"
@@ -135,19 +119,19 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? tt("common.loading", fallbackText.loading) : tt("common.login", fallbackText.login)}
+            {loading ? t("common.loading", "Loading...") : t("common.login", "Login")}
           </button>
         </form>
 
         <div className="mt-6 p-3 bg-gray-50 rounded-md text-xs text-gray-600">
           <p className="font-semibold mb-1">
-            {tt("auth.testAccounts", locale === "vi" ? "Tài khoản test:" : "Test accounts:")}
+            {t("auth.testAccounts", "Test accounts:")}
           </p>
-          <p>👑 {tt("roles.ADMIN", locale === "vi" ? "Quản trị viên" : "Admin")}: admin@company.com / password123</p>
-          <p>👔 {tt("roles.MANAGER", locale === "vi" ? "Quản lý" : "Manager")}: manager@company.com / password123</p>
+          <p>👑 {t("roles.ADMIN", "Administrator")}: admin@company.com / password123</p>
+          <p>👔 {t("roles.MANAGER", "Manager")}: manager@company.com / password123</p>
           <p>💻 IT: it1@company.com / password123</p>
-          <p>🛒 {tt("roles.PURCHASING", locale === "vi" ? "Mua sắm" : "Purchasing")}: purchase@company.com / password123</p>
-          <p>👤 {tt("roles.EMPLOYEE", locale === "vi" ? "Nhân viên" : "Employee")}: employee1@company.com / password123</p>
+          <p>🛒 {t("roles.PURCHASING", "Purchasing")}: purchase@company.com / password123</p>
+          <p>👤 {t("roles.EMPLOYEE", "Employee")}: employee1@company.com / password123</p>
         </div>
       </div>
     </div>

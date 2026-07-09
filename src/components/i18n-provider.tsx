@@ -13,7 +13,7 @@ type TranslationMap = Record<string, string>;
 type I18nValue = {
   locale: string;
   setLocale: (l: string) => void;
-  t: (key: string) => string;
+  t: (key: string, fallback?: string) => string;
   languages: LanguageItem[];
 };
 
@@ -96,7 +96,12 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("locale", l);
       }
     },
-    t: (key: string) => data.translations[key] || key,
+    t: (key: string, fallback?: string) => {
+      const translated = data.translations[key];
+      if (translated) return translated;
+      if (fallback !== undefined) return fallback;
+      return key;
+    },
     languages: data.languages,
   };
 
