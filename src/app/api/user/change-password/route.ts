@@ -19,8 +19,12 @@ export async function POST(req: NextRequest) {
     const user = await prisma.user.findUnique({ where: { id: session.user.id } });
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    const valid = await bcrypt.compare(currentPassword, user.passwordHash);
-    if (!valid) return NextResponse.json({ errors: ["Mat khau hien tai khong dung"] }, { status: 400 });
+    const mustChangePassword = (session.user as any).mustChangePassword;
+
+    if (!mustChangePassword) {
+      const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+      if (!valid) return NextResponse.json({ errors: ["Mat khau hien tai khong dung"] }, { status: 400 });
+    }
 
     if (newPassword !== confirmPassword) {
       return NextResponse.json({ errors: ["Mat khau moi khong khop"] }, { status: 400 });
@@ -43,7 +47,12 @@ export async function POST(req: NextRequest) {
     const hash = await bcrypt.hash(newPassword, 10);
     await recordPasswordChange(user.id, hash);
 
-    return NextResponse.json({ success: true });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { mustChangePassword: false },
+    });
+
+    return NextResponse.json({ success: true, mustChangePassword: false });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

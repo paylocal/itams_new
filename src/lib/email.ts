@@ -261,4 +261,46 @@ export const emailTemplates = {
       `,
     };
   },
+
+  passwordReset: (data: {
+    name: string;
+    email: string;
+    password: string;
+    url: string;
+    locale?: string;
+    mustChangePassword?: boolean;
+  }) => {
+    const isVi = data.locale !== "en";
+    return {
+      subject: isVi
+        ? `[ITAMS] Mat khau tai khoan cua ban da duoc dat lai`
+        : `[ITAMS] Your account password has been reset`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+            <h2 style="margin: 0;">ITAMS - ${isVi ? "Mat khau moi" : "New Password"}</h2>
+          </div>
+          <div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb;">
+            <p>${isVi ? `Xin chao ${data.name},` : `Hi ${data.name},`}</p>
+            <p>${isVi
+              ? "Mat khau tai khoan cua ban da duoc dat lai. Vui long dang nhap bang thong tin ben duoi:"
+              : "Your account password has been reset. Please log in with the following information:"}</p>
+            <div style="background: white; padding: 15px; border-radius: 6px; margin: 15px 0;">
+              <p><strong>${isVi ? "Email" : "Email"}:</strong> ${data.email}</p>
+              <p><strong>${isVi ? "Mat khau moi" : "New password"}:</strong> ${data.password}</p>
+            </div>
+            <a href="${data.url}" style="display: inline-block; background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">
+              ${isVi ? "Dang nhap" : "Login"}
+            </a>
+            ${data.mustChangePassword
+              ? `<p style="color: #ef4444; font-weight: bold; margin-top: 20px;">${isVi ? "Luu y: Ban se duoc yeu cau doi mat khau ngay sau khi dang nhap." : "Note: You will be required to change your password immediately after login."}</p>`
+              : ""}
+            <p style="color: #6b7280; font-size: 12px; margin-top: 20px;">
+              ${isVi ? "Vui long khong chia se mat khau nay voi nguoi khac." : "Please do not share this password with anyone."}
+            </p>
+          </div>
+        </div>
+      `,
+    };
+  },
 };

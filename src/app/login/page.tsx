@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Globe, Check } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
@@ -47,7 +47,13 @@ export default function LoginPage() {
       setError(t("auth.invalidCredentials", "Invalid username or password"));
       setLoading(false);
     } else {
-      router.push("/dashboard");
+      const session = await getSession();
+      const mustChange = (session?.user as any)?.mustChangePassword;
+      if (mustChange) {
+        router.push("/change-password");
+      } else {
+        router.push("/dashboard");
+      }
       router.refresh();
     }
   };

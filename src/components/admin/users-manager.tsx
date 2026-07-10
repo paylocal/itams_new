@@ -36,15 +36,19 @@ export function UsersManager({ users: initial, managers }: Props) {
     managerId: "",
     department: "",
     password: "",
+    mustChangePassword: true,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [importFile, setImportFile] = useState<File | null>(null);
   const [importLoading, setImportLoading] = useState(false);
   const [importResult, setImportResult] = useState<{ created: number; skipped: number; errors: string[] } | null>(null);
   const [resettingUser, setResettingUser] = useState<User | null>(null);
   const [resetPassword, setResetPassword] = useState("");
+  const [resetMustChangePassword, setResetMustChangePassword] = useState(true);
   const [resetLoading, setResetLoading] = useState(false);
+  const [resetResult, setResetResult] = useState<{ password?: string; sent?: boolean; mustChangePassword?: boolean; devMode?: boolean } | null>(null);
 
   const filteredUsers = users.filter(
     (u) =>
@@ -63,15 +67,17 @@ export function UsersManager({ users: initial, managers }: Props) {
       managerId: user.managerId || "",
       department: user.department || "",
       password: "",
+      mustChangePassword: true,
     });
     setShowForm(true);
   };
 
   const resetForm = () => {
     setEditing(null);
-    setForm({ email: "", name: "", role: "EMPLOYEE", managerId: "", department: "", password: "" });
+    setForm({ email: "", name: "", role: "EMPLOYEE", managerId: "", department: "", password: "", mustChangePassword: true });
     setShowForm(false);
     setError("");
+    setSuccessMessage("");
   };
 
   const save = async () => {
@@ -79,23 +85,27 @@ export function UsersManager({ users: initial, managers }: Props) {
       setError(t("user.errorNameEmail", "Please enter email and name"));
       return;
     }
-    if (!editing && !form.password) {
-      setError(t("user.errorPassword", "Please enter password"));
-      return;
-    }
 
     setLoading(true);
     setError("");
+    setSuccessMessage("");
 
     try {
       const url = editing
         ? "/api/users/" + editing.id
         : "/api/users";
       const method = editing ? "PUT" : "POST";
-      const payload = {
-        ...form,
+      const payload: any = {
+        email: form.email,
+        name: form.name,
+        role: form.role,
+        department: form.department,
         managerId: form.role === "EMPLOYEE" ? form.managerId || null : null,
       };
+      if (!editing) {
+        payload.password = form.password || undefined;
+        payload.mustChangePassword = form.mustChangePassword;
+      }
 
       const res = await fetch(url, {
         method,
@@ -105,14 +115,21 @@ export function UsersManager({ users: initial, managers }: Props) {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || t("common.error", "Error"));
+        setError(data.error || data.errors?.join(", ") || t("common.error", "Error"));
       } else {
         if (editing) {
           setUsers(users.map((u) => (u.id === editing.id ? data : u)));
         } else {
           setUsers([data, ...users]);
         }
-        resetForm();
+        if (!editing) {
+          const emailInfo = data.passwordSent
+            ? " Mat khau da duoc gui qua email."
+            : " Email chua duoc gui (kiem tra cau hinh SMTP).";
+          setSuccessMessage(t("user.created", "User created successfully") + emailInfo);
+          setTimeout(() => setSuccessMessage(""), 5000);
+        }
+        if (editing) resetForm();
         router.refresh();
       }
     } catch (e: any) {
@@ -138,18 +155,23 @@ export function UsersManager({ users: initial, managers }: Props) {
     if (!resettingUser) return;
     setResetLoading(true);
     setError("");
+    setResetResult(null);
     try {
       const res = await fetch(`/api/users/${resettingUser.id}/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ newPassword: resetPassword || undefined }),
+        body: JSON.stringify({ newPassword: resetPassword || undefined, mustChangePassword: resetMustChangePassword }),
       });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || data.errors?.join(", ") || t("common.error", "Error"));
       } else {
-        alert(t("user.resetSuccess", "Password reset successfully"));
-        setResettingUser(null);
+        setResetResult({
+          password: resetPassword || undefined,
+          sent: data.passwordSent,
+          mustChangePassword: data.mustChangePassword,
+          devMode: data.devMode,
+        });
         setResetPassword("");
       }
     } catch (e: any) {
@@ -291,35 +313,67 @@ export function UsersManager({ users: initial, managers }: Props) {
       {resettingUser && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-            <h3 className="font-bold text-lg mb-2">
-              {t("user.resetPassword", "Reset password")}: {resettingUser.name}
-            </h3>
-            <p className="text-sm text-gray-500 mb-3">
-              {t("user.resetPasswordHint", "Leave blank to generate default password")}
-            </p>
-            <input
-              type="password"
-              value={resetPassword}
-              onChange={(e) => setResetPassword(e.target.value)}
-              placeholder={t("user.newPassword", "New password")}
-              className="w-full border rounded px-3 py-2 text-sm mb-3"
-            />
-            {error && <div className="bg-red-50 text-red-700 p-2 rounded text-sm mb-3">{error}</div>}
-            <div className="flex gap-2">
-              <button
-                onClick={handleResetPassword}
-                disabled={resetLoading}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-              >
-                {resetLoading ? t("common.saving", "Saving...") : t("common.save", "Save")}
-              </button>
-              <button
-                onClick={() => { setResettingUser(null); setResetPassword(""); setError(""); }}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-              >
-                {t("common.cancel", "Cancel")}
-              </button>
-            </div>
+            {!resetResult ? (
+              <>
+                <h3 className="font-bold text-lg mb-2">
+                  {t("user.resetPassword", "Reset password")}: {resettingUser.name}
+                </h3>
+                <p className="text-sm text-gray-500 mb-3">
+                  {t("user.resetPasswordHint", "Leave blank to generate password automatically")}
+                </p>
+                <input
+                  type="password"
+                  value={resetPassword}
+                  onChange={(e) => setResetPassword(e.target.value)}
+                  placeholder={t("user.newPassword", "New password")}
+                  className="w-full border rounded px-3 py-2 text-sm mb-3"
+                />
+                <label className="flex items-center gap-2 text-sm mb-3">
+                  <input
+                    type="checkbox"
+                    checked={resetMustChangePassword}
+                    onChange={(e) => setResetMustChangePassword(e.target.checked)}
+                  />
+                  {t("user.forceChangePassword", "Require password change on first login")}
+                </label>
+                {error && <div className="bg-red-50 text-red-700 p-2 rounded text-sm mb-3">{error}</div>}
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleResetPassword}
+                    disabled={resetLoading}
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {resetLoading ? t("common.saving", "Saving...") : t("common.save", "Save")}
+                  </button>
+                  <button
+                    onClick={() => { setResettingUser(null); setResetPassword(""); setResetMustChangePassword(true); setError(""); setResetResult(null); }}
+                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                  >
+                    {t("common.cancel", "Cancel")}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="font-bold text-lg mb-2 text-green-700">{t("user.resetSuccess", "Password reset successfully")}</h3>
+                <div className="bg-gray-50 p-3 rounded text-sm mb-3">
+                  {resetResult.password ? (
+                    <p><strong>{t("user.newPassword", "New password")}:</strong> {resetResult.password}</p>
+                  ) : (
+                    <p>{t("user.passwordSentByEmail", "Password has been sent to user's email")}</p>
+                  )}
+                  <p><strong>Email:</strong> {resetResult.sent ? t("common.sent", "Sent") : t("common.notSent", "Not sent")}</p>
+                  {resetResult.devMode && <p className="text-yellow-600">{t("user.devModeEmail", "Email config not enabled - check console for password")}</p>}
+                  <p><strong>{t("user.forceChangePassword", "Require password change")}:</strong> {resetResult.mustChangePassword ? t("common.yes", "Yes") : t("common.no", "No")}</p>
+                </div>
+                <button
+                  onClick={() => { setResettingUser(null); setResetPassword(""); setResetMustChangePassword(true); setError(""); setResetResult(null); }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  {t("common.close", "Close")}
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -335,6 +389,12 @@ export function UsersManager({ users: initial, managers }: Props) {
               <X className="w-5 h-5" />
             </button>
           </div>
+
+          {successMessage && (
+            <div className="bg-green-50 text-green-700 p-2 rounded text-sm mb-3">
+              {successMessage}
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-3">
             <input
@@ -387,13 +447,23 @@ export function UsersManager({ users: initial, managers }: Props) {
             {!editing && (
               <input
                 type="password"
-                placeholder={t("user.password", "Password") + " *"}
+                placeholder={t("user.password", "Password") + " (de trong de tu tao)"}
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="border rounded px-3 py-2 text-sm col-span-2"
+                className="border rounded px-3 py-2 text-sm"
               />
             )}
           </div>
+          {!editing && (
+            <label className="flex items-center gap-2 text-sm mt-3">
+              <input
+                type="checkbox"
+                checked={form.mustChangePassword}
+                onChange={(e) => setForm({ ...form, mustChangePassword: e.target.checked })}
+              />
+              {t("user.forceChangePassword", "Require password change on first login")}
+            </label>
+          )}
 
           {error && (
             <div className="bg-red-50 text-red-700 p-2 rounded text-sm mt-3">

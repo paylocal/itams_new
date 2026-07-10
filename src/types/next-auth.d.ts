@@ -6,12 +6,14 @@ declare module "next-auth" {
       id: string;
       role: string;
       passwordExpired?: boolean;
+      mustChangePassword?: boolean;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     role: string;
     passwordExpired?: boolean;
+    mustChangePassword?: boolean;
   }
 }
 
@@ -20,5 +22,6 @@ declare module "next-auth/jwt" {
     id?: string;
     role?: string;
     passwordExpired?: boolean;
+    mustChangePassword?: boolean;
   }
 }

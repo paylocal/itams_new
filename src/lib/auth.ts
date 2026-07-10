@@ -31,6 +31,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           role: user.role,
           passwordExpired,
+          mustChangePassword: user.mustChangePassword,
         };
       },
     }),
@@ -41,6 +42,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.role = (user as any).role;
         token.passwordExpired = (user as any).passwordExpired;
+        token.mustChangePassword = (user as any).mustChangePassword;
       }
       return token;
     },
@@ -49,6 +51,7 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).id = token.id;
         (session.user as any).role = token.role;
         (session.user as any).passwordExpired = token.passwordExpired;
+        (session.user as any).mustChangePassword = token.mustChangePassword;
       }
       return session;
     },

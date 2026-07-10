@@ -52,6 +52,44 @@ export function validatePasswordStrength(
   return { valid: errors.length === 0, errors };
 }
 
+export function generatePassword(policy: PasswordPolicy): string {
+  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lowercase = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const special = "!@#$%^&*(),.?\":{}|<>_[]\\/-+=";
+
+  let chars = "";
+  let password = "";
+
+  if (policy.requireUppercase) {
+    password += uppercase[Math.floor(Math.random() * uppercase.length)];
+    chars += uppercase;
+  }
+  if (policy.requireLowercase) {
+    password += lowercase[Math.floor(Math.random() * lowercase.length)];
+    chars += lowercase;
+  }
+  if (policy.requireNumber) {
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    chars += numbers;
+  }
+  if (policy.requireSpecial) {
+    password += special[Math.floor(Math.random() * special.length)];
+    chars += special;
+  }
+
+  const minLength = Math.max(policy.minLength, 12);
+  while (password.length < minLength || password.length < 12) {
+    password += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  // Shuffle
+  return password
+    .split("")
+    .sort(() => Math.random() - 0.5)
+    .join("");
+}
+
 export async function isPasswordReused(
   userId: string,
   newPassword: string,
