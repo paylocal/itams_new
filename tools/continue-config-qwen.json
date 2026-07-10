@@ -1,0 +1,62 @@
+{
+  "models": [
+    {
+      "title": "Qwen Coder Fix (Local)",
+      "provider": "ollama",
+      "model": "qwen-coder-fix:latest",
+      "apiBase": "http://localhost:11434",
+      "contextLength": 8192
+    },
+    {
+      "title": "Qwen2.5 Coder 7B (Local)",
+      "provider": "ollama",
+      "model": "qwen2.5-coder:7b",
+      "apiBase": "http://localhost:11434",
+      "contextLength": 8192,
+      "temperature": 0.3,
+      "topP": 0.8,
+      "topK": 40
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "Qwen2.5 Coder 7B Autocomplete",
+    "provider": "ollama",
+    "model": "qwen2.5-coder:7b",
+    "apiBase": "http://localhost:11434"
+  },
+  "embeddingsProvider": {
+    "provider": "ollama",
+    "model": "mxbai-embed-large",
+    "apiBase": "http://localhost:11434"
+  },
+  "reranker": null,
+  "mcpServers": {
+    "apply-diff": {
+      "command": "python",
+      "args": [
+        "D:/Project/itams-new-clean/tools/mcp_apply_diff.py"
+      ]
+    }
+  },
+  "customCommands": [
+    {
+      "name": "code",
+      "description": "Sua code truc tiep trong du an bang apply_diff",
+      "prompt": "Ban la senior full-stack developer chuyen Next.js/TypeScript/Prisma. Nhiem vu: doc file can sua, phan tich, va TRA VE unified diff chinh xac de apply vao file.\n\nTUYET DOI:\n- Khong tra loi bang text dai dong\n- Chi tra ve diff va giai thich ngan gon\n- Diff phai co dinh dang: @@ -startLine,count +startLine,count @@\n- Dong `-` la xoa, `+` la them, ` ` la context\n- Path file dung dang Windows: D:/Project/itams-new-clean/...\n\nSau khi sua xong, neu la TypeScript thi chay `npx tsc --noEmit` de kiem tra."
+    },
+    {
+      "name": "fix",
+      "description": "Tu dong tim va sua loi trong code",
+      "prompt": "Tim va sua loi trong code. Dung tool apply_diff de patch file truc tiep. Neu can tao file moi, hay noi ro. Sau khi sua, chay kiem tra TypeScript (npx tsc --noEmit)."
+    },
+    {
+      "name": "review",
+      "description": "Review code va de xuat cai tien",
+      "prompt": "Review doan code nay va chi ra van de bao mat, hieu nang, clean code. Tra loi duoi dang danh sach."
+    }
+  ],
+  "context": {
+    "useProvider": true
+  },
+  "docs": []
+}
