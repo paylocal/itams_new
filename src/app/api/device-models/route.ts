@@ -4,6 +4,11 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const models = await prisma.deviceModel.findMany({
     include: { category: { select: { name: true, code: true } } },
     orderBy: [{ categoryId: "asc" }, { brand: "asc" }, { name: "asc" }],
