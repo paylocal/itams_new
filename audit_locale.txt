@@ -1,5 +1,0 @@
-D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:49:       label: locale === "vi" ? s.vi : s.en,
-D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:76:     return locale === "vi" ? labels.vi : labels.en;
-D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:82:     return locale === "vi" ? labels.vi : labels.en;
-D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:102:           sub={locale === "vi" ? `${stats.completedRequests} hoan thanh` : `${stats.completedRequests} done`}
-D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:109:           sub={locale === "vi" ? `${stats.assignedAssets} dang dung` : `${stats.assignedAssets} in use`}

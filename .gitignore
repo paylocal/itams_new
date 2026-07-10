@@ -43,3 +43,17 @@ next-env.d.ts
 # test cookies
 cookies*.txt
 test-mcp.txt
+
+# python / MCP
+__pycache__/
+*.pyc
+*.pyo
+
+# local debug / audit files
+*.log
+login-res.json
+csrf.json
+audit_*.txt
+
+# local continue config (if any)
+.continue/local*
