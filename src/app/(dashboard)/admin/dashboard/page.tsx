@@ -1,8 +1,9 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/components/i18n-provider";
-import { Globe, Tag, Building2, FileText, Users, BarChart3, Package } from "lucide-react";
+import { Globe, Tag, Building2, FileText, Users, BarChart3, Package, Lock, Mail, CheckSquare } from "lucide-react";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function AdminDashboard() {
   const cards = [
     {
       key: "requests",
-      title: t("nav.requests") || "Yeu cau",
+      title: t("admin.requestsCard", "Requests"),
       value: stats.requests,
       href: "/requests",
       icon: FileText,
@@ -42,7 +43,7 @@ export default function AdminDashboard() {
     },
     {
       key: "pending",
-      title: "Cho duyet",
+      title: t("admin.pendingCard", "Pending"),
       value: stats.pending,
       href: "/requests?status=PENDING",
       icon: FileText,
@@ -50,7 +51,7 @@ export default function AdminDashboard() {
     },
     {
       key: "completed",
-      title: "Hoan thanh",
+      title: t("admin.completedCard", "Completed"),
       value: stats.completed,
       href: "/requests?status=COMPLETED",
       icon: FileText,
@@ -58,7 +59,7 @@ export default function AdminDashboard() {
     },
     {
       key: "assets",
-      title: t("nav.assets") || "Kho tai san",
+      title: t("admin.assetsCard", "Assets"),
       value: stats.assets,
       href: "/assets",
       icon: Package,
@@ -66,45 +67,37 @@ export default function AdminDashboard() {
     },
     {
       key: "users",
-      title: t("nav.users") || "Nguoi dung",
+      title: t("nav.users", "Users"),
       value: stats.users,
       href: "/admin/users",
       icon: Users,
       color: "indigo",
     },
-    {
-      key: "categories",
-      title: t("nav.categories") || "Danh muc",
-      value: "-",
-      href: "/admin/categories",
-      icon: Tag,
-      color: "pink",
-    },
-    {
-      key: "suppliers",
-      title: t("nav.suppliers") || "Nha cung cap",
-      value: "-",
-      href: "/admin/suppliers",
-      icon: Building2,
-      color: "cyan",
-    },
-    {
-      key: "languages",
-      title: t("nav.languages") || "Ngon ngu",
-      value: "-",
-      href: "/admin/languages",
-      icon: Globe,
-      color: "emerald",
-    },
+  ];
+
+  const settings = [
+    { href: "/admin/users", icon: Users, label: t("nav.users", "Users") },
+    { href: "/admin/groups", icon: Users, label: t("nav.userGroups", "User Groups") },
+    { href: "/admin/categories", icon: Tag, label: t("nav.categories", "Categories") },
+    { href: "/admin/suppliers", icon: Building2, label: t("nav.suppliers", "Suppliers") },
+    { href: "/admin/workflow", icon: CheckSquare, label: t("nav.workflow", "Workflow") },
+    { href: "/admin/password", icon: Lock, label: t("nav.passwordPolicy", "Password") },
+    { href: "/admin/email", icon: Mail, label: t("nav.emailConfig", "Email") },
+    { href: "/admin/languages", icon: Globe, label: t("nav.languages", "Languages") },
+  ];
+
+  const reports = [
+    { href: "/requests", icon: FileText, label: t("nav.requests", "All requests") },
+    { href: "/assets", icon: Package, label: t("nav.assets", "Assets") },
+    { href: "/purchase-orders", icon: BarChart3, label: t("nav.purchaseOrders", "Purchase orders") },
+    { href: "/reports", icon: BarChart3, label: t("nav.reports", "Reports") },
   ];
 
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-        <p className="text-gray-500 mt-1">
-          Tong quan he thong
-        </p>
+        <h1 className="text-2xl font-bold">{t("admin.dashboardTitle", "Admin Dashboard")}</h1>
+        <p className="text-gray-500 mt-1">{t("admin.dashboardSubtitle", "System overview")}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -132,63 +125,40 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="font-bold mb-2">Cai dat he thong</h2>
-          <div className="space-y-2">
-            <a
-              href="/admin/languages"
-              className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
-            >
-              <Globe className="w-4 h-4" />
-              Quan ly ngon ngu
-            </a>
-            <a
-              href="/admin/categories"
-              className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
-            >
-              <Tag className="w-4 h-4" />
-              Quan ly danh muc
-            </a>
-            <a
-              href="/admin/suppliers"
-              className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
-            >
-              <Building2 className="w-4 h-4" />
-              Quan ly nha cung cap
-            </a>
-            <a
-              href="/admin/users"
-              className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
-            >
-              <Users className="w-4 h-4" />
-              Quan ly nguoi dung
-            </a>
+          <h2 className="font-bold mb-2">{t("admin.systemSettings", "System settings")}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {settings.map((s) => {
+              const Icon = s.icon;
+              return (
+                <a
+                  key={s.href}
+                  href={s.href}
+                  className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
+                >
+                  <Icon className="w-4 h-4" />
+                  {s.label}
+                </a>
+              );
+            })}
           </div>
         </div>
 
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="font-bold mb-2">Xem bao cao</h2>
+          <h2 className="font-bold mb-2">{t("admin.viewReports", "View reports")}</h2>
           <div className="space-y-2">
-            <a
-              href="/requests"
-              className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
-            >
-              <FileText className="w-4 h-4" />
-              Tat ca yeu cau
-            </a>
-            <a
-              href="/assets"
-              className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
-            >
-              <Package className="w-4 h-4" />
-              Kho tai san
-            </a>
-            <a
-              href="/reports"
-              className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
-            >
-              <BarChart3 className="w-4 h-4" />
-              Bao cao & thong ke
-            </a>
+            {reports.map((r) => {
+              const Icon = r.icon;
+              return (
+                <a
+                  key={r.href}
+                  href={r.href}
+                  className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
+                >
+                  <Icon className="w-4 h-4" />
+                  {r.label}
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>

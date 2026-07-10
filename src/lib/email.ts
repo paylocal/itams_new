@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { prisma } from "./prisma";
 
 interface EmailParams {
   to: string;
@@ -7,24 +8,56 @@ interface EmailParams {
   text?: string;
 }
 
-// Tao transporter 1 lan
-const transporter = nodemailer.createTransport({
+export type EmailConfig = {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  pass: string;
+  from: string;
+  replyTo: string;
+  enabled: boolean;
+};
+
+const defaultConfig: EmailConfig = {
   host: process.env.SMTP_HOST || "smtp.gmail.com",
   port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+  secure: process.env.SMTP_SECURE === "true",
+  user: process.env.SMTP_USER || "",
+  pass: process.env.SMTP_PASS || "",
+  from: process.env.SMTP_FROM || "ITAMS <noreply@company.com>",
+  replyTo: process.env.SMTP_REPLY_TO || "",
+  enabled: process.env.EMAIL_ENABLED === "true" || !!process.env.SMTP_USER,
+};
 
-// Trong development, log email thay vi gui that
-const isDev = process.env.NODE_ENV !== "production";
+export async function loadEmailConfig(): Promise<EmailConfig> {
+  try {
+    const rows = await prisma.$queryRaw<{ key: string; value: string }[]>`
+      SELECT [key], [value] FROM [dbo].[AppConfig]
+      WHERE [key] IN ('SMTP_HOST','SMTP_PORT','SMTP_SECURE','SMTP_USER','SMTP_PASS','SMTP_FROM','SMTP_REPLY_TO','EMAIL_ENABLED')
+    `;
+    const map = new Map(rows.map((r) => [r.key, r.value]));
+    return {
+      host: map.get("SMTP_HOST") || defaultConfig.host,
+      port: parseInt(map.get("SMTP_PORT") || String(defaultConfig.port)),
+      secure: (map.get("SMTP_SECURE") || "false") === "true",
+      user: map.get("SMTP_USER") || defaultConfig.user,
+      pass: map.get("SMTP_PASS") || defaultConfig.pass,
+      from: map.get("SMTP_FROM") || defaultConfig.from,
+      replyTo: map.get("SMTP_REPLY_TO") || defaultConfig.replyTo,
+      enabled: (map.get("EMAIL_ENABLED") || "false") === "true",
+    };
+  } catch (e) {
+    console.error("Load email config error:", e);
+    return defaultConfig;
+  }
+}
 
 export async function sendEmail({ to, subject, html, text }: EmailParams) {
+  const config = await loadEmailConfig();
+
   try {
-    if (isDev || !process.env.SMTP_USER) {
-      // Development: chi log
+    if (!config.enabled || !config.user) {
       console.log("=== EMAIL (DEV MODE) ===");
       console.log("To:", to);
       console.log("Subject:", subject);
@@ -34,9 +67,19 @@ export async function sendEmail({ to, subject, html, text }: EmailParams) {
       return { success: true, dev: true };
     }
 
-    // Production: gui that
+    const transporter = nodemailer.createTransport({
+      host: config.host,
+      port: config.port,
+      secure: config.secure,
+      auth: {
+        user: config.user,
+        pass: config.pass,
+      },
+    });
+
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM || "ITAMS <noreply@company.com>",
+      from: config.from,
+      replyTo: config.replyTo || undefined,
       to,
       subject,
       html,

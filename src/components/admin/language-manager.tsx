@@ -46,7 +46,7 @@ export function LanguageManager() {
 
   async function save() {
     if (!form.code || !form.name) {
-      alert(t("admin.codeRequired"));
+      alert(t("admin.codeRequired", "Code and name are required"));
       return;
     }
     setSaving(true);
@@ -63,30 +63,30 @@ export function LanguageManager() {
       if (res.ok) {
         await loadLanguages();
         resetForm();
-        alert(t("admin.addSuccess"));
+        alert(t("admin.addSuccess", "Saved"));
       } else {
         const d = await res.json();
-        alert(t("admin.error") + ": " + (d.error || res.status));
+        alert(t("admin.error", "Error") + ": " + (d.error || res.status));
       }
     } catch (e) {
-      alert(t("admin.error") + ": " + (e as Error).message);
+      alert(t("admin.error", "Error") + ": " + (e as Error).message);
     } finally {
       setSaving(false);
     }
   }
 
   async function remove(lang: any) {
-    if (!confirm(t("admin.deleteConfirm"))) return;
+    if (!confirm(t("admin.deleteConfirm", "Delete?"))) return;
     try {
       const res = await fetch("/api/admin/languages/" + lang.id, {
         method: "DELETE",
       });
       if (res.ok) {
         await loadLanguages();
-        alert(t("admin.deleteSuccess"));
+        alert(t("admin.deleteSuccess", "Deleted"));
       }
     } catch (e) {
-      alert(t("admin.error") + ": " + (e as Error).message);
+      alert(t("admin.error", "Error") + ": " + (e as Error).message);
     }
   }
 
@@ -96,17 +96,17 @@ export function LanguageManager() {
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
             <Globe className="w-5 h-5" />
-            {t("admin.tabLanguages")}
+            {t("admin.tabLanguages", "Languages")}
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            {t("admin.subtitle")}
+            {t("admin.subtitle", "Manage languages and translations")}
           </p>
         </div>
         <button
           onClick={() => { resetForm(); setShowForm(true); }}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
         >
-          <Plus className="w-4 h-4" /> {t("admin.addLanguage")}
+          <Plus className="w-4 h-4" /> {t("admin.addLanguage", "Add language")}
         </button>
       </div>
 
@@ -114,7 +114,7 @@ export function LanguageManager() {
         <div className="bg-white p-4 rounded-lg shadow border-2 border-blue-200">
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-bold">
-              {editing ? t("admin.edit") + " " + editing.code : t("admin.addLanguage")}
+              {editing ? t("admin.edit", "Edit") + " " + editing.code : t("admin.addLanguage", "Add language")}
             </h3>
             <button onClick={resetForm} className="text-gray-500">
               <X className="w-5 h-5" />
@@ -123,7 +123,7 @@ export function LanguageManager() {
           <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="text-xs text-gray-500 mb-1 block">
-                {t("admin.code")} *
+                {t("admin.code", "Code")} *
               </label>
               <input
                 placeholder="vi, en, ja"
@@ -135,7 +135,7 @@ export function LanguageManager() {
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">
-                {t("admin.name")} *
+                {t("admin.name", "Name")} *
               </label>
               <input
                 value={form.name}
@@ -145,10 +145,10 @@ export function LanguageManager() {
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">
-                {t("admin.flag")}
+                {t("admin.flag", "Flag")}
               </label>
               <input
-                placeholder="🇻🇳"
+                placeholder={t("admin.flagPlaceholder", "🇻🇳")}
                 value={form.flag}
                 onChange={(e) => setForm({ ...form, flag: e.target.value })}
                 className="w-full border rounded px-3 py-2 text-sm"
@@ -162,13 +162,13 @@ export function LanguageManager() {
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 flex items-center gap-1"
             >
               <Save className="w-4 h-4" />
-              {saving ? "..." : editing ? t("admin.edit") : t("admin.add")}
+              {saving ? "..." : editing ? t("admin.edit", "Edit") : t("admin.add", "Add")}
             </button>
             <button
               onClick={resetForm}
               className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
             >
-              {t("admin.cancel")}
+              {t("admin.cancel", "Cancel")}
             </button>
           </div>
         </div>
@@ -176,24 +176,24 @@ export function LanguageManager() {
 
       {loading ? (
         <div className="p-8 text-center text-gray-500">
-          {t("admin.loading")}
+          {t("admin.loading", "Loading...")}
         </div>
       ) : languages.length === 0 ? (
         <div className="p-8 text-center text-gray-500">
-          Chua co ngon ngu nao
+          {t("admin.noLanguages", "No languages")}
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
-                <th className="text-left p-3">{t("admin.code")}</th>
-                <th className="text-left p-3">{t("admin.name")}</th>
-                <th className="text-left p-3">{t("admin.flag")}</th>
+                <th className="text-left p-3">{t("admin.code", "Code")}</th>
+                <th className="text-left p-3">{t("admin.name", "Name")}</th>
+                <th className="text-left p-3">{t("admin.flag", "Flag")}</th>
                 <th className="text-center p-3">
-                  {t("admin.translationsCount")}
+                  {t("admin.translationsCount", "Translations")}
                 </th>
-                <th className="text-right p-3">Actions</th>
+                <th className="text-right p-3">{t("common.actions", "Actions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -204,7 +204,7 @@ export function LanguageManager() {
                     {l.name}
                     {l.isDefault && (
                       <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
-                        {t("admin.default")}
+                        {t("admin.default", "Default")}
                       </span>
                     )}
                   </td>
@@ -216,14 +216,14 @@ export function LanguageManager() {
                     <button
                       onClick={() => startEdit(l)}
                       className="p-1.5 text-blue-600 hover:bg-blue-100 rounded"
-                      title={t("admin.edit")}
+                      title={t("admin.edit", "Edit")}
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => remove(l)}
                       className="p-1.5 text-red-600 hover:bg-red-100 rounded ml-1"
-                      title={t("admin.delete")}
+                      title={t("admin.delete", "Delete")}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

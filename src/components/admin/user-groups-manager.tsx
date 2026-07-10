@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Edit, Trash2, X, Check } from "lucide-react";
+import { useI18n } from "../i18n-provider";
 
 type UserLite = {
   id: string;
@@ -46,15 +47,8 @@ function defaultManagedLevelByType(type: GroupType): number | null {
   return null;
 }
 
-function groupLevelLabel(level: number | null | undefined): string {
-  if (level === 1) return "Nhan vien";
-  if (level === 2) return "Leader";
-  if (level === 3) return "Manager";
-  if (level === 4) return "User/Admin";
-  return "-";
-}
-
 export function UserGroupsManager({ users }: Props) {
+  const { t } = useI18n();
   const [groups, setGroups] = useState<UserGroup[]>([]);
   const [editing, setEditing] = useState<UserGroup | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -86,12 +80,12 @@ export function UserGroupsManager({ users }: Props) {
       const res = await fetch("/api/admin/user-groups", { cache: "no-store" });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Khong tai duoc danh sach nhom");
+        setError(data.error || t("group.loadError", "Cannot load groups"));
       } else {
         setGroups(Array.isArray(data) ? data : []);
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Khong tai duoc danh sach nhom");
+      setError(e instanceof Error ? e.message : t("group.loadError", "Cannot load groups"));
     } finally {
       setLoadingGroups(false);
     }
@@ -140,7 +134,7 @@ export function UserGroupsManager({ users }: Props) {
 
   async function save() {
     if (!form.name.trim()) {
-      setError("Ten nhom la bat buoc");
+      setError(t("group.errorName", "Group name is required"));
       return;
     }
 
@@ -160,7 +154,7 @@ export function UserGroupsManager({ users }: Props) {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Khong luu duoc nhom");
+        setError(data.error || t("group.saveError", "Cannot save group"));
         return;
       }
 
@@ -171,28 +165,38 @@ export function UserGroupsManager({ users }: Props) {
       }
       resetForm();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Khong luu duoc nhom");
+      setError(e instanceof Error ? e.message : t("group.saveError", "Cannot save group"));
     } finally {
       setLoading(false);
     }
   }
 
   async function remove(group: UserGroup) {
-    if (!confirm(`Xoa nhom ${group.name}?`)) return;
+    if (!confirm(t("group.confirmDelete", "Delete group {{name}}?", { name: group.name }))) return;
     const res = await fetch(`/api/admin/user-groups/${group.id}`, { method: "DELETE" });
     if (!res.ok) {
-      alert("Khong xoa duoc nhom");
+      alert(t("group.deleteError", "Cannot delete group"));
       return;
     }
     setGroups((prev) => prev.filter((g) => g.id !== group.id));
   }
 
+  const groupLevelLabel = (level: number | null | undefined): string => {
+    if (level === 1) return t("group.levelEmployee", "Employee");
+    if (level === 2) return t("group.levelLeader", "Leader");
+    if (level === 3) return t("group.levelManager", "Manager");
+    if (level === 4) return t("group.levelAdmin", "Admin");
+    return "-";
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Nhom User</h1>
-          <p className="text-gray-500 mt-1">{groups.length} nhom duoc cau hinh</p>
+          <h1 className="text-2xl font-bold">{t("nav.userGroups", "User Groups")}</h1>
+          <p className="text-gray-500 mt-1">
+            {groups.length} {t("group.count", "groups configured")}
+          </p>
         </div>
         <div className="flex gap-2">
           <button
@@ -202,7 +206,7 @@ export function UserGroupsManager({ users }: Props) {
             }}
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
           >
-            <Plus className="w-4 h-4" /> Tao nhom
+            <Plus className="w-4 h-4" /> {t("group.create", "Create group")}
           </button>
         </div>
       </div>
@@ -212,7 +216,7 @@ export function UserGroupsManager({ users }: Props) {
       {showForm && (
         <div className="bg-white rounded-lg shadow p-4 space-y-3">
           <div className="flex justify-between items-center">
-            <h2 className="font-bold">{editing ? "Sua nhom" : "Tao nhom moi"}</h2>
+            <h2 className="font-bold">{editing ? t("group.edit", "Edit group") : t("group.create", "Create group")}</h2>
             <button onClick={resetForm} className="text-gray-500">
               <X className="w-4 h-4" />
             </button>
@@ -221,7 +225,7 @@ export function UserGroupsManager({ users }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input
               type="text"
-              placeholder="Ten nhom (vd: Nhom 1)"
+              placeholder={t("group.namePlaceholder", "Group name (e.g. Group 1)")}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
@@ -239,24 +243,24 @@ export function UserGroupsManager({ users }: Props) {
               }}
               className="border rounded px-3 py-2 text-sm"
             >
-              <option value="EMPLOYEE">Nhom Nhan vien</option>
-              <option value="LEADER">Nhom Leader</option>
-              <option value="MANAGER">Nhom Manager</option>
-              <option value="ADMIN">Nhom Admin</option>
+              <option value="EMPLOYEE">{t("group.typeEmployee", "Employee group")}</option>
+              <option value="LEADER">{t("group.typeLeader", "Leader group")}</option>
+              <option value="MANAGER">{t("group.typeManager", "Manager group")}</option>
+              <option value="ADMIN">{t("group.typeAdmin", "Admin group")}</option>
             </select>
             <select
               value={form.managesLevel}
               onChange={(e) => setForm({ ...form, managesLevel: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
             >
-              <option value="">Khong quan ly nhom nao</option>
-              <option value="1">Quan ly nhom Nhan vien</option>
-              <option value="2">Quan ly nhom Leader</option>
-              <option value="3">Quan ly nhom Manager</option>
+              <option value="">{t("group.noManaged", "Does not manage any group")}</option>
+              <option value="1">{t("group.manageEmployee", "Manage Employee group")}</option>
+              <option value="2">{t("group.manageLeader", "Manage Leader group")}</option>
+              <option value="3">{t("group.manageManager", "Manage Manager group")}</option>
             </select>
             <input
               type="text"
-              placeholder="Mo ta (tuy chon)"
+              placeholder={t("common.description", "Description (optional)")}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
@@ -264,7 +268,9 @@ export function UserGroupsManager({ users }: Props) {
           </div>
 
           <div>
-            <p className="text-sm font-medium mb-2">Thanh vien ({form.memberIds.length})</p>
+            <p className="text-sm font-medium mb-2">
+              {t("group.members", "Members")} ({form.memberIds.length})
+            </p>
             <div className="max-h-56 overflow-y-auto border rounded p-2 grid grid-cols-1 md:grid-cols-2 gap-2">
               {users.map((u) => {
                 const selected = form.memberIds.includes(u.id);
@@ -295,13 +301,13 @@ export function UserGroupsManager({ users }: Props) {
               disabled={loading}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 flex items-center gap-1"
             >
-              <Check className="w-4 h-4" /> {loading ? "Dang luu..." : "Luu"}
+              <Check className="w-4 h-4" /> {loading ? t("common.saving", "Saving...") : t("common.save", "Save")}
             </button>
             <button
               onClick={resetForm}
               className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
             >
-              Huy
+              {t("common.cancel", "Cancel")}
             </button>
           </div>
         </div>
@@ -311,25 +317,25 @@ export function UserGroupsManager({ users }: Props) {
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b">
             <tr>
-              <th className="text-left p-3">Ten nhom</th>
-              <th className="text-left p-3">Loai</th>
-              <th className="text-left p-3">Quan ly nhom</th>
-              <th className="text-left p-3">Thanh vien</th>
-              <th className="text-left p-3">Mo ta</th>
-              <th className="text-right p-3">Thao tac</th>
+              <th className="text-left p-3">{t("group.name", "Group name")}</th>
+              <th className="text-left p-3">{t("group.type", "Type")}</th>
+              <th className="text-left p-3">{t("group.manages", "Manages group")}</th>
+              <th className="text-left p-3">{t("group.members", "Members")}</th>
+              <th className="text-left p-3">{t("common.description", "Description")}</th>
+              <th className="text-right p-3">{t("common.actions", "Actions")}</th>
             </tr>
           </thead>
           <tbody>
             {loadingGroups ? (
               <tr>
                 <td colSpan={6} className="text-center py-8 text-gray-500">
-                  Dang tai du lieu nhom...
+                  {t("common.loading", "Loading...")}
                 </td>
               </tr>
             ) : groups.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-8 text-gray-500">
-                  Chua co nhom nao
+                  {t("group.empty", "No groups")}
                 </td>
               </tr>
             ) : (
@@ -347,14 +353,14 @@ export function UserGroupsManager({ users }: Props) {
                     <button
                       onClick={() => startEdit(group)}
                       className="p-1.5 hover:bg-blue-100 rounded text-blue-600 mr-1"
-                      title="Sua"
+                      title={t("common.edit", "Edit")}
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => remove(group)}
                       className="p-1.5 hover:bg-red-100 rounded text-red-600"
-                      title="Xoa"
+                      title={t("common.delete", "Delete")}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

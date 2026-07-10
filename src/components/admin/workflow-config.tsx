@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "../i18n-provider";
 
 type WorkflowConfigProps = {
   embedded?: boolean;
 };
 
 export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
+  const { t } = useI18n();
   const [threshold, setThreshold] = useState(5000);
   const [exchangeRateMode, setExchangeRateMode] = useState<"AUTO" | "MANUAL">("MANUAL");
   const [manualRate, setManualRate] = useState(26000);
@@ -29,7 +31,7 @@ export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
       const res = await fetch("/api/admin/workflow-config", { cache: "no-store" });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Khong tai duoc cau hinh");
+        setError(data.error || t("workflow.loadError", "Cannot load config"));
       } else {
         setThreshold(Number(data.leadThresholdUsd || 5000));
         setExchangeRateMode(data.exchangeRateMode === "AUTO" ? "AUTO" : "MANUAL");
@@ -47,7 +49,7 @@ export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
         );
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Khong tai duoc cau hinh");
+      setError(e instanceof Error ? e.message : t("workflow.loadError", "Cannot load config"));
     } finally {
       setLoading(false);
     }
@@ -69,7 +71,7 @@ export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Luu cau hinh that bai");
+        setError(data.error || t("workflow.saveError", "Save config failed"));
       } else {
         setThreshold(Number(data.leadThresholdUsd || threshold));
         setExchangeRateMode(data.exchangeRateMode === "AUTO" ? "AUTO" : exchangeRateMode);
@@ -85,17 +87,21 @@ export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
             ? null
             : Number(data.lastAutoSyncEpoch)
         );
-        setMessage("Da luu cau hinh workflow va ty gia quy doi");
+        setMessage(t("workflow.saved", "Saved workflow config and exchange rate"));
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Luu cau hinh that bai");
+      setError(e instanceof Error ? e.message : t("workflow.saveError", "Save config failed"));
     } finally {
       setSaving(false);
     }
   }
 
   if (loading) {
-    return <div className={embedded ? "p-4 border rounded-lg bg-gray-50" : "p-6 bg-white rounded-lg shadow"}>Dang tai cau hinh...</div>;
+    return (
+      <div className={embedded ? "p-4 border rounded-lg bg-gray-50" : "p-6 bg-white rounded-lg shadow"}>
+        {t("common.loading", "Loading...")}
+      </div>
+    );
   }
 
   const wrapperClass = embedded ? "border rounded-lg p-4 bg-gray-50 space-y-4" : "bg-white p-6 rounded-lg shadow space-y-4";
@@ -104,25 +110,25 @@ export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
     <div className="space-y-4">
       {!embedded && (
         <div>
-          <h1 className="text-2xl font-bold">Workflow Approvals</h1>
-          <p className="text-gray-500 mt-1">Cau hinh nguong gia tri de kich hoat buoc duyet Lead</p>
+          <h1 className="text-2xl font-bold">{t("nav.workflow", "Workflow Approvals")}</h1>
+          <p className="text-gray-500 mt-1">{t("workflow.subtitle", "Configure thresholds for Lead approval step")}</p>
         </div>
       )}
 
       <div className={wrapperClass}>
         <div>
-          <label className="block text-sm font-medium mb-2">Che do ty gia quy doi (VND/USD)</label>
+          <label className="block text-sm font-medium mb-2">{t("workflow.rateMode", "Exchange rate mode (VND/USD)")}</label>
           <select
             value={exchangeRateMode}
             onChange={(e) => setExchangeRateMode(e.target.value === "AUTO" ? "AUTO" : "MANUAL")}
             className="w-full md:w-80 border rounded px-3 py-2"
           >
             <option value="MANUAL">Manual</option>
-            <option value="AUTO">Auto (lay ty gia online)</option>
+            <option value="AUTO">{t("workflow.autoRate", "Auto (fetch online rate)")}</option>
           </select>
 
           <div className="mt-3">
-            <label className="block text-sm font-medium mb-2">Ty gia manual (VND cho 1 USD)</label>
+            <label className="block text-sm font-medium mb-2">{t("workflow.manualRate", "Manual rate (VND per 1 USD)")}</label>
             <input
               type="number"
               min={1}
@@ -134,14 +140,14 @@ export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
           </div>
 
           <div className="mt-3 text-sm text-gray-600 space-y-1">
-            <p>Ty gia auto hien tai: {autoRate ? `${autoRate.toLocaleString("vi-VN")} VND/USD` : "Chua lay duoc"}</p>
-            <p>Ty gia ap dung: {Number(effectiveRate || 0).toLocaleString("vi-VN")} VND/USD</p>
+            <p>{t("workflow.autoRateValue", "Current auto rate")}: {autoRate ? `${autoRate.toLocaleString("vi-VN")} VND/USD` : t("workflow.rateUnavailable", "Unavailable")}</p>
+            <p>{t("workflow.effectiveRate", "Effective rate")}: {Number(effectiveRate || 0).toLocaleString("vi-VN")} VND/USD</p>
             {lastAutoSyncEpoch ? (
               <p>
-                Lan dong bo auto gan nhat: {new Date(lastAutoSyncEpoch * 1000).toLocaleString("vi-VN")}
+                {t("workflow.lastSync", "Last auto sync")}: {new Date(lastAutoSyncEpoch * 1000).toLocaleString("vi-VN")}
               </p>
             ) : (
-              <p>Lan dong bo auto gan nhat: chua co</p>
+              <p>{t("workflow.lastSync", "Last auto sync")}: {t("workflow.noSync", "Not yet")}</p>
             )}
           </div>
         </div>
@@ -154,7 +160,7 @@ export function WorkflowConfig({ embedded = false }: WorkflowConfigProps) {
           disabled={saving}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
         >
-          {saving ? "Dang luu..." : "Luu cau hinh"}
+          {saving ? t("common.saving", "Saving...") : t("workflow.save", "Save config")}
         </button>
       </div>
     </div>

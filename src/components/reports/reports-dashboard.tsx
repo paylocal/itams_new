@@ -11,9 +11,12 @@ const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"
 
 const statusLabels: Record<string, { vi: string; en: string }> = {
   DRAFT: { vi: "Nhap", en: "Draft" },
+  PENDING_LEADER: { vi: "Cho Leader", en: "Pending Leader" },
   PENDING_MANAGER: { vi: "Cho QL", en: "Pending Mgr" },
-  PENDING_IT: { vi: "Cho IT", en: "Pending IT" },
+  PENDING_BOD: { vi: "Cho BOD", en: "Pending BOD" },
+  PENDING_STOCK_CHECK: { vi: "Cho IT kiem kho", en: "Pending Stock" },
   ORDERED: { vi: "Dat hang", en: "Ordered" },
+  DELIVERED: { vi: "Da giao", en: "Delivered" },
   COMPLETED: { vi: "Hoan thanh", en: "Completed" },
   REJECTED: { vi: "Tu choi", en: "Rejected" },
 };

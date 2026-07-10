@@ -15,7 +15,28 @@ export default async function AssetQRPage({
   const asset = await prisma.asset.findUnique({
     where: { id: params.id },
     include: {
-      currentHolder: { select: { name: true } },
+      currentHolder: { select: { name: true, department: true } },
+      request: {
+        select: {
+          requestNumber: true,
+          requester: { select: { name: true } },
+        },
+      },
+      purchaseOrder: { select: { poNumber: true, actualDate: true } },
+      handoverItems: {
+        include: {
+          handover: {
+            select: {
+              handoverNumber: true,
+              employee: { select: { name: true } },
+              itStaff: { select: { name: true } },
+              handoverDate: true,
+            },
+          },
+        },
+        orderBy: { id: "desc" },
+        take: 1,
+      },
     },
   });
 

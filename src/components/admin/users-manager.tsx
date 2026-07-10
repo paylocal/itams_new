@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Edit, Trash2, Search, X, Check } from "lucide-react";
+import { Plus, Edit, Trash2, Search, X, Check, Upload, Download, KeyRound } from "lucide-react";
+import * as XLSX from "xlsx";
 import { useI18n } from "../i18n-provider";
 
 interface User {
@@ -38,6 +39,12 @@ export function UsersManager({ users: initial, managers }: Props) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [importLoading, setImportLoading] = useState(false);
+  const [importResult, setImportResult] = useState<{ created: number; skipped: number; errors: string[] } | null>(null);
+  const [resettingUser, setResettingUser] = useState<User | null>(null);
+  const [resetPassword, setResetPassword] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
 
   const filteredUsers = users.filter(
     (u) =>
@@ -69,11 +76,11 @@ export function UsersManager({ users: initial, managers }: Props) {
 
   const save = async () => {
     if (!form.email || !form.name) {
-      setError("Vui long dien email va ten");
+      setError(t("user.errorNameEmail", "Please enter email and name"));
       return;
     }
     if (!editing && !form.password) {
-      setError("Vui long nhap mat khau");
+      setError(t("user.errorPassword", "Please enter password"));
       return;
     }
 
@@ -98,7 +105,7 @@ export function UsersManager({ users: initial, managers }: Props) {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Loi");
+        setError(data.error || t("common.error", "Error"));
       } else {
         if (editing) {
           setUsers(users.map((u) => (u.id === editing.id ? data : u)));
@@ -115,8 +122,73 @@ export function UsersManager({ users: initial, managers }: Props) {
     }
   };
 
+  const downloadTemplate = () => {
+    const rows = [
+      ["Email", "Name", "Role", "Department", "ManagerEmail", "Position"],
+      ["nv1@company.com", "Nguyen Van A", "EMPLOYEE", "IT", "leader1@company.com", "Developer"],
+      ["leader1@company.com", "Tran Thi B", "LEAD", "IT", "", "Team Lead"],
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Users");
+    XLSX.writeFile(wb, "user_import_template.xlsx");
+  };
+
+  const handleResetPassword = async () => {
+    if (!resettingUser) return;
+    setResetLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/users/${resettingUser.id}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPassword: resetPassword || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || data.errors?.join(", ") || t("common.error", "Error"));
+      } else {
+        alert(t("user.resetSuccess", "Password reset successfully"));
+        setResettingUser(null);
+        setResetPassword("");
+      }
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleImport = async () => {
+    if (!importFile) return;
+    setImportLoading(true);
+    setImportResult(null);
+    setError("");
+    try {
+      const formData = new FormData();
+      formData.append("file", importFile);
+      const res = await fetch("/api/users/import", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || t("common.error", "Error"));
+      } else {
+        setImportResult({
+          created: data.created || 0,
+          skipped: data.skipped || 0,
+          errors: data.errors || [],
+        });
+        setImportFile(null);
+        router.refresh();
+      }
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setImportLoading(false);
+    }
+  };
+
   const toggleActive = async (user: User) => {
-    if (!confirm(user.isActive ? "Vo hieu hoa user?" : "Kich hoat user?")) return;
+    if (!confirm(user.isActive ? t("user.confirmDeactivate", "Deactivate user?") : t("user.confirmActivate", "Activate user?"))) return;
 
     const res = await fetch("/api/users/" + user.id, {
       method: "PATCH",
@@ -128,7 +200,7 @@ export function UsersManager({ users: initial, managers }: Props) {
       const updated = await res.json();
       setUsers(users.map((u) => (u.id === user.id ? updated : u)));
     } else {
-      alert("Loi");
+      alert(t("common.error", "Error"));
     }
   };
 
@@ -145,41 +217,119 @@ export function UsersManager({ users: initial, managers }: Props) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">{t("user.title")}</h1>
-          <p className="text-gray-500 mt-1">{users.length} nguoi dung</p>
+          <h1 className="text-2xl font-bold">{t("user.title", "Users")}</h1>
+          <p className="text-gray-500 mt-1">{users.length} {t("user.count", "users")}</p>
         </div>
-        <button
-          onClick={() => {
-            resetForm();
-            setShowForm(true);
-          }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          {t("user.addUser")}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={downloadTemplate}
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" /> {t("user.downloadTemplate", "Template")}
+          </button>
+          <button
+            onClick={() => {
+              resetForm();
+              setShowForm(true);
+            }}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            {t("user.addUser", "Add user")}
+          </button>
+        </div>
       </div>
 
       {/* Search */}
       <div className="bg-white p-4 rounded-lg shadow">
-        <div className="relative">
+        <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder={t("common.search") + "..."}
+            placeholder={t("common.search", "Search") + "..."}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-3 py-2 border rounded-md text-sm"
           />
         </div>
+        <div className="border-t pt-3">
+          <p className="text-sm font-medium mb-2">{t("user.importExcel", "Import from Excel")}</p>
+          <div className="flex gap-2 items-center">
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={(e) => setImportFile(e.target.files?.[0] || null)}
+              className="text-sm flex-1"
+            />
+            <button
+              onClick={handleImport}
+              disabled={!importFile || importLoading}
+              className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 disabled:opacity-50 flex items-center gap-1 text-sm"
+            >
+              <Upload className="w-4 h-4" /> {importLoading ? t("common.importing", "Importing...") : t("common.import", "Import")}
+            </button>
+          </div>
+          {importResult && (
+            <div className="mt-2 text-sm">
+              <p className="text-green-700">{t("user.imported", "Created")}: {importResult.created}</p>
+              <p className="text-yellow-700">{t("user.skipped", "Skipped (duplicate)")}: {importResult.skipped}</p>
+              {importResult.errors.length > 0 && (
+                <div className="bg-red-50 text-red-700 p-2 rounded mt-1">
+                  <ul className="list-disc pl-4">
+                    {importResult.errors.map((err, i) => (
+                      <li key={i}>{err}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Reset Password Modal */}
+      {resettingUser && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+            <h3 className="font-bold text-lg mb-2">
+              {t("user.resetPassword", "Reset password")}: {resettingUser.name}
+            </h3>
+            <p className="text-sm text-gray-500 mb-3">
+              {t("user.resetPasswordHint", "Leave blank to generate default password")}
+            </p>
+            <input
+              type="password"
+              value={resetPassword}
+              onChange={(e) => setResetPassword(e.target.value)}
+              placeholder={t("user.newPassword", "New password")}
+              className="w-full border rounded px-3 py-2 text-sm mb-3"
+            />
+            {error && <div className="bg-red-50 text-red-700 p-2 rounded text-sm mb-3">{error}</div>}
+            <div className="flex gap-2">
+              <button
+                onClick={handleResetPassword}
+                disabled={resetLoading}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              >
+                {resetLoading ? t("common.saving", "Saving...") : t("common.save", "Save")}
+              </button>
+              <button
+                onClick={() => { setResettingUser(null); setResetPassword(""); setError(""); }}
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                {t("common.cancel", "Cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Form */}
       {showForm && (
         <div className="bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-3">
             <h2 className="font-bold">
-              {editing ? "Sua nguoi dung" : "Them nguoi dung moi"}
+              {editing ? t("user.editUser", "Edit user") : t("user.addUser", "Add user")}
             </h2>
             <button onClick={resetForm} className="text-gray-500">
               <X className="w-5 h-5" />
@@ -189,7 +339,7 @@ export function UsersManager({ users: initial, managers }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <input
               type="email"
-              placeholder={t("user.email") + " *"}
+              placeholder={t("user.email", "Email") + " *"}
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
@@ -197,14 +347,14 @@ export function UsersManager({ users: initial, managers }: Props) {
             />
             <input
               type="text"
-              placeholder={t("user.name") + " *"}
+              placeholder={t("user.name", "Name") + " *"}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
             />
             <input
               type="text"
-              placeholder={t("user.department")}
+              placeholder={t("user.department", "Department")}
               value={form.department}
               onChange={(e) => setForm({ ...form, department: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
@@ -227,7 +377,7 @@ export function UsersManager({ users: initial, managers }: Props) {
               className="border rounded px-3 py-2 text-sm"
               disabled={form.role !== "EMPLOYEE"}
             >
-              <option value="">Khong gan manager</option>
+              <option value="">{t("user.noManager", "No manager")}</option>
               {managers.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name} ({m.role})
@@ -237,7 +387,7 @@ export function UsersManager({ users: initial, managers }: Props) {
             {!editing && (
               <input
                 type="password"
-                placeholder="Mat khau *"
+                placeholder={t("user.password", "Password") + " *"}
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="border rounded px-3 py-2 text-sm col-span-2"
@@ -258,13 +408,13 @@ export function UsersManager({ users: initial, managers }: Props) {
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 flex items-center gap-1"
             >
               <Check className="w-4 h-4" />
-              {loading ? "Dang luu..." : t("common.save")}
+              {loading ? t("common.saving", "Saving...") : t("common.save", "Save")}
             </button>
             <button
               onClick={resetForm}
               className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
             >
-              {t("common.cancel")}
+              {t("common.cancel", "Cancel")}
             </button>
           </div>
         </div>
@@ -275,19 +425,19 @@ export function UsersManager({ users: initial, managers }: Props) {
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b">
             <tr>
-              <th className="text-left p-3">{t("user.email")}</th>
-              <th className="text-left p-3">{t("user.name")}</th>
-              <th className="text-left p-3">{t("user.role")}</th>
-              <th className="text-left p-3">{t("user.department")}</th>
-              <th className="text-left p-3">Trang thai</th>
-              <th className="text-right p-3">{t("common.actions")}</th>
+              <th className="text-left p-3">{t("user.email", "Email")}</th>
+              <th className="text-left p-3">{t("user.name", "Name")}</th>
+              <th className="text-left p-3">{t("user.role", "Role")}</th>
+              <th className="text-left p-3">{t("user.department", "Department")}</th>
+              <th className="text-left p-3">{t("common.status", "Status")}</th>
+              <th className="text-right p-3">{t("common.actions", "Actions")}</th>
             </tr>
           </thead>
           <tbody>
             {filteredUsers.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-8 text-gray-500">
-                  Khong co nguoi dung
+                  {t("user.empty", "No users")}
                 </td>
               </tr>
             ) : (
@@ -312,18 +462,25 @@ export function UsersManager({ users: initial, managers }: Props) {
                   </td>
                   <td className="p-3">
                     {user.isActive ? (
-                      <span className="text-xs text-green-600">Hoat dong</span>
+                      <span className="text-xs text-green-600">{t("common.active", "Active")}</span>
                     ) : (
-                      <span className="text-xs text-red-600">Vo hieu hoa</span>
+                      <span className="text-xs text-red-600">{t("common.inactive", "Inactive")}</span>
                     )}
                   </td>
                   <td className="p-3 text-right">
                     <button
                       onClick={() => startEdit(user)}
                       className="p-1.5 hover:bg-blue-100 rounded text-blue-600 mr-1"
-                      title="Sua"
+                      title={t("common.edit", "Edit")}
                     >
                       <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setResettingUser(user)}
+                      className="p-1.5 hover:bg-yellow-100 rounded text-yellow-600 mr-1"
+                      title={t("user.resetPassword", "Reset password")}
+                    >
+                      <KeyRound className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => toggleActive(user)}
@@ -333,7 +490,7 @@ export function UsersManager({ users: initial, managers }: Props) {
                           ? "hover:bg-red-100 text-red-600"
                           : "hover:bg-green-100 text-green-600")
                       }
-                      title={user.isActive ? "Vo hieu hoa" : "Kich hoat"}
+                      title={user.isActive ? t("common.deactivate", "Deactivate") : t("common.activate", "Activate")}
                     >
                       {user.isActive ? (
                         <X className="w-4 h-4" />

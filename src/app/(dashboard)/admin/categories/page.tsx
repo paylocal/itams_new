@@ -97,7 +97,7 @@ export default function CategoriesAdminPage() {
   }
 
   async function deleteCategory(c: Category) {
-    if (!confirm("Xoa danh muc " + c.name + "?")) return;
+    if (!confirm(t("categories.confirmDelete", "Delete category {{name}}?", { name: c.name }))) return;
     try {
       const res = await fetch("/api/device-categories/" + c.id, {
         method: "DELETE",
@@ -126,7 +126,7 @@ export default function CategoriesAdminPage() {
 
   async function saveModel(categoryId: string) {
     if (!modelForm.brand || !modelForm.name) {
-      alert("Nhap brand va name");
+      alert(t("models.brandNameRequired", "Please enter brand and name"));
       return;
     }
     try {
@@ -159,7 +159,7 @@ export default function CategoriesAdminPage() {
   }
 
   async function deleteModel(m: Model) {
-    if (!confirm("Xoa " + m.brand + " " + m.name + "?")) return;
+    if (!confirm(t("models.confirmDelete", "Delete {{brand}} {{name}}?", { brand: m.brand, name: m.name }))) return;
     try {
       const res = await fetch("/api/device-models/" + m.id, {
         method: "DELETE",
@@ -172,7 +172,7 @@ export default function CategoriesAdminPage() {
   }
 
   if (loading) {
-    return <div className="p-8 text-center">Dang tai...</div>;
+    return <div className="p-8 text-center">{t("common.loading", "Loading...")}</div>;
   }
 
   return (
@@ -181,10 +181,10 @@ export default function CategoriesAdminPage() {
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Tag className="w-6 h-6" />
-            Quan ly danh muc
+            {t("categories.title", "Category management")}
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            {categories.length} danh muc
+            {categories.length} {t("categories.count", "categories")}
           </p>
         </div>
         <button
@@ -195,25 +195,25 @@ export default function CategoriesAdminPage() {
           }}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
         >
-          <Plus className="w-4 h-4" /> Them danh muc
+          <Plus className="w-4 h-4" /> {t("categories.add", "Add category")}
         </button>
       </div>
 
       {showAddCategory && (
         <div className="bg-white p-4 rounded-lg shadow border-2 border-blue-200">
           <h3 className="font-bold mb-3">
-            {editing ? "Sua danh muc" : "Them danh muc moi"}
+            {editing ? t("categories.edit", "Edit category") : t("categories.addNew", "Add new category")}
           </h3>
           <div className="grid grid-cols-3 gap-3">
             <input
-              placeholder="Code (vi: LAPTOP, DESKTOP)"
+              placeholder={t("categories.codePlaceholder", "Code (e.g. LAPTOP, DESKTOP)")}
               value={form.code}
               onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
               disabled={!!editing}
               className="border rounded px-3 py-2 text-sm disabled:bg-gray-100"
             />
             <input
-              placeholder="Ten hien thi"
+              placeholder={t("categories.namePlaceholder", "Display name")}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
@@ -224,7 +224,7 @@ export default function CategoriesAdminPage() {
                 checked={form.hasModel}
                 onChange={(e) => setForm({ ...form, hasModel: e.target.checked })}
               />
-              Co chon model
+              {t("categories.hasModel", "Has model selection")}
             </label>
           </div>
           {error && <div className="bg-red-50 text-red-700 p-2 rounded text-sm mt-3">{error}</div>}
@@ -233,7 +233,7 @@ export default function CategoriesAdminPage() {
               onClick={saveCategory}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-1"
             >
-              <Save className="w-4 h-4" /> {editing ? "Cap nhat" : "Tao moi"}
+              <Save className="w-4 h-4" /> {editing ? t("common.update", "Update") : t("common.create", "Create")}
             </button>
             <button
               onClick={() => {
@@ -243,7 +243,7 @@ export default function CategoriesAdminPage() {
               }}
               className="px-4 py-2 bg-gray-200 rounded flex items-center gap-1"
             >
-              <X className="w-4 h-4" /> Huy
+              <X className="w-4 h-4" /> {t("common.cancel", "Cancel")}
             </button>
           </div>
         </div>
@@ -252,7 +252,7 @@ export default function CategoriesAdminPage() {
       <div className="space-y-2">
         {categories.length === 0 ? (
           <div className="p-8 bg-gray-50 text-center rounded border">
-            <p className="text-gray-500">Chua co danh muc nao</p>
+            <p className="text-gray-500">{t("categories.empty", "No categories yet")}</p>
           </div>
         ) : (
           categories.map((c) => (
@@ -281,14 +281,14 @@ export default function CategoriesAdminPage() {
                   <button
                     onClick={() => startEdit(c)}
                     className="p-1 text-blue-600 hover:bg-blue-100 rounded"
-                    title="Sua"
+                    title={t("common.edit", "Edit")}
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => deleteCategory(c)}
                     className="p-1 text-red-600 hover:bg-red-100 rounded"
-                    title="Xoa"
+                    title={t("common.delete", "Delete")}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -298,12 +298,12 @@ export default function CategoriesAdminPage() {
               {expanded[c.id] && c.hasModel && (
                 <div className="border-t bg-gray-50 p-3">
                   <div className="flex justify-between items-center mb-2">
-                    <h4 className="font-medium text-sm">Models trong {c.name}</h4>
+                    <h4 className="font-medium text-sm">{t("models.title", "Models in {{name}}", { name: c.name })}</h4>
                     <button
                       onClick={() => startEditModel(c)}
                       className="px-2 py-1 bg-green-600 text-white rounded text-xs flex items-center gap-1"
                     >
-                      <Plus className="w-3 h-3" /> Them model
+                      <Plus className="w-3 h-3" /> {t("models.add", "Add model")}
                     </button>
                   </div>
 
@@ -311,20 +311,20 @@ export default function CategoriesAdminPage() {
                     <div className="bg-white p-2 rounded border mb-2">
                       <div className="grid grid-cols-4 gap-2">
                         <input
-                          placeholder="Brand (Apple, Dell)"
+                          placeholder={t("models.brandPlaceholder", "Brand (Apple, Dell)")}
                           value={modelForm.brand}
                           onChange={(e) => setModelForm({ ...modelForm, brand: e.target.value })}
                           className="border rounded px-2 py-1 text-sm"
                         />
                         <input
-                          placeholder="Ten model"
+                          placeholder={t("models.namePlaceholder", "Model name")}
                           value={modelForm.name}
                           onChange={(e) => setModelForm({ ...modelForm, name: e.target.value })}
                           className="border rounded px-2 py-1 text-sm"
                         />
                         <input
                           type="number"
-                          placeholder="Gia tham khao"
+                          placeholder={t("models.pricePlaceholder", "Reference price")}
                           value={modelForm.avgPrice}
                           onChange={(e) => setModelForm({ ...modelForm, avgPrice: e.target.value })}
                           className="border rounded px-2 py-1 text-sm"
@@ -334,7 +334,7 @@ export default function CategoriesAdminPage() {
                             onClick={() => saveModel(c.id)}
                             className="flex-1 px-2 py-1 bg-blue-600 text-white rounded text-xs"
                           >
-                            Save
+                            {t("common.save", "Save")}
                           </button>
                           <button
                             onClick={() => {
@@ -343,7 +343,7 @@ export default function CategoriesAdminPage() {
                             }}
                             className="px-2 py-1 bg-gray-200 rounded text-xs"
                           >
-                            X
+                            {t("common.cancel", "Cancel")}
                           </button>
                         </div>
                       </div>
@@ -355,10 +355,10 @@ export default function CategoriesAdminPage() {
                       <table className="w-full text-sm">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="text-left p-2">Brand</th>
-                            <th className="text-left p-2">Model</th>
-                            <th className="text-right p-2">Gia tham khao</th>
-                            <th className="text-right p-2">Thao tac</th>
+                            <th className="text-left p-2">{t("models.brand", "Brand")}</th>
+                            <th className="text-left p-2">{t("models.name", "Model")}</th>
+                            <th className="text-right p-2">{t("models.price", "Price")}</th>
+                            <th className="text-right p-2">{t("common.actions", "Actions")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -371,7 +371,7 @@ export default function CategoriesAdminPage() {
                               <td className="p-2">{m.name}</td>
                               <td className="p-2 text-right">
                                 {m.avgPrice
-                                  ? m.avgPrice.toLocaleString("vi-VN") + " d"
+                                  ? m.avgPrice.toLocaleString("vi-VN") + " VND"
                                   : "-"}
                               </td>
                               <td className="p-2 text-right">
@@ -395,7 +395,7 @@ export default function CategoriesAdminPage() {
                     </div>
                   ) : (
                     <p className="text-sm text-gray-500 italic p-2">
-                      Chua co model nao
+                      {t("models.empty", "No models yet")}
                     </p>
                   )}
                 </div>

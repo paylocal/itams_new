@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Check, X, FileText, Clock } from "lucide-react";
 import { getStatusColor, getStatusLabel, formatDate } from "@/lib/utils";
+import { useI18n } from "@/components/i18n-provider";
 
 interface Request {
   id: string;
@@ -23,25 +24,29 @@ interface Request {
 interface Props {
   requests: Request[];
   userRole: string;
+  readOnly?: boolean;
 }
 
-export function ApprovalList({ requests, userRole }: Props) {
+export function ApprovalList({ requests, userRole, readOnly }: Props) {
+  const { t } = useI18n();
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold">Yeu cau cho phe duyet</h1>
-        <p className="text-gray-500 mt-1">{requests.length} yeu cau dang cho</p>
+        <h1 className="text-2xl font-bold">{t("approvals.title", "Pending Approvals")}</h1>
+        <p className="text-gray-500 mt-1">
+          {requests.length} {t("approvals.count", "requests")}
+        </p>
       </div>
 
       {requests.length === 0 ? (
         <div className="bg-white p-12 rounded-lg shadow text-center">
           <Check className="w-12 h-12 mx-auto text-green-500 mb-3" />
-          <p className="text-gray-600">Khong co yeu cau nao dang cho</p>
+          <p className="text-gray-600">{t("approvals.empty", "No pending requests")}</p>
         </div>
       ) : (
         <div className="space-y-3">
           {requests.map((req) => (
-            <ApprovalCard key={req.id} request={req} userRole={userRole} />
+            <ApprovalCard key={req.id} request={req} userRole={userRole} readOnly={readOnly} />
           ))}
         </div>
       )}
@@ -49,16 +54,27 @@ export function ApprovalList({ requests, userRole }: Props) {
   );
 }
 
-function ApprovalCard({ request, userRole }: { request: Request; userRole: string }) {
+function ApprovalCard({
+  request,
+  userRole,
+  readOnly,
+}: {
+  request: Request;
+  userRole: string;
+  readOnly?: boolean;
+}) {
   const router = useRouter();
+  const { t } = useI18n();
   const [processing, setProcessing] = useState(false);
   const [comment, setComment] = useState("");
   const [showForm, setShowForm] = useState<"APPROVED" | "REJECTED" | null>(null);
   const [error, setError] = useState("");
 
+  const canApprove = !readOnly;
+
   const handleDecision = async (decision: "APPROVED" | "REJECTED") => {
     if (decision === "REJECTED" && !comment.trim()) {
-      setError("Vui long nhap ly do");
+      setError(t("approvals.rejectReasonRequired", "Please enter a reason"));
       return;
     }
     setProcessing(true);
@@ -77,7 +93,34 @@ function ApprovalCard({ request, userRole }: { request: Request; userRole: strin
         router.refresh();
       }
     } catch (e) {
-      const message = e instanceof Error ? e.message : "Unknown error";
+      const message = e instanceof Error ? e.message : t("common.error", "Error");
+      setError(message);
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleStockCheck = async (hasStock: boolean) => {
+    if (!hasStock && !comment.trim()) {
+      setError(t("approvals.rejectReasonRequired", "Please enter a reason"));
+      return;
+    }
+    setProcessing(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/requests/${request.id}/stock-check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hasStock, comment }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error);
+      } else {
+        router.refresh();
+      }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : t("common.error", "Error");
       setError(message);
     } finally {
       setProcessing(false);
@@ -98,11 +141,11 @@ function ApprovalCard({ request, userRole }: { request: Request; userRole: strin
           </div>
           <h3 className="font-medium">{request.title}</h3>
           <p className="text-sm text-gray-600 mt-1">
-            Nguoi yeu cau: <strong>{request.requester.name}</strong>
+            {t("approvals.requester", "Requester")}: <strong>{request.requester.name}</strong>
             {request.requester.department && ` (${request.requester.department})`}
           </p>
           <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-            <strong>Ly do:</strong> {request.reason}
+            <strong>{t("common.reason", "Reason")}:</strong> {request.reason}
           </p>
         </div>
         <div className="text-right text-xs text-gray-500">
@@ -111,12 +154,44 @@ function ApprovalCard({ request, userRole }: { request: Request; userRole: strin
         </div>
       </div>
 
-      {showForm ? (
+      {request.status === "PENDING_STOCK_CHECK" ? (
+        <div className="mt-4 pt-3 border-t space-y-2">
+          <p className="text-sm text-gray-700">{t("approvals.stockCheckTitle", "IT stock check")}</p>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder={t("approvals.stockCommentPlaceholder", "Comment / reason")}
+            rows={2}
+            className="w-full border rounded-md px-3 py-2 text-sm"
+          />
+          {error && <div className="bg-red-50 text-red-700 p-2 rounded text-xs">{error}</div>}
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleStockCheck(true)}
+              disabled={processing}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
+            >
+              <Check className="w-4 h-4" /> {t("approvals.inStock", "In stock - Complete")}
+            </button>
+            <button
+              onClick={() => handleStockCheck(false)}
+              disabled={processing}
+              className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 disabled:opacity-50 flex items-center gap-1"
+            >
+              <X className="w-4 h-4" /> {t("approvals.outOfStock", "Out of stock - Order")}
+            </button>
+          </div>
+        </div>
+      ) : showForm ? (
         <div className="mt-4 pt-3 border-t space-y-2">
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder={showForm === "REJECTED" ? "Ly do tu choi *" : "Ghi chu (tuy chon)"}
+            placeholder={
+              showForm === "REJECTED"
+                ? t("approvals.rejectPlaceholder", "Rejection reason *")
+                : t("approvals.commentPlaceholder", "Comment (optional)")
+            }
             rows={3}
             className="w-full border rounded-md px-3 py-2 text-sm"
           />
@@ -132,8 +207,10 @@ function ApprovalCard({ request, userRole }: { request: Request; userRole: strin
               }`}
             >
               {processing
-                ? "Dang xu ly..."
-                : `Xac nhan ${showForm === "APPROVED" ? "phe duyet" : "tu choi"}`}
+                ? t("common.processing", "Processing...")
+                : showForm === "APPROVED"
+                ? t("approvals.confirmApprove", "Confirm approve")
+                : t("approvals.confirmReject", "Confirm reject")}
             </button>
             <button
               onClick={() => {
@@ -143,37 +220,41 @@ function ApprovalCard({ request, userRole }: { request: Request; userRole: strin
               }}
               className="px-4 py-2 border rounded-md hover:bg-gray-50"
             >
-              Huy
+              {t("common.cancel", "Cancel")}
             </button>
           </div>
         </div>
       ) : (
         <div className="flex gap-2 pt-3 border-t flex-wrap">
-          {userRole === "PURCHASING" && request.status === "ORDERED" && (
+          {canApprove && userRole === "PURCHASING" && request.status === "ORDERED" && (
             <Link
               href={`/purchase-orders/new?requestIds=${request.id}`}
               className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm"
             >
-              Tao PO
+              {t("po.create", "Create PO")}
             </Link>
           )}
-          <button
-            onClick={() => setShowForm("APPROVED")}
-            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-1"
-          >
-            <Check className="w-4 h-4" /> Phe duyet
-          </button>
-          <button
-            onClick={() => setShowForm("REJECTED")}
-            className="px-4 py-2 border border-red-300 text-red-600 rounded-md hover:bg-red-50 flex items-center gap-1"
-          >
-            <X className="w-4 h-4" /> Tu choi
-          </button>
+          {canApprove && request.status !== "PENDING_STOCK_CHECK" && (
+            <>
+              <button
+                onClick={() => setShowForm("APPROVED")}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-1"
+              >
+                <Check className="w-4 h-4" /> {t("common.approve", "Approve")}
+              </button>
+              <button
+                onClick={() => setShowForm("REJECTED")}
+                className="px-4 py-2 border border-red-300 text-red-600 rounded-md hover:bg-red-50 flex items-center gap-1"
+              >
+                <X className="w-4 h-4" /> {t("common.reject", "Reject")}
+              </button>
+            </>
+          )}
           <Link
             href={`/requests/${request.id}`}
             className="ml-auto px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-md flex items-center gap-1"
           >
-            <FileText className="w-4 h-4" /> Xem chi tiet
+            <FileText className="w-4 h-4" /> {t("common.viewDetail", "View detail")}
           </Link>
         </div>
       )}

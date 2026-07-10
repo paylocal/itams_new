@@ -87,14 +87,14 @@ export function TranslationManager() {
       if (res.ok) {
         setSavedFlag((x) => x + 1);
         const data = await res.json();
-        alert("Da luu " + (data.count || trans.length) + " translations!");
+        alert(t("translation.savedCount", "Saved {{count}} translations!", { count: data.count || trans.length }));
       } else {
         const data = await res.json();
-        alert("Loi: " + (data.error || res.status));
+        alert(t("translation.saveError", "Error") + ": " + (data.error || res.status));
       }
     } catch (e) {
       console.error("Save error:", e);
-      alert("Loi: " + (e as Error).message);
+      alert(t("translation.saveError", "Error") + ": " + (e as Error).message);
     } finally {
       setSaving(false);
     }
@@ -102,7 +102,7 @@ export function TranslationManager() {
 
   async function addNew() {
     if (!newKey.key || !newKey.value) {
-      alert("Nhap key va value");
+      alert(t("translation.errorKeyValue", "Enter key and value"));
       return;
     }
     try {
@@ -120,15 +120,15 @@ export function TranslationManager() {
         setTranslations((p) => ({ ...p, [newKey.key]: newKey.value }));
         setNewKey({ key: "", value: "", category: "common" });
         setShowAddForm(false);
-        alert("Them thanh cong!");
+        alert(t("translation.addSuccess", "Added"));
       }
     } catch (e) {
-      alert("Loi: " + (e as Error).message);
+      alert(t("translation.addError", "Error") + ": " + (e as Error).message);
     }
   }
 
   async function deleteKey(key: string) {
-    if (!confirm("Xoa key '" + key + "'?")) return;
+    if (!confirm(t("translation.confirmDelete", "Delete key '{{key}}'?", { key }))) return;
     try {
       const url =
         "/api/admin/translations?languageCode=" +
@@ -142,7 +142,7 @@ export function TranslationManager() {
         setTranslations(newT);
       }
     } catch (e) {
-      alert("Loi: " + (e as Error).message);
+      alert(t("translation.deleteError", "Error") + ": " + (e as Error).message);
     }
   }
 
@@ -172,10 +172,10 @@ export function TranslationManager() {
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
             <Globe className="w-5 h-5" />
-            {t("admin.translations")}
+            {t("admin.translations", "Translations")}
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            {t("admin.subtitle")}
+            {t("admin.subtitle", "Manage languages and translations")}
           </p>
         </div>
         <div className="flex gap-2">
@@ -183,7 +183,7 @@ export function TranslationManager() {
             onClick={() => setShowAddForm(!showAddForm)}
             className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center gap-2"
           >
-            <Plus className="w-4 h-4" /> {t("admin.addTranslation")}
+            <Plus className="w-4 h-4" /> {t("admin.addTranslation", "Add translation")}
           </button>
           <button
             onClick={saveAll}
@@ -191,7 +191,7 @@ export function TranslationManager() {
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
-            {saving ? "..." : t("admin.saveAll")}
+            {saving ? "..." : t("admin.saveAll", "Save all")}
           </button>
         </div>
       </div>
@@ -239,9 +239,14 @@ export function TranslationManager() {
               <option value="roles">roles</option>
               <option value="status">status</option>
               <option value="admin">admin</option>
+              <option value="request">request</option>
+              <option value="po">po</option>
+              <option value="assets">assets</option>
+              <option value="handover">handover</option>
+              <option value="email">email</option>
             </select>
             <input
-              placeholder="Gia tri"
+              placeholder={t("admin.value", "Value")}
               value={newKey.value}
               onChange={(e) => setNewKey({ ...newKey, value: e.target.value })}
               className="col-span-4 border rounded px-2 py-1.5 text-sm"
@@ -250,7 +255,7 @@ export function TranslationManager() {
               onClick={addNew}
               className="col-span-1 px-3 py-1.5 bg-green-600 text-white rounded text-sm"
             >
-              Add
+              {t("common.add", "Add")}
             </button>
           </div>
         </div>
@@ -260,7 +265,7 @@ export function TranslationManager() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
-          placeholder={t("admin.search")}
+          placeholder={t("admin.search", "Search...")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full pl-9 pr-3 py-2 border rounded text-sm"
@@ -268,13 +273,13 @@ export function TranslationManager() {
       </div>
 
       {loading ? (
-        <div className="p-8 text-center text-gray-500">{t("admin.loading")}</div>
+        <div className="p-8 text-center text-gray-500">{t("admin.loading", "Loading...")}</div>
       ) : (
         <div className="bg-white border rounded-lg overflow-hidden">
           <div className="max-h-[500px] overflow-y-auto">
             {filteredKeys.length === 0 ? (
               <div className="p-8 text-center text-gray-500">
-                {t("admin.emptyTranslations")}
+                {t("admin.emptyTranslations", "No translations")}
               </div>
             ) : (
               filteredKeys.map((key) => (
@@ -301,14 +306,14 @@ export function TranslationManager() {
                         <button
                           onClick={saveEdit}
                           className="px-2 py-1 bg-green-500 text-white rounded text-sm"
-                          title="Luu"
+                          title={t("common.save", "Save")}
                         >
                           <Check className="w-3 h-3" />
                         </button>
                         <button
                           onClick={cancelEdit}
                           className="px-2 py-1 bg-gray-300 rounded text-sm"
-                          title="Huy"
+                          title={t("common.cancel", "Cancel")}
                         >
                           ×
                         </button>
@@ -320,7 +325,7 @@ export function TranslationManager() {
                       >
                         {translations[key] || (
                           <span className="text-gray-400 italic">
-                            (empty)
+                            {t("translation.empty", "(empty)")}
                           </span>
                         )}
                       </div>
@@ -332,14 +337,14 @@ export function TranslationManager() {
                         <button
                           onClick={() => startEdit(key, translations[key] || "")}
                           className="p-1 text-blue-600 hover:bg-blue-100 rounded"
-                          title={t("admin.edit")}
+                          title={t("admin.edit", "Edit")}
                         >
                           <Edit3 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => deleteKey(key)}
                           className="p-1 text-red-600 hover:bg-red-100 rounded"
-                          title={t("admin.delete")}
+                          title={t("admin.delete", "Delete")}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

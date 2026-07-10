@@ -4,11 +4,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ShoppingCart, Package, FileText } from "lucide-react";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate, getStatusLabel } from "@/lib/utils";
+import { getServerT } from "@/lib/i18n-server";
 
 export default async function PurchaseOrdersPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
+  const { t } = await getServerT();
 
   const purchaseOrders = await prisma.purchaseOrder.findMany({
     include: {
@@ -25,36 +27,43 @@ export default async function PurchaseOrdersPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  const statusLabels: Record<string, { label: string; color: string }> = {
-    DRAFT: { label: "Nhap", color: "bg-gray-100 text-gray-700" },
-    SENT: { label: "Da gui", color: "bg-blue-100 text-blue-700" },
-    SHIPPED: { label: "Dang giao", color: "bg-yellow-100 text-yellow-700" },
-    DELIVERED: { label: "Da nhan", color: "bg-green-100 text-green-700" },
-    CANCELLED: { label: "Huy", color: "bg-red-100 text-red-700" },
+  const statusLabels: Record<string, { labelKey: string; fallback: string; color: string }> = {
+    DRAFT: { labelKey: "po.status.DRAFT", fallback: "Nhap", color: "bg-gray-100 text-gray-700" },
+    SENT: { labelKey: "po.status.SENT", fallback: "Da gui", color: "bg-blue-100 text-blue-700" },
+    SHIPPED: { labelKey: "po.status.SHIPPED", fallback: "Dang giao", color: "bg-yellow-100 text-yellow-700" },
+    DELIVERED: { labelKey: "po.status.DELIVERED", fallback: "Da nhan", color: "bg-green-100 text-green-700" },
+    CANCELLED: { labelKey: "po.status.CANCELLED", fallback: "Huy", color: "bg-red-100 text-red-700" },
   };
+
+  const isPurchasing = session.user.role === "PURCHASING";
+  const isAdmin = session.user.role === "ADMIN";
+  const isITMember = await prisma.userGroupMember.findFirst({
+    where: { userId: session.user.id, group: { code: "IT" } },
+  });
+  const isIT = isITMember !== null || session.user.role === "IT_STAFF";
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Don mua hang (PO)</h1>
-          <p className="text-gray-500 mt-1">{purchaseOrders.length} don</p>
+          <h1 className="text-2xl font-bold">{t("nav.purchaseOrders", "Purchase Orders")}</h1>
+          <p className="text-gray-500 mt-1">{purchaseOrders.length} {t("po.count", "orders")}</p>
         </div>
-        {(session.user.role === "PURCHASING" || session.user.role === "ADMIN") && (
+        {isPurchasing && (
           <div className="flex gap-2">
             <Link
               href="/purchase-orders/pending"
               className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 flex items-center gap-2"
             >
               <Package className="w-4 h-4" />
-              YC cho mua
+              {t("po.pendingRequests", "Pending requests")}
             </Link>
             <Link
               href="/purchase-orders/select-items"
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
             >
               <ShoppingCart className="w-4 h-4" />
-              Tao PO tu YC
+              {t("po.createFromRequests", "Create PO from requests")}
             </Link>
           </div>
         )}
@@ -63,10 +72,8 @@ export default async function PurchaseOrdersPage() {
       {purchaseOrders.length === 0 ? (
         <div className="bg-white p-12 rounded-lg shadow text-center text-gray-500">
           <Package className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>Chua co don mua hang nao</p>
-          <p className="text-xs mt-2">
-            Vao "YC cho mua" de tao PO tu cac yeu cau da duyet
-          </p>
+          <p>{t("po.empty", "No purchase orders yet")}</p>
+          <p className="text-xs mt-2">{t("po.emptyHint", "Go to Pending Requests to create PO")}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -79,41 +86,37 @@ export default async function PurchaseOrdersPage() {
                     <div className="flex items-center gap-2">
                       <p className="font-bold text-lg">{po.poNumber}</p>
                       <span className={`text-xs px-2 py-0.5 rounded ${status.color}`}>
-                        {status.label}
+                        {t(status.labelKey, status.fallback)}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mt-1">
-                      NCC: <strong>{po.supplierName}</strong>
+                      {t("po.supplier", "Supplier")}: <strong>{po.supplierName}</strong>
                       {po.supplierContact && " - " + po.supplierContact}
                     </p>
                     <p className="text-sm font-medium mt-2">
-                      Tong tien: <span className="text-blue-700">{formatCurrency(po.totalAmount)}</span>
+                      {t("po.total", "Total")}: <span className="text-blue-700">{formatCurrency(po.totalAmount)}</span>
                     </p>
                   </div>
                   <div className="text-right text-sm">
-                    <div className="text-gray-500">Ngay dat</div>
+                    <div className="text-gray-500">{t("po.orderDate", "Order date")}</div>
                     <div className="font-medium">{formatDate(po.orderDate)}</div>
                     {po.expectedDate && (
                       <>
-                        <div className="text-gray-500 mt-2">Du kien giao</div>
-                        <div className="font-medium text-blue-600">
-                          {formatDate(po.expectedDate)}
-                        </div>
+                        <div className="text-gray-500 mt-2">{t("po.expectedDate", "Expected delivery")}</div>
+                        <div className="font-medium text-blue-600">{formatDate(po.expectedDate)}</div>
                       </>
                     )}
                     {po.actualDate && (
                       <>
-                        <div className="text-gray-500 mt-2">Nhan thuc te</div>
-                        <div className="font-medium text-green-600">
-                          {formatDate(po.actualDate)}
-                        </div>
+                        <div className="text-gray-500 mt-2">{t("po.actualDate", "Received date")}</div>
+                        <div className="font-medium text-green-600">{formatDate(po.actualDate)}</div>
                       </>
                     )}
                   </div>
                 </div>
                 <div className="mt-3 pt-3 border-t">
                   <p className="text-xs font-medium text-gray-600 mb-2">
-                    Bao gom {po.requests.length} yeu cau:
+                    {t("po.includesRequests", "Includes {{n}} requests", { n: po.requests.length })}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {po.requests.map((pr) => (
@@ -136,7 +139,7 @@ export default async function PurchaseOrdersPage() {
                       rel="noopener noreferrer"
                       className="text-sm text-blue-600 hover:underline"
                     >
-                      Xem file PO
+                      {t("po.viewPO", "View PO file")}
                     </a>
                   )}
                   {po.invoiceDocument && (
@@ -146,20 +149,20 @@ export default async function PurchaseOrdersPage() {
                       rel="noopener noreferrer"
                       className="text-sm text-blue-600 hover:underline"
                     >
-                      Xem hoa don
+                      {t("po.viewInvoice", "View invoice")}
                     </a>
                   )}
-                  {session.user.role === "IT_STAFF" && po.status !== "DELIVERED" && (
+                  {isIT && po.status !== "DELIVERED" && (
                     <Link
                       href={`/purchase-orders/${po.id}/receive`}
                       className="ml-auto px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700"
                     >
-                      Xac nhan nhan hang
+                      {t("po.receive", "Confirm receipt")}
                     </Link>
                   )}
-                  {po.status === "DELIVERED" && session.user.role === "IT_STAFF" && (
+                  {po.status === "DELIVERED" && isIT && (
                     <span className="ml-auto px-3 py-1.5 bg-gray-100 text-gray-600 rounded text-sm">
-                      Da nhan hang
+                      {t("po.received", "Received")}
                     </span>
                   )}
                 </div>

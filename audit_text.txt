@@ -1,0 +1,1420 @@
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:4: import { Plus, Edit, Trash2, Save, X, ChevronDown, ChevronRight, Laptop, Tag, Package } from "lucide-react";
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:29:   const [editing, setEditing] = useState<Category | null>(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:30:   const [editingModel, setEditingModel] = useState<Model | null>(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:31:   const [showAddCategory, setShowAddCategory] = useState(false);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:32:   const [showAddModel, setShowAddModel] = useState<string | null>(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:51:     } finally {
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:60:   async function saveCategory() {
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:67:       const url = editing ? "/api/device-categories/" + editing.id : "/api/device-categories";
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:68:       const method = editing ? "PUT" : "POST";
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:81:         setEditing(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:82:         setShowAddCategory(false);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:93:   function startEdit(c: Category) {
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:94:     setEditing(c);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:96:     setShowAddCategory(true);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:99:   async function deleteCategory(c: Category) {
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:103:         method: "DELETE",
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:112:   function startEditModel(c: Category, m?: Model) {
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:113:     setShowAddModel(c.id);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:115:       setEditingModel(m);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:122:       setEditingModel(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:127:   async function saveModel(categoryId: string) {
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:133:       const url = editingModel
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:134:         ? "/api/device-models/" + editingModel.id
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:136:       const method = editingModel ? "PUT" : "POST";
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:150:         setEditingModel(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:161:   async function deleteModel(m: Model) {
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:165:         method: "DELETE",
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:192:             setEditing(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:193:             setShowAddCategory(true);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:202:       {showAddCategory && (
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:205:             {editing ? "Sua danh muc" : "Them danh muc moi"}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:212:               disabled={!!editing}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:233:               onClick={saveCategory}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:236:               <Save className="w-4 h-4" /> {editing ? "Cap nhat" : "Tao moi"}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:240:                 setShowAddCategory(false);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:241:                 setEditing(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:282:                     onClick={() => startEdit(c)}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:286:                     <Edit className="w-4 h-4" />
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:289:                     onClick={() => deleteCategory(c)}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:303:                       onClick={() => startEditModel(c)}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:310:                   {showAddModel === c.id && (
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:334:                             onClick={() => saveModel(c.id)}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:337:                             Save
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:341:                               setShowAddModel(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:342:                               setEditingModel(null);
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:379:                                   onClick={() => startEditModel(c, m)}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:382:                                   <Edit className="w-3 h-3" />
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\categories\page.tsx:385:                                   onClick={() => deleteModel(m)}
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:15:     pending: 0,
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:16:     completed: 0,
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:44:       key: "pending",
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:46:       value: stats.pending,
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:47:       href: "/requests?status=PENDING",
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:52:       key: "completed",
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:54:       value: stats.completed,
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:55:       href: "/requests?status=COMPLETED",
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\dashboard\page.tsx:169:           <h2 className="font-bold mb-2">Xem bao cao</h2>
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\groups\page.tsx:15:     select: { id: true, name: true, email: true, role: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\users\page.tsx:14:     orderBy: { createdAt: "desc" },
+D:\Project\itams-new-clean\src\app\(dashboard)\admin\users\page.tsx:16:       manager: { select: { id: true, name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:5: import { ApprovalList } from "@/components/approvals/approval-list";
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:16:       status: "PENDING_MANAGER",
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:20:     where = { status: "PENDING_LEAD" };
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:22:     where = { status: "PENDING_IT" };
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:24:     where = { status: { in: ["PENDING_MANAGER", "PENDING_LEAD", "PENDING_IT", "PENDING_ADMIN", "PENDING_PURCHASING"] } };
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:31:     include: { requester: { select: { id: true, name: true, department: true } } },
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:32:     orderBy: { createdAt: "asc" },
+D:\Project\itams-new-clean\src\app\(dashboard)\approvals\page.tsx:35:   return <ApprovalList requests={requests} userRole={session.user.role} />;
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\[id]\qr\page.tsx:18:       currentHolder: { select: { name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\[id]\page.tsx:5: import { AssetDetail } from "@/components/assets/asset-detail";
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\[id]\page.tsx:7: export default async function AssetDetailPage({
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\[id]\page.tsx:18:       currentHolder: { select: { id: true, name: true, department: true, email: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\[id]\page.tsx:20:         orderBy: { createdAt: "desc" },
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\[id]\page.tsx:28:   return <AssetDetail asset={asset} />;
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\page.tsx:5: import { AssetsList } from "@/components/assets/assets-list";
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\page.tsx:12:     where: { status: { not: "DISPOSED" } },
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\page.tsx:14:       currentHolder: { select: { id: true, name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\page.tsx:16:     orderBy: { createdAt: "desc" },
+D:\Project\itams-new-clean\src\app\(dashboard)\assets\page.tsx:19:   return <AssetsList assets={assets} />;
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:11:   const stats = { total: 0, pending: 0, completed: 0, myAssets: 0 };
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:14:     stats.total = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:17:     stats.pending = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:20:         status: { notIn: ["COMPLETED", "REJECTED"] },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:23:     stats.completed = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:24:       where: { requesterId: session.user.id, status: "COMPLETED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:27:       where: { currentHolderId: session.user.id, status: "ASSIGNED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:30:     stats.pending = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:32:         status: "PENDING_MANAGER",
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:36:     stats.total = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:39:     stats.completed = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:42:         status: "COMPLETED",
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:46:     stats.pending = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:47:       where: { status: "PENDING_LEAD" },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:49:     stats.total = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:50:       where: { status: { in: ["PENDING_MANAGER", "PENDING_LEAD", "PENDING_IT", "ORDERED", "COMPLETED"] } },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:52:     stats.completed = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:53:       where: { status: "COMPLETED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:56:     stats.pending = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:57:       where: { status: "PENDING_IT" },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:59:     stats.total = await prisma.asset.count();
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:61:       where: { status: "ASSIGNED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:64:     stats.pending = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:65:       where: { status: "ORDERED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:67:     stats.total = await prisma.purchaseOrder.count();
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:69:     stats.total = await prisma.assetRequest.count();
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:70:     stats.pending = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:72:         status: { in: ["PENDING_MANAGER", "PENDING_LEAD", "PENDING_IT", "ORDERED"] },
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:75:     stats.completed = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\dashboard\page.tsx:76:       where: { status: "COMPLETED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\[id]\page.tsx:5: import { HandoverDetail } from "@/components/handover/handover-detail";
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\[id]\page.tsx:7: export default async function HandoverDetailPage({
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\[id]\page.tsx:18:       employee: { select: { id: true, name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\[id]\page.tsx:19:       itStaff: { select: { id: true, name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\[id]\page.tsx:22:           asset: { select: { id: true, assetTag: true, name: true, serialNumber: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\[id]\page.tsx:31:     <HandoverDetail
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\page.tsx:5: import { HandoverList } from "@/components/handover/handover-list";
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\page.tsx:18:       { status: "PENDING_IT_SIGN" },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\page.tsx:25:       employee: { select: { id: true, name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\page.tsx:26:       itStaff: { select: { name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\page.tsx:27:       items: { include: { asset: { select: { assetTag: true, name: true } } } },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\page.tsx:29:     orderBy: { createdAt: "desc" },
+D:\Project\itams-new-clean\src\app\(dashboard)\handovers\page.tsx:32:   return <HandoverList handovers={handovers} userRole={session.user.role} />;
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:5: import { SelectRequestsForPO } from "@/components/purchase-orders/select-requests-for-po";
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:7: export default async function CreatePOSelectPage() {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:16:   const allOrdered = await prisma.assetRequest.findMany({
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:17:     where: { status: "ORDERED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:19:       requester: { select: { name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:27:     select: { requestId: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:29:   const requestIdsWithPO = new Set(existingPOs.map((p: { requestId: string }) => p.requestId));
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:30:   const availableRequests = allOrdered.filter(
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\create\page.tsx:34:   return <SelectRequestsForPO availableRequests={availableRequests as any} />;
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:6: import { getStatusColor, getStatusLabel, formatCurrency } from "@/lib/utils";
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:8: export default async function PendingPOPage() {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:17:   const allOrdered = await prisma.assetRequest.findMany({
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:18:     where: { status: "ORDERED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:20:       requester: { select: { name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:28:     select: { requestId: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:30:   const requestIdsWithPO = new Set(existingPOs.map((p: { requestId: string }) => p.requestId));
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:31:   const requests = allOrdered.filter((r: { id: string }) => !requestIdsWithPO.has(r.id));
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:41:           href="/purchase-orders/new"
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:62:                     <span className={`text-xs px-2 py-1 rounded ${getStatusColor(req.status)}`}>
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:63:                       {getStatusLabel(req.status)}
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:71:                     {req.items.length} mat hang | Tong: <strong>{formatCurrency(req.totalAmount || 0)}</strong>
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\pending\page.tsx:75:                   href={`/purchase-orders/new?requestIds=${req.id}`}
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:5: import { CreatePOFormMulti } from "@/components/purchase-orders/create-po-form-multi";
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:7: export default async function NewPOPage({
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:8:   searchParams,
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:10:   searchParams: { itemIds?: string; requestIds?: string };
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:20:   let selectedItemIds: string[] = [];
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:22:   if (searchParams.itemIds) {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:24:     selectedItemIds = decodeURIComponent(searchParams.itemIds).split(",");
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:25:   } else if (searchParams.requestIds) {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:26:     // Fallback: lay tat ca items cua cac YC
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:27:     const requestIds = searchParams.requestIds.split(",");
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:30:       select: { id: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:32:     selectedItemIds = items.map((i: { id: string }) => i.id);
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:35:   if (selectedItemIds.length === 0) {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:36:     redirect("/purchase-orders/select-items");
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:41:     where: { id: { in: selectedItemIds } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:43:       deviceModel: { select: { brand: true, name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:44:       category: { select: { name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:47:           requester: { select: { name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:54:   const requestMap = new Map<
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:77:   const preselected = Array.from(requestMap.values());
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:80:     <CreatePOFormMulti
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\new\page.tsx:82:       preselected={preselected as any}
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:9: export default async function PendingPOPage() {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:17:   const allOrdered = await prisma.assetRequest.findMany({
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:18:     where: { status: "ORDERED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:20:       requester: { select: { name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:27:     select: { requestId: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:29:   const requestIdsWithPO = new Set(existingPOs.map((p) => p.requestId));
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:30:   const requests = allOrdered.filter((r) => !requestIdsWithPO.has(r.id));
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:40:           href="/purchase-orders/create"
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:79:                     <strong>{formatCurrency(req.totalAmount || 0)}</strong>
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\pending\page.tsx:83:                   href={`/purchase-orders/new?requestIds=${req.id}`}
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:5: import { SelectItemsForPO } from "@/components/purchase-orders/select-items-for-po";
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:7: export default async function SelectItemsPage() {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:16:   const allOrdered = await prisma.assetRequest.findMany({
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:19:         { status: "ORDERED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:20:         { status: "COMPLETED" }, // YC hoan thanh nhung co the co them item moi
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:24:       requester: { select: { name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:27:           deviceModel: { select: { brand: true, name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:28:           category: { select: { name: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:38:     select: { requestItemId: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:40:   const itemIdsInPO = new Set(poItems.map((p) => p.requestItemId));
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:43:   const availableRequests = allOrdered
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\select-items\page.tsx:56:   return <SelectItemsForPO availableRequests={availableRequests as any} />;
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:19:               requester: { select: { name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:25:     orderBy: { createdAt: "desc" },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:28:   const statusLabels: Record<string, { label: string; color: string }> = {
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:33:     CANCELLED: { label: "Huy", color: "bg-red-100 text-red-700" },
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:46:               href="/purchase-orders/pending"
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:53:               href="/purchase-orders/select-items"
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:74:             const status = statusLabels[po.status] || statusLabels.DRAFT;
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:81:                       <span className={`text-xs px-2 py-0.5 rounded ${status.color}`}>
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:82:                         {status.label}
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:90:                       Tong tien: <span className="text-blue-700">{formatCurrency(po.totalAmount)}</span>
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:139:                       Xem file PO
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:149:                       Xem hoa don
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:152:                   {session.user.role === "IT_STAFF" && po.status !== "DELIVERED" && (
+D:\Project\itams-new-clean\src\app\(dashboard)\purchase-orders\page.tsx:160:                   {po.status === "DELIVERED" && session.user.role === "IT_STAFF" && (
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:13:   const totalRequests = await prisma.assetRequest.count();
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:14:   const completedRequests = await prisma.assetRequest.count({
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:15:     where: { status: "COMPLETED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:17:   const totalAssets = await prisma.asset.count();
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:19:     where: { status: "ASSIGNED" },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:21:   const totalPOs = await prisma.purchaseOrder.count();
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:22:   const totalSpent = await prisma.purchaseOrder.aggregate({
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:23:     _sum: { totalAmount: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:27:   const statusGroups = await prisma.assetRequest.groupBy({
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:28:     by: ["status"],
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:34:     select: { department: true, role: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:48:   const assetsByStatus = await prisma.asset.groupBy({
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:49:     by: ["status"],
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:54:   const sixMonthsAgo = new Date();
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:58:     where: { createdAt: { gte: sixMonthsAgo } },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:59:     select: { createdAt: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:65:     const month = r.createdAt.toISOString().slice(0, 7);
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:74:     where: { createdAt: { gte: sixMonthsAgo } },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:75:     select: { createdAt: true, totalAmount: true },
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:79:     const month = p.createdAt.toISOString().slice(0, 7);
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:80:     const amount = typeof p.totalAmount === "number" ? p.totalAmount : p.totalAmount?.toNumber?.() ?? 0;
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:96:         totalRequests,
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:97:         completedRequests,
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:98:         totalAssets,
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:100:         totalPOs,
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:101:         totalSpent:
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:102:           typeof totalSpent._sum.totalAmount === "number"
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:103:             ? totalSpent._sum.totalAmount
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:104:             : totalSpent._sum.totalAmount?.toNumber?.() ?? 0,
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:106:       statusGroups={statusGroups as any}
+D:\Project\itams-new-clean\src\app\(dashboard)\reports\page.tsx:108:       assetsByStatus={assetsByStatus as any}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:24: export default function NewRequestPage() {
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:44:   const addItem = () => {
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:70:   const totalAmount = items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:72:   const handleSubmit = async (e: React.FormEvent) => {
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:78:       const res = await fetch("/api/requests/new", {
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:104:     } finally {
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:113:       <form onSubmit={handleSubmit} className="space-y-4">
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:132:           <select
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:141:           </select>
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:153:               onClick={addItem}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:179:                     <select
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:189:                     </select>
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:193:                         <select
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:209:                         </select>
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:258:               {totalAmount.toLocaleString("vi-VN")} d
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:271:             type="submit"
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\new\page.tsx:279:             onClick={() => router.back()}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:7:   getStatusColor,
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:8:   getStatusLabel,
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:14: export default async function RequestDetailPage({
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:35:           purchaseOrder: { select: { poNumber: true, id: true, status: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:46:     include: { po: { select: { poNumber: true, id: true, status: true } } },
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:48:   const itemPOs = new Map<string, any>();
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:53:   const totalItems = request.items.length;
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:55:   const allItemsHavePO = itemsWithPO === totalItems;
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:71:               className={`inline-block px-2 py-1 rounded text-xs ${getStatusColor(
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:72:                 request.status
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:75:               {getStatusLabel(request.status)}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:79:             Tao luc {formatDate(request.createdAt)}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:90:               allItemsHavePO
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:95:             {itemsWithPO} / {totalItems} da co PO
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:103:                 totalItems > 0 ? (itemsWithPO / totalItems) * 100 + "%" : "0%",
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:129:           {request.totalAmount && (
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:133:                 {formatCurrency(request.totalAmount)}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:183:                       {formatCurrency(item.totalPrice || 0)}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:221:                   className={`text-xs px-2 py-1 rounded ${getStatusColor(
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:222:                     pr.purchaseOrder.status
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:225:                   {getStatusLabel(pr.purchaseOrder.status)}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:239:                 {step.decision === "APPROVED" ? (
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\[id]\page.tsx:241:                 ) : step.decision === "REJECTED" ? (
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:6: import { getStatusColor, getStatusLabel, getCategoryLabel, formatDate } from "@/lib/utils";
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:28:       requester: { select: { id: true, name: true, department: true } },
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:30:         include: { approver: { select: { name: true } } },
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:35:     orderBy: { createdAt: "desc" },
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:47:             href="/requests/new"
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:96:                       <span className={`inline-block px-2 py-1 rounded text-xs ${getStatusColor(req.status)}`}>
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:97:                         {getStatusLabel(req.status)}
+D:\Project\itams-new-clean\src\app\(dashboard)\requests\page.tsx:100:                     <td className="p-3 text-gray-600 text-xs">{formatDate(req.createdAt)}</td>
+D:\Project\itams-new-clean\src\app\api\admin\languages\[id]\route.ts:12:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\[id]\route.ts:19:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\[id]\route.ts:23: export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+D:\Project\itams-new-clean\src\app\api\admin\languages\[id]\route.ts:26:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\[id]\route.ts:29:     await prisma.language.delete({ where: { id: params.id } });
+D:\Project\itams-new-clean\src\app\api\admin\languages\[id]\route.ts:32:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:25:     const controller = new AbortController();
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:59:   const results: R[] = new Array(items.length);
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:71:   await Promise.all(
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:83:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:87:       include: { _count: { select: { translations: true } } },
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:93:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:100:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:105:       return NextResponse.json({ error: "Thieu code/name" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:115:     const lang = await prisma.language.create({
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:144:           await prisma.translation.createMany({
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:148:           // Avoid leaving a half-created language without translations.
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:149:           await prisma.language.delete({ where: { id: lang.id } });
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:154:     return NextResponse.json(lang, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\admin\languages\route.ts:157:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\stats\route.ts:9:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\stats\route.ts:13:     const [requests, assets, pos, users, pending, completed] = await Promise.all([
+D:\Project\itams-new-clean\src\app\api\admin\stats\route.ts:20:           status: {
+D:\Project\itams-new-clean\src\app\api\admin\stats\route.ts:21:             in: ["PENDING_MANAGER", "PENDING_LEAD", "PENDING_IT", "PENDING_PURCHASING"],
+D:\Project\itams-new-clean\src\app\api\admin\stats\route.ts:25:       prisma.assetRequest.count({ where: { status: "COMPLETED" } }),
+D:\Project\itams-new-clean\src\app\api\admin\stats\route.ts:27:     return NextResponse.json({ requests, assets, pos, users, pending, completed });
+D:\Project\itams-new-clean\src\app\api\admin\stats\route.ts:29:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:12:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:21:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:28:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:33:       return NextResponse.json({ error: "Thieu thong tin" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:37:       return NextResponse.json({ error: "Khong tim thay ngon ngu" }, { status: 404 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:42:       create: { languageId: lang.id, key, value, category: category || key.split(".")[0] },
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:46:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:53:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:58:       return NextResponse.json({ error: "Phai la array" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:68:         create: {
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:79:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:83: export async function DELETE(req: NextRequest) {
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:86:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:89:     const { searchParams } = new URL(req.url);
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:90:     const languageCode = searchParams.get("languageCode");
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:91:     const key = searchParams.get("key");
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:93:       return NextResponse.json({ error: "Thieu params" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:96:     if (!lang) return NextResponse.json({ error: "Khong tim thay" }, { status: 404 });
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:97:     await prisma.translation.delete({
+D:\Project\itams-new-clean\src\app\api\admin\translations\route.ts:102:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:5: import { ensureGroupWorkflowTables, listGroupFlows } from "@/lib/group-workflow";
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:13:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:25:       return NextResponse.json({ error: "Chon day du nhom nguon va nhom dich" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:28:       return NextResponse.json({ error: "Nhom nguon va nhom dich khong duoc trung nhau" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:31:       return NextResponse.json({ error: "So tien khong hop le" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:35:       SELECT TOP 1 [id]
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:43:       return NextResponse.json({ error: "Flow giua 2 nhom nay da ton tai" }, { status: 409 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:52:     const flows = await listGroupFlows();
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:57:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:61: export async function DELETE(
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:67:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:73:       DELETE FROM [dbo].[UserGroupFlow]
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\[id]\route.ts:79:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:5: import { ensureGroupWorkflowTables, listGroupFlows } from "@/lib/group-workflow";
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:11:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:15:   const flows = await listGroupFlows();
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:22:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:34:       return NextResponse.json({ error: "Chon day du nhom nguon va nhom dich" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:37:       return NextResponse.json({ error: "Nhom nguon va nhom dich khong duoc trung nhau" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:40:       return NextResponse.json({ error: "So tien khong hop le" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:44:       SELECT TOP 1 [id]
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:56:       const flows = await listGroupFlows();
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:58:       return NextResponse.json(updated, { status: 200 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:67:     const flows = await listGroupFlows();
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:68:     const created = flows.find((flow) => flow.id === id);
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:69:     return NextResponse.json(created, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\flows\route.ts:72:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:6: import { ensureGroupWorkflowTables, listGroupFlows, listGroupsWithMembers } from "@/lib/group-workflow";
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:63:   return listGroupsWithMembers();
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:69:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:77:       select: { id: true, role: true },
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:81:       SELECT [id], [code]
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:85:     const byCode = new Map(existingGroups.map((g) => [g.code, g]));
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:86:     let created = 0;
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:100:         created += 1;
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:111:         DELETE FROM [dbo].[UserGroupMember]
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:124:     const groupByCode = new Map(groups.map((g) => [g.code, g]));
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:138:         USING (SELECT ${fromGroup.id} AS fromGroupId, ${toGroup.id} AS toGroupId) AS source
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:148:     const flowList = await listGroupFlows();
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:152:       created,
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:156:       flows: flowList,
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\setup\route.ts:160:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:25:   CREATE TABLE [dbo].[UserGroup] (
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:32:     [createdAt] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:38:   ALTER TABLE [dbo].[UserGroup] ADD [managesLevel] INT NULL
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:43:   CREATE TABLE [dbo].[UserGroupMember] (
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:49:     CONSTRAINT [FK_UserGroupMember_group] FOREIGN KEY ([groupId]) REFERENCES [dbo].[UserGroup]([id]) ON DELETE CASCADE
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:62:   createdAt: Date;
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:72:     SELECT
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:79:       g.createdAt,
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:102:     createdAt: first.createdAt,
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:124:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:139:       ? Array.from(new Set(body.memberIds.map((x: unknown) => String(x))))
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:143:       return NextResponse.json({ error: "Ten nhom la bat buoc" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:153:       DELETE FROM [dbo].[UserGroupMember]
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:168:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:172: export async function DELETE(
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:178:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:184:       DELETE FROM [dbo].[UserGroup]
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\[id]\route.ts:190:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:25:   CREATE TABLE [dbo].[UserGroup] (
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:32:     [createdAt] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:38:   ALTER TABLE [dbo].[UserGroup] ADD [managesLevel] INT NULL
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:43:   CREATE TABLE [dbo].[UserGroupMember] (
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:49:     CONSTRAINT [FK_UserGroupMember_group] FOREIGN KEY ([groupId]) REFERENCES [dbo].[UserGroup]([id]) ON DELETE CASCADE
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:62:   createdAt: Date;
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:72:     SELECT
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:79:       g.createdAt,
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:88:     ORDER BY g.level ASC, g.createdAt DESC, u.name ASC
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:91:   const map = new Map<string, any>();
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:101:         createdAt: row.createdAt,
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:126:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:137:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:151:       ? Array.from(new Set(body.memberIds.map((x: unknown) => String(x))))
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:155:       return NextResponse.json({ error: "Ten nhom la bat buoc" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:177:     const created = groups.find((g) => g.id === groupId);
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:178:     return NextResponse.json(created, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\admin\user-groups\route.ts:181:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:5: import { getExchangeRateState, saveExchangeRateSettings } from "@/lib/exchange-rate";
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:13:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:35:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:45:       return NextResponse.json({ error: "Nguong khong hop le" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:48:       return NextResponse.json({ error: "Che do ty gia khong hop le" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:51:       return NextResponse.json({ error: "Ty gia manual khong hop le" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:54:     const saved = await prisma.sLAConfig.upsert({
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:57:       create: {
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:63:     await saveExchangeRateSettings({
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:71:       leadThresholdUsd: saved.hoursToApprove,
+D:\Project\itams-new-clean\src\app\api\admin\workflow-config\route.ts:81:     return NextResponse.json({ error: message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\device-categories\[id]\route.ts:8:   if (!session || session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\device-categories\[id]\route.ts:14:     return NextResponse.json({ error: e?.message || "Unknown error" }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\device-categories\[id]\route.ts:18: export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+D:\Project\itams-new-clean\src\app\api\device-categories\[id]\route.ts:20:   if (!session || session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\device-categories\[id]\route.ts:22:     await prisma.deviceCategory.delete({ where: { id: params.id } });
+D:\Project\itams-new-clean\src\app\api\device-categories\[id]\route.ts:24:   } catch (e: any) { return NextResponse.json({ error: e?.message || "Unknown error" }, { status: 500 }); }
+D:\Project\itams-new-clean\src\app\api\device-categories\route.ts:8:   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\app\api\device-models\[id]\route.ts:13:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\device-models\[id]\route.ts:17: export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+D:\Project\itams-new-clean\src\app\api\device-models\[id]\route.ts:19:     await prisma.deviceModel.delete({ where: { id: params.id } });
+D:\Project\itams-new-clean\src\app\api\device-models\[id]\route.ts:22:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\device-models\route.ts:8:     include: { category: { select: { name: true, code: true } } },
+D:\Project\itams-new-clean\src\app\api\device-models\route.ts:17:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\device-models\route.ts:23:       return NextResponse.json({ error: "Thieu thong tin" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\device-models\route.ts:25:     const model = await prisma.deviceModel.create({
+D:\Project\itams-new-clean\src\app\api\device-models\route.ts:28:     return NextResponse.json(model, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\device-models\route.ts:30:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:13:     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:20:       return NextResponse.json({ error: "Thieu chu ky" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:32:       return NextResponse.json({ error: "Khong tim thay" }, { status: 404 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:37:         return NextResponse.json({ error: "Khong co quyen" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:39:       if (handover.status !== "PENDING_EMPLOYEE_SIGN") {
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:40:         return NextResponse.json({ error: "Trang thai khong hop le" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:47:           employeeSignedAt: new Date(),
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:48:           status: "PENDING_IT_SIGN",
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:63:         return NextResponse.json({ error: "Khong co quyen" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:65:       if (handover.status !== "PENDING_IT_SIGN") {
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:66:         return NextResponse.json({ error: "NV phai ky truoc" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:75:             itSignedAt: new Date(),
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:76:             status: "COMPLETED",
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:86:               status: "ASSIGNED",
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:87:               assignedDate: new Date(),
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:91:           await tx.assetHistory.create({
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:105:           data: { status: "COMPLETED", completedAt: new Date() },
+D:\Project\itams-new-clean\src\app\api\handover\[id]\sign\route.ts:123:     return NextResponse.json({ error: error.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\languages\route.ts:12:     select: { code: true, name: true, flag: true, isDefault: true },
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:10:   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:13:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:25:     const itemIds = formData.getAll("itemIds") as string[];
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:30:         { status: 400 }
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:41:       return NextResponse.json({ error: "Khong tim thay items" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:52:         { status: 400 }
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:57:     const totalAmount = items.reduce((sum, item) => {
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:58:       const amount = typeof item.totalPrice === "number" ? item.totalPrice : item.totalPrice?.toNumber?.() ?? 0;
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:67:       const uploadDir = path.join(process.cwd(), "public", "uploads", "po");
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:68:       await mkdir(uploadDir, { recursive: true });
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:71:       await writeFile(path.join(uploadDir, filename), buffer);
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:77:     const year = new Date().getFullYear();
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:82:       new Set(
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:90:     const po = await prisma.purchaseOrder.create({
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:96:         expectedDate: new Date(expectedDate),
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:97:         totalAmount,
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:100:         status: "SENT",
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:103:           create: requestIds.map((requestId) => ({ requestId })),
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:107:           create: items.map((item) => ({
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:114:             totalPrice: item.totalPrice || 0,
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:124:     // Check xem cac YC da hoan thanh chua
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:127:     return NextResponse.json(po, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:129:     console.error("Create PO error:", error);
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:130:     return NextResponse.json({ error: error.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:149:     const poItemIds = new Set(poItems.map((p) => p.requestItemId));
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:150:     const allItemsHavePO = request.items.every((item) => poItemIds.has(item.id));
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:152:     // Neu tat ca items co PO va YC dang o ORDERED -> chuyen sang COMPLETED
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:153:     if (allItemsHavePO && request.status === "ORDERED") {
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:156:         data: { status: "COMPLETED", completedAt: new Date() },
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:165:   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\app\api\purchase-orders\route.ts:174:     orderBy: { createdAt: "desc" },
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:6: import { buildApprovalChain, ensureGroupWorkflowTables, statusForGroupLevel } from "@/lib/group-workflow";
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:11:   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:18:       return NextResponse.json({ error: "Thieu tieu de hoac ly do" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:21:       return NextResponse.json({ error: "Phai co it nhat 1 hang" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:24:     const totalAmount = items.reduce(
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:31:     const totalAmountUsd = fx.effectiveVndPerUsd > 0 ? totalAmount / fx.effectiveVndPerUsd : totalAmount;
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:34:     let dynamicChain = await buildApprovalChain(session.user.id, totalAmountUsd);
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:36:     // Neu dynamic chain co buoc thieu approver, thu fallback ve quan ly truc tiep
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:41:         const fallbackUser = await prisma.user.findUnique({
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:43:           select: { managerId: true },
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:45:         if (fallbackUser?.managerId) {
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:50:             { status: 400 }
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:57:     const year = new Date().getFullYear();
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:63:       const request = await prisma.assetRequest.create({
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:70:           totalAmount,
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:71:           status: statusForGroupLevel(firstStep.groupLevel),
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:74:             create: dynamicChain.map((step, index) => ({
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:80:             create: items.map((item: any) => ({
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:86:               totalPrice: (item.quantity || 1) * (item.unitPrice || 0),
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:103:               totalAmountUsd.toFixed(2) +
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:105:               totalAmount +
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:115:       return NextResponse.json(request, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:120:       select: {
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:122:         manager: { select: { name: true, email: true } },
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:127:       return NextResponse.json({ error: "Chua co quan ly" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:134:     const requireLeadApproval = totalAmountUsd > leadThreshold;
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:139:           select: { id: true, name: true, email: true },
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:146:         { status: 400 }
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:150:     const legacyRequest = await prisma.assetRequest.create({
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:157:         totalAmount,
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:158:         status: "PENDING_MANAGER",
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:161:           create: [
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:167:           create: items.map((item: any) => ({
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:173:             totalPrice: (item.quantity || 1) * (item.unitPrice || 0),
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:184:         const template = emailTemplates.requestCreated({
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:208:             totalAmountUsd.toFixed(2) +
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:210:             totalAmount +
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:220:     return NextResponse.json(legacyRequest, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\requests\new\route.ts:223:     return NextResponse.json({ error: error.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:14:   status: string;
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:24:     create: vi.fn(),
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:50:     status: "PENDING_MANAGER",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:57:     vi.clearAllMocks();
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:60:     db.approvalStep.create.mockResolvedValue({});
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:71:         decision: "APPROVED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:77:     expect(res.status).toBe(404);
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:82:       id: "req-approved",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:91:         decision: "APPROVED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:98:     expect(res.status).toBe(200);
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:99:     expect(res.body.status).toBe("PENDING_IT");
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:100:     expect(db.assetRequest.update).toHaveBeenCalledWith({
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:102:       data: { status: "PENDING_IT", currentStep: 2, isLocked: true },
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:116:         decision: "REJECTED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:123:     expect(res.status).toBe(200);
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:124:     expect(res.body.status).toBe("DRAFT");
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:125:     expect(db.assetRequest.update).toHaveBeenCalledWith({
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:127:       data: { status: "DRAFT", currentStep: 1, isLocked: false },
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:131:   it("returns 400 if rejected without comment", async () => {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:138:         decision: "REJECTED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:144:     expect(res.status).toBe(400);
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:147:   it("returns 403 if not allowed", async () => {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:154:         decision: "APPROVED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\__tests__\route.test.ts:160:     expect(res.status).toBe(403);
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:1: type Decision = "APPROVED" | "REJECTED";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:17:   status: number;
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:28:     create: (args: any) => Promise<any>;
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:49:   return value === "APPROVED" || value === "REJECTED";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:63:     SELECT TOP 1 g.id, g.name, g.level
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:67:     ORDER BY g.level ASC, g.createdAt DESC
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:72: function statusForLevel(level: number): string {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:73:   if (level === 2) return "PENDING_LEAD";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:74:   if (level === 3) return "PENDING_MANAGER";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:75:   if (level === 4) return "PENDING_ADMIN";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:76:   return "PENDING_MANAGER";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:87:     return { status: 400, body: { error: "Decision khong hop le" } };
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:96:             manager: { select: { id: true, name: true, email: true } },
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:101:             approver: { select: { id: true, role: true, email: true } },
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:110:       status: string;
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:111:       totalAmount?: unknown;
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:126:       return { status: 404, body: { error: "Khong tim thay" } };
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:138:     } else if (request.status === "PENDING_LEAD" && currentStep === 2 && currentUser.role === "LEAD") {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:140:     } else if (request.status === "PENDING_IT" && currentUser.role === "IT_STAFF") {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:147:       return { status: 403, body: { error: "Khong co quyen" } };
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:150:     if (decision === "REJECTED") {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:152:         return { status: 400, body: { error: "Nhap ly do tu choi" } };
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:164:             decision: "REJECTED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:166:             decidedAt: new Date(),
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:170:         await db.approvalStep.create({
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:175:             decision: "REJECTED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:177:             decidedAt: new Date(),
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:184:         data: { status: "DRAFT", currentStep: 1, isLocked: false },
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:218:       return { status: 200, body: { success: true, status: "DRAFT" } };
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:222:     let newStatus = request.status;
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:227:         newStatus = nextGroup ? statusForLevel(nextGroup.level) : newStatus;
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:229:         newStatus = "PENDING_IT";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:231:         newStatus = "ORDERED";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:234:       newStatus = "PENDING_IT";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:235:     } else if (request.status === "PENDING_LEAD" && currentStep === 2) {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:236:       newStatus = "PENDING_IT";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:237:     } else if (request.status === "PENDING_IT" && currentStep >= 2) {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:238:       newStatus = "ORDERED";
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:250:           decision: "APPROVED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:252:           decidedAt: new Date(),
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:256:       await db.approvalStep.create({
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:261:           decision: "APPROVED",
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:263:           decidedAt: new Date(),
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:271:         status: newStatus,
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:278:       if (newStatus === "ORDERED") {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:298:       } else if (newStatus === "PENDING_LEAD") {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:307:       } else if (newStatus === "PENDING_IT") {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:318:       } else if (newStatus === "PENDING_ADMIN") {
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:334:     return { status: 200, body: { success: true, status: newStatus } };
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\approve-service.ts:339:       status: 500,
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\route.ts:14:     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\route.ts:21:     return NextResponse.json({ error: "Body khong hop le" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\requests\[id]\approve\route.ts:41:   return NextResponse.json(result.body, { status: result.status });
+D:\Project\itams-new-clean\src\app\api\suppliers\[id]\route.ts:8:   if (!session || session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\suppliers\[id]\route.ts:14:     return NextResponse.json({ error: e?.message || "Unknown error" }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\suppliers\[id]\route.ts:18: export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+D:\Project\itams-new-clean\src\app\api\suppliers\[id]\route.ts:20:   if (!session || session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\suppliers\[id]\route.ts:22:     await prisma.supplier.delete({ where: { id: params.id } });
+D:\Project\itams-new-clean\src\app\api\suppliers\[id]\route.ts:25:     return NextResponse.json({ error: e?.message || "Unknown error" }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\suppliers\route.ts:8:   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\app\api\suppliers\route.ts:19:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\suppliers\route.ts:24:       return NextResponse.json({ error: "Thieu ten" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\suppliers\route.ts:28:     const supplier = await prisma.supplier.create({
+D:\Project\itams-new-clean\src\app\api\suppliers\route.ts:35:         address: data.address,
+D:\Project\itams-new-clean\src\app\api\suppliers\route.ts:39:     return NextResponse.json(supplier, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\suppliers\route.ts:41:     return NextResponse.json({ error: e.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:15:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:22:       return NextResponse.json({ error: "Khong tim thay" }, { status: 404 });
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:44:       newData: data,
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:52:     return NextResponse.json({ error: error.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:63:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:70:       return NextResponse.json({ error: "Khong tim thay" }, { status: 404 });
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:85:       newData: { isActive },
+D:\Project\itams-new-clean\src\app\api\users\[id]\route.ts:93:     return NextResponse.json({ error: error.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\api\users\route.ts:11:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\app\api\users\route.ts:18:       return NextResponse.json({ error: "Thieu thong tin" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\users\route.ts:23:       return NextResponse.json({ error: "Email da ton tai" }, { status: 400 });
+D:\Project\itams-new-clean\src\app\api\users\route.ts:30:     const user = await prisma.user.create({
+D:\Project\itams-new-clean\src\app\api\users\route.ts:44:       action: "CREATE",
+D:\Project\itams-new-clean\src\app\api\users\route.ts:47:       newData: { email, name, role, department, managerId: managerId || null },
+D:\Project\itams-new-clean\src\app\api\users\route.ts:53:     return NextResponse.json(userWithoutPassword, { status: 201 });
+D:\Project\itams-new-clean\src\app\api\users\route.ts:55:     return NextResponse.json({ error: error.message }, { status: 500 });
+D:\Project\itams-new-clean\src\app\login\page.tsx:30:   const handleSubmit = async (e: React.FormEvent) => {
+D:\Project\itams-new-clean\src\app\login\page.tsx:82:         <form onSubmit={handleSubmit} className="space-y-4">
+D:\Project\itams-new-clean\src\app\login\page.tsx:118:             type="submit"
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:3: import { Plus, Edit, Trash2, X, Tag } from "lucide-react";
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:19:   const [editing, setEditing] = useState<Category | null>(null);
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:36:     } finally {
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:41:   function startEdit(cat: Category) {
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:42:     setEditing(cat);
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:48:     setEditing(null);
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:53:   async function save() {
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:59:       const url = editing
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:60:         ? "/api/device-categories/" + editing.id
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:62:       const method = editing ? "PUT" : "POST";
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:70:         alert("Loi: " + (d.error || res.status));
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:83:       method: "DELETE",
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:108:           <Plus className="w-4 h-4" /> {t("admin.addCategory")}
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:116:               {editing ? "Sua danh muc" : "Them moi"}
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:127:               disabled={!!editing}
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:147:               onClick={save}
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:150:               {editing ? "Cap nhat" : "Tao moi"}
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:207:                         onClick={() => startEdit(c)}
+D:\Project\itams-new-clean\src\components\admin\category-manager.tsx:210:                         <Edit className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:4: import { Plus, Edit, Trash2, Check } from "lucide-react";
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:25:   const [editingFlow, setEditingFlow] = useState<GroupFlow | null>(null);
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:61:     } finally {
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:78:     } finally {
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:84:     setEditingFlow(null);
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:94:   function startEditFlow(flow: GroupFlow) {
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:95:     setEditingFlow(flow);
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:105:   async function saveFlow() {
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:115:       const isEdit = Boolean(editingFlow);
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:117:         isEdit ? `/api/admin/user-groups/flows/${editingFlow?.id}` : "/api/admin/user-groups/flows",
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:119:           method: isEdit ? "PUT" : "POST",
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:140:     } finally {
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:147:     const res = await fetch(`/api/admin/user-groups/flows/${flow.id}`, { method: "DELETE" });
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:182:               <select
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:193:               </select>
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:194:               <select
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:205:               </select>
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:224:                 onClick={saveFlow}
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:266:                         onClick={() => startEditFlow(flow)}
+D:\Project\itams-new-clean\src\components\admin\flow-manager.tsx:270:                         <Edit className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:3: import { Plus, Edit, Trash2, X, Save, Globe } from "lucide-react";
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:11:   const [editing, setEditing] = useState<any>(null);
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:30:     } finally {
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:35:   function startEdit(lang: any) {
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:36:     setEditing(lang);
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:42:     setEditing(null);
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:47:   async function save() {
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:54:       const url = editing
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:55:         ? "/api/admin/languages/" + editing.id
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:57:       const method = editing ? "PUT" : "POST";
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:66:         alert(t("admin.addSuccess"));
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:69:         alert(t("admin.error") + ": " + (d.error || res.status));
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:73:     } finally {
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:79:     if (!confirm(t("admin.deleteConfirm"))) return;
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:82:         method: "DELETE",
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:86:         alert(t("admin.deleteSuccess"));
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:109:           <Plus className="w-4 h-4" /> {t("admin.addLanguage")}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:117:               {editing ? t("admin.edit") + " " + editing.code : t("admin.addLanguage")}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:132:                 disabled={!!editing}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:160:               onClick={save}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:164:               <Save className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:165:               {saving ? "..." : editing ? t("admin.edit") : t("admin.add")}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:171:               {t("admin.cancel")}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:196:                 <th className="text-right p-3">Actions</th>
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:217:                       onClick={() => startEdit(l)}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:219:                       title={t("admin.edit")}
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:221:                       <Edit className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\language-manager.tsx:226:                       title={t("admin.delete")}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:3: import { Plus, Edit, Trash2, X, Building2 } from "lucide-react";
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:13:   address: string | null;
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:21:   const [editing, setEditing] = useState<Supplier | null>(null);
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:28:     address: "",
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:45:     } finally {
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:50:   function startEdit(s: Supplier) {
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:51:     setEditing(s);
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:57:       address: s.address || "",
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:64:     setEditing(null);
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:65:     setForm({ name: "", contactName: "", phone: "", email: "", address: "", taxCode: "" });
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:69:   async function save() {
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:75:       const url = editing
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:76:         ? "/api/suppliers/" + editing.id
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:78:       const method = editing ? "PUT" : "POST";
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:86:         alert("Loi: " + (d.error || res.status));
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:99:       method: "DELETE",
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:124:           <Plus className="w-4 h-4" /> {t("admin.addSupplier")}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:132:               {editing ? "Sua nha cung cap" : "Them moi"}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:171:               value={form.address}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:172:               onChange={(e) => setForm({ ...form, address: e.target.value })}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:178:               onClick={save}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:181:               {editing ? "Cap nhat" : "Tao moi"}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:228:                         onClick={() => startEdit(s)}
+D:\Project\itams-new-clean\src\components\admin\supplier-manager.tsx:231:                         <Edit className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:3: import { Save, Search, Globe, Trash2, Edit3, Check, Plus } from "lucide-react";
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:10:   const [selectedLang, setSelectedLang] = useState<string>("");
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:14:   const [searchTerm, setSearchTerm] = useState("");
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:15:   const [editKey, setEditKey] = useState<string | null>(null);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:16:   const [editValue, setEditValue] = useState("");
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:17:   const [showAddForm, setShowAddForm] = useState(false);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:18:   const [newKey, setNewKey] = useState({ key: "", value: "", category: "common" });
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:19:   const [savedFlag, setSavedFlag] = useState(0);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:24:     if (languages && languages.length > 0 && !selectedLang) {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:26:       if (def) setSelectedLang(def.code);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:28:   }, [languages, selectedLang]);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:32:     if (!selectedLang) return;
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:34:   }, [selectedLang]);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:37:     if (!selectedLang) return;
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:40:       const res = await fetch("/api/translations/" + selectedLang);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:47:     } finally {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:52:   function startEdit(key: string, value: string) {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:53:     setEditKey(key);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:54:     setEditValue(value);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:57:   function saveEdit() {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:58:     if (!editKey) return;
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:59:     setTranslations((p) => ({ ...p, [editKey]: editValue }));
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:60:     setEditKey(null);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:63:   function cancelEdit() {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:64:     setEditKey(null);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:67:   async function saveAll() {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:75:           languageCode: selectedLang,
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:88:         setSavedFlag((x) => x + 1);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:93:         alert("Loi: " + (data.error || res.status));
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:96:       console.error("Save error:", e);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:98:     } finally {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:103:   async function addNew() {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:104:     if (!newKey.key || !newKey.value) {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:113:           languageCode: selectedLang,
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:114:           key: newKey.key,
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:115:           value: newKey.value,
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:116:           category: newKey.category,
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:120:         setTranslations((p) => ({ ...p, [newKey.key]: newKey.value }));
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:121:         setNewKey({ key: "", value: "", category: "common" });
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:122:         setShowAddForm(false);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:130:   async function deleteKey(key: string) {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:135:         selectedLang +
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:138:       const res = await fetch(url, { method: "DELETE" });
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:140:         const newT = { ...translations };
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:141:         delete newT[key];
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:142:         setTranslations(newT);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:149:   // Auto-focus khi vao edit mode
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:151:     if (editKey && inputRef.current) {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:153:       inputRef.current.select();
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:155:   }, [editKey]);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:159:     if (savedFlag > 0) {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:162:   }, [savedFlag]);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:164:   const allKeys = Object.keys(translations).sort();
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:165:   const filteredKeys = allKeys.filter(
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:166:     (k) => !searchTerm || k.toLowerCase().includes(searchTerm.toLowerCase())
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:183:             onClick={() => setShowAddForm(!showAddForm)}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:186:             <Plus className="w-4 h-4" /> {t("admin.addTranslation")}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:189:             onClick={saveAll}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:193:             <Save className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:194:             {saving ? "..." : t("admin.saveAll")}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:205:               if (l.code !== selectedLang) {
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:206:                 setSelectedLang(l.code);
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:211:               (selectedLang === l.code
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:222:       {/* Add new form */}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:223:       {showAddForm && (
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:228:               value={newKey.key}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:229:               onChange={(e) => setNewKey({ ...newKey, key: e.target.value })}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:232:             <select
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:233:               value={newKey.category}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:234:               onChange={(e) => setNewKey({ ...newKey, category: e.target.value })}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:240:               <option value="status">status</option>
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:242:             </select>
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:245:               value={newKey.value}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:246:               onChange={(e) => setNewKey({ ...newKey, value: e.target.value })}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:250:               onClick={addNew}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:253:               Add
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:259:       {/* Search */}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:261:         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:263:           placeholder={t("admin.search")}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:264:           value={searchTerm}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:265:           onChange={(e) => setSearchTerm(e.target.value)}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:289:                     {editKey === key ? (
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:293:                           value={editValue}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:294:                           onChange={(e) => setEditValue(e.target.value)}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:296:                             if (e.key === "Enter") saveEdit();
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:297:                             if (e.key === "Escape") cancelEdit();
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:302:                           onClick={saveEdit}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:309:                           onClick={cancelEdit}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:318:                         onClick={() => startEdit(key, translations[key] || "")}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:330:                     {editKey !== key && (
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:333:                           onClick={() => startEdit(key, translations[key] || "")}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:335:                           title={t("admin.edit")}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:337:                           <Edit3 className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:340:                           onClick={() => deleteKey(key)}
+D:\Project\itams-new-clean\src\components\admin\translation-manager.tsx:342:                           title={t("admin.delete")}
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:4: import { Plus, Edit, Trash2, X, Check } from "lucide-react";
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:59:   const [editing, setEditing] = useState<UserGroup | null>(null);
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:95:     } finally {
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:101:     setEditing(null);
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:113:   function startEdit(group: UserGroup) {
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:114:     setEditing(group);
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:141:   async function save() {
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:151:       const isEdit = Boolean(editing);
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:153:         isEdit ? `/api/admin/user-groups/${editing?.id}` : "/api/admin/user-groups",
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:155:           method: isEdit ? "PUT" : "POST",
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:167:       if (isEdit) {
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:175:     } finally {
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:182:     const res = await fetch(`/api/admin/user-groups/${group.id}`, { method: "DELETE" });
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:215:             <h2 className="font-bold">{editing ? "Sua nhom" : "Tao nhom moi"}</h2>
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:229:             <select
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:246:             </select>
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:247:             <select
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:256:             </select>
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:270:                 const selected = form.memberIds.includes(u.id);
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:275:                       checked={selected}
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:294:               onClick={save}
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:348:                       onClick={() => startEdit(group)}
+D:\Project\itams-new-clean\src\components\admin\user-groups-manager.tsx:352:                       <Edit className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:5: import { Plus, Edit, Trash2, Search, X, Check } from "lucide-react";
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:28:   const [searchTerm, setSearchTerm] = useState("");
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:30:   const [editing, setEditing] = useState<User | null>(null);
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:44:       searchTerm === "" ||
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:45:       u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:46:       u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:47:       (u.department && u.department.toLowerCase().includes(searchTerm.toLowerCase()))
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:50:   const startEdit = (user: User) => {
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:51:     setEditing(user);
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:64:     setEditing(null);
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:70:   const save = async () => {
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:75:     if (!editing && !form.password) {
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:84:       const url = editing
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:85:         ? "/api/users/" + editing.id
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:87:       const method = editing ? "PUT" : "POST";
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:103:         if (editing) {
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:104:           setUsers(users.map((u) => (u.id === editing.id ? data : u)));
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:113:     } finally {
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:159:           {t("user.addUser")}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:163:       {/* Search */}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:166:           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:169:             placeholder={t("common.search") + "..."}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:170:             value={searchTerm}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:171:             onChange={(e) => setSearchTerm(e.target.value)}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:182:               {editing ? "Sua nguoi dung" : "Them nguoi dung moi"}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:196:               disabled={!!editing}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:212:             <select
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:223:             </select>
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:224:             <select
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:236:             </select>
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:237:             {!editing && (
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:256:               onClick={save}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:261:               {loading ? "Dang luu..." : t("common.save")}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:267:               {t("common.cancel")}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:283:               <th className="text-right p-3">{t("common.actions")}</th>
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:322:                       onClick={() => startEdit(user)}
+D:\Project\itams-new-clean\src\components\admin\users-manager.tsx:326:                       <Edit className="w-4 h-4" />
+D:\Project\itams-new-clean\src\components\admin\workflow-config.tsx:51:     } finally {
+D:\Project\itams-new-clean\src\components\admin\workflow-config.tsx:56:   async function save() {
+D:\Project\itams-new-clean\src\components\admin\workflow-config.tsx:92:     } finally {
+D:\Project\itams-new-clean\src\components\admin\workflow-config.tsx:115:           <select
+D:\Project\itams-new-clean\src\components\admin\workflow-config.tsx:122:           </select>
+D:\Project\itams-new-clean\src\components\admin\workflow-config.tsx:141:                 Lan dong bo auto gan nhat: {new Date(lastAutoSyncEpoch * 1000).toLocaleString("vi-VN")}
+D:\Project\itams-new-clean\src\components\admin\workflow-config.tsx:153:           onClick={save}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:7: import { getStatusColor, getStatusLabel, formatDate } from "@/lib/utils";
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:14:   status: string;
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:15:   createdAt: Date;
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:28: export function ApprovalList({ requests, userRole }: Props) {
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:56:   const [showForm, setShowForm] = useState<"APPROVED" | "REJECTED" | null>(null);
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:59:   const handleDecision = async (decision: "APPROVED" | "REJECTED") => {
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:60:     if (decision === "REJECTED" && !comment.trim()) {
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:82:     } finally {
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:95:             <span className={`px-2 py-1 rounded text-xs ${getStatusColor(request.status)}`}>
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:96:               {getStatusLabel(request.status)}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:110:           {formatDate(request.createdAt)}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:119:             placeholder={showForm === "REJECTED" ? "Ly do tu choi *" : "Ghi chu (tuy chon)"}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:129:                 showForm === "APPROVED"
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:136:                 : `Xac nhan ${showForm === "APPROVED" ? "phe duyet" : "tu choi"}`}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:152:           {userRole === "PURCHASING" && request.status === "ORDERED" && (
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:154:               href={`/purchase-orders/new?requestIds=${request.id}`}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:161:             onClick={() => setShowForm("APPROVED")}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:167:             onClick={() => setShowForm("REJECTED")}
+D:\Project\itams-new-clean\src\components\approvals\approval-list.tsx:176:             <FileText className="w-4 h-4" /> Xem chi tiet
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:7: const statusColors: Record<string, string> = {
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:8:   NEW: "bg-gray-100 text-gray-700",
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:16: export function AssetDetail({ asset }: { asset: any }) {
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:19:   const getStatusLabel = (status: string) => {
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:20:     const labels: Record<string, { key: string; fallback: string }> = {
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:21:       NEW: { key: "status.NEW", fallback: "New" },
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:22:       IN_STOCK: { key: "status.IN_STOCK", fallback: "In Stock" },
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:23:       ASSIGNED: { key: "status.ASSIGNED", fallback: "Assigned" },
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:24:       IN_MAINTENANCE: { key: "status.IN_MAINTENANCE", fallback: "Maintenance" },
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:25:       RECOVERED: { key: "status.RECOVERED", fallback: "Recovered" },
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:26:       DISPOSED: { key: "status.DISPOSED", fallback: "Disposed" },
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:28:     const label = labels[status];
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:29:     return label ? t(label.key, label.fallback) : status;
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:35:         <ArrowLeft className="w-4 h-4" /> {t("common.back", "Back")}
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:46:             (statusColors[asset.status] || "bg-gray-100 text-gray-700")
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:49:           {getStatusLabel(asset.status)}
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:66:               value={asset.purchaseDate ? new Date(asset.purchaseDate).toLocaleDateString() : "-"}
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:70:               value={asset.warrantyExpiry ? new Date(asset.warrantyExpiry).toLocaleDateString() : "-"}
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:85:                   {t("asset.assignedFrom", "Assigned from")}: {new Date(asset.assignedDate).toLocaleDateString()}
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:104:                 src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(asset.qrCode)}`}
+D:\Project\itams-new-clean\src\components\assets\asset-detail.tsx:132:                     {new Date(h.createdAt).toLocaleString()}
+D:\Project\itams-new-clean\src\components\assets\asset-qr.tsx:11:   // Su dung API qrserver de tao QR (mien phi, khong can can install them)
+D:\Project\itams-new-clean\src\components\assets\asset-qr.tsx:12:   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(asset.qrCode)}`;
+D:\Project\itams-new-clean\src\components\assets\asset-qr.tsx:22:           onClick={() => router.back()}
+D:\Project\itams-new-clean\src\components\assets\asset-qr.tsx:26:           <span className="ml-1">{t("common.back", "Back")}</span>
+D:\Project\itams-new-clean\src\components\assets\asset-qr.tsx:63:         <p className="text-xs text-gray-400 font-mono break-all mt-2">{asset.qrCode}</p>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:5: import { Package, QrCode, Search } from "lucide-react";
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:17:   status: string;
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:22: const statusColors: Record<string, string> = {
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:23:   NEW: "bg-gray-100 text-gray-700",
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:31: export function AssetsList({ assets: initial }: { assets: Asset[] }) {
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:34:   const [searchTerm, setSearchTerm] = useState("");
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:35:   const [statusFilter, setStatusFilter] = useState("ALL");
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:37:   const getStatusLabel = (status: string) => {
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:38:     const labels: Record<string, { key: string; fallback: string }> = {
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:39:       NEW: { key: "status.NEW", fallback: "New" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:40:       IN_STOCK: { key: "status.IN_STOCK", fallback: "In Stock" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:41:       ASSIGNED: { key: "status.ASSIGNED", fallback: "Assigned" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:42:       IN_MAINTENANCE: { key: "status.IN_MAINTENANCE", fallback: "Maintenance" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:43:       RECOVERED: { key: "status.RECOVERED", fallback: "Recovered" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:44:       DISPOSED: { key: "status.DISPOSED", fallback: "Disposed" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:46:     const label = labels[status];
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:47:     return label ? t(label.key, label.fallback) : status;
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:51:     const labels: Record<string, { key: string; fallback: string }> = {
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:52:       LAPTOP: { key: "categories.LAPTOP", fallback: "Laptop" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:53:       DESKTOP: { key: "categories.DESKTOP", fallback: "Desktop" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:54:       MONITOR: { key: "categories.MONITOR", fallback: "Monitor" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:55:       PHONE: { key: "categories.PHONE", fallback: "Phone" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:56:       KEYBOARD: { key: "categories.KEYBOARD", fallback: "Keyboard" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:57:       MOUSE: { key: "categories.MOUSE", fallback: "Mouse" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:58:       HEADPHONE: { key: "categories.HEADPHONE", fallback: "Headphone" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:59:       PRINTER: { key: "categories.PRINTER", fallback: "Printer" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:60:       OTHER: { key: "categories.OTHER", fallback: "Other" },
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:63:     return label ? t(label.key, label.fallback) : cat;
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:67:     const matchSearch =
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:68:       searchTerm === "" ||
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:69:       a.assetTag.toLowerCase().includes(searchTerm.toLowerCase()) ||
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:70:       a.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:72:         a.serialNumber.toLowerCase().includes(searchTerm.toLowerCase())) ||
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:74:         a.currentHolder.name.toLowerCase().includes(searchTerm.toLowerCase()));
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:75:     const matchStatus = statusFilter === "ALL" || a.status === statusFilter;
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:76:     return matchSearch && matchStatus;
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:80:     total: assets.length,
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:81:     inStock: assets.filter((a) => a.status === "IN_STOCK").length,
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:82:     assigned: assets.filter((a) => a.status === "ASSIGNED").length,
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:83:     maintenance: assets.filter((a) => a.status === "IN_MAINTENANCE").length,
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:98:         <StatBox label={t("assets.total", "Total")} value={stats.total} color="blue" />
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:107:             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:110:               placeholder={t("assets.searchPlaceholder", "Search by tag, name, serial, holder...")}
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:111:               value={searchTerm}
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:112:               onChange={(e) => setSearchTerm(e.target.value)}
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:116:           <select
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:117:             value={statusFilter}
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:118:             onChange={(e) => setStatusFilter(e.target.value)}
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:121:             <option value="ALL">{t("assets.allStatuses", "All status")}</option>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:122:             <option value="NEW">{getStatusLabel("NEW")}</option>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:123:             <option value="IN_STOCK">{getStatusLabel("IN_STOCK")}</option>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:124:             <option value="ASSIGNED">{getStatusLabel("ASSIGNED")}</option>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:125:             <option value="IN_MAINTENANCE">{getStatusLabel("IN_MAINTENANCE")}</option>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:126:           </select>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:143:                 <th className="text-left p-3">{t("assets.status", "Status")}</th>
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:167:                         (statusColors[asset.status] || "bg-gray-100 text-gray-700")
+D:\Project\itams-new-clean\src\components\assets\assets-list.tsx:170:                       {getStatusLabel(asset.status)}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:9:     total: number;
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:10:     pending: number;
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:11:     completed: number;
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:43:           label={t("dashboard.totalRequests", "Total Requests")}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:44:           value={stats.total}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:49:           label={t("dashboard.pending", "Pending")}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:50:           value={stats.pending}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:55:           label={t("dashboard.completed", "Completed")}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:56:           value={stats.completed}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:73:           {t("dashboard.quickActions", "Quick Actions")}
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:78:               href="/requests/new"
+D:\Project\itams-new-clean\src\components\dashboard\admin-dashboard.tsx:83:                 {t("dashboard.createRequest", "Create Request")}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:8: type HandoverDetailData = {
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:11:   status: string;
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:27:   handover: HandoverDetailData;
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:32: export function HandoverDetail({ handover, currentUserId, currentUserRole }: Props) {
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:43:     handover.status === "PENDING_EMPLOYEE_SIGN" &&
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:48:     handover.status === "PENDING_IT_SIGN" &&
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:52:   const isCompleted = handover.status === "COMPLETED";
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:60:       ctx.lineWidth = 2;
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:148:     } finally {
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:153:   const statusText =
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:154:     handover.status === "PENDING_EMPLOYEE_SIGN"
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:155:       ? t("common.pending.employee", "Pending Employee")
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:156:       : handover.status === "PENDING_IT_SIGN"
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:157:       ? t("common.pending.it", "Pending IT")
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:158:       : t("common.completed", "Completed");
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:163:         onClick={() => router.back()}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:166:         <ArrowLeft className="w-4 h-4" /> {t("common.back", "Back")}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:175:           {statusText}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:198:               {new Date(handover.handoverDate).toLocaleDateString()}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:202:             <p className="text-gray-500">{t("common.total.items", "Total items")}</p>
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:211:           {t("common.asset.list", "Asset List")} ({handover.items.length})
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:279:                     : t("handover.saveSignature", "Save Signature")}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:286:                 ? t("common.pending.employee2", "Pending Employee")
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:287:                 : t("common.pending.employee3", "Pending Employee")}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:293:               {new Date(handover.employeeSignedAt).toLocaleString()}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:340:                     : t("handover.saveSignature", "Save Signature")}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:347:                 ? t("common.pending.employee.first", "Pending Employee first")
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:348:                 : t("common.pending.it2", "Pending IT")}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:354:               {new Date(handover.itSignedAt).toLocaleString()}
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:364:       {isCompleted && (
+D:\Project\itams-new-clean\src\components\handover\handover-detail.tsx:368:             {t("common.handover.completed", "Handover completed")}
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:7: type HandoverListItem = {
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:10:   status: string;
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:18: const statusMap: Record<string, { vi: string; en: string; color: string }> = {
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:19:   PENDING_EMPLOYEE_SIGN: {
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:21:     en: "Pending Employee",
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:24:   PENDING_IT_SIGN: {
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:26:     en: "Pending IT",
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:29:   COMPLETED: {
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:30:     vi: "Ho…n th…nh",
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:31:     en: "Completed",
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:36: export function HandoverList({
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:40:   handovers: HandoverListItem[];
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:45:   const getStatus = (status: string) => {
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:46:     const s = statusMap[status];
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:47:     if (!s) return { label: status, color: "bg-gray-100" };
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:71:             const status = getStatus(h.status);
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:73:               (h.status === "PENDING_EMPLOYEE_SIGN" &&
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:75:               (h.status === "PENDING_IT_SIGN" && userRole === "IT_STAFF");
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:87:                   <span className={`text-xs px-2 py-1 rounded ${status.color}`}>{status.label}</span>
+D:\Project\itams-new-clean\src\components\handover\handover-list.tsx:91:                   <p>?? {new Date(h.handoverDate).toLocaleDateString()}</p>
+D:\Project\itams-new-clean\src\components\layout\header.tsx:86:               signOut({ callbackUrl: "/login" });
+D:\Project\itams-new-clean\src\components\layout\sidebar.tsx:21:     { href: "/requests/new", labelKey: "nav.createRequest", icon: FileText },
+D:\Project\itams-new-clean\src\components\layout\sidebar.tsx:43:     { href: "/purchase-orders/select-items", labelKey: "po.create", icon: ShoppingCart },
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:15:   totalPrice: number | null;
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:31:   preselected: Request[];
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:32:   preselectedItems?: { requestId: string; itemIds: string[] }[];
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:35: export function CreatePOFormMulti({ availableRequests, preselected, preselectedItems }: Props) {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:38:   const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:51:   // Khoi tao: tick san cac items da preselected
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:53:     if (preselectedItems && preselectedItems.length > 0) {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:54:       const ids = new Set<string>();
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:55:       preselectedItems.forEach((p) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:56:         p.itemIds.forEach((id) => ids.add(id));
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:58:       setSelectedItemIds(ids);
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:59:     } else if (preselected.length > 0) {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:60:       // Fallback: tick tat ca items cua cac YC preselected
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:61:       const ids = new Set<string>();
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:62:       preselected.forEach((req) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:63:         req.items.forEach((item) => ids.add(item.id));
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:65:       setSelectedItemIds(ids);
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:70:     setSelectedItemIds((prev) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:71:       const next = new Set(prev);
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:73:         next.delete(itemId);
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:75:         next.add(itemId);
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:81:   const allRequests = preselected.length > 0 ? preselected : availableRequests;
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:84:   const getSelectedItems = (): Item[] => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:86:     allRequests.forEach((req) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:88:         if (selectedItemIds.has(item.id)) {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:96:   const selectedItems = getSelectedItems();
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:97:   const totalAmount = selectedItems.reduce(
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:98:     (sum, item) => sum + (item.totalPrice || 0),
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:109:   const handleSubmit = async (e: React.FormEvent) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:112:     if (selectedItemIds.size === 0) {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:133:       const formData = new FormData();
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:135:       selectedItemIds.forEach((id) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:154:         alert("Tao PO thanh cong voi " + selectedItemIds.size + " mat hang!");
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:159:     } finally {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:166:       <button onClick={() => router.back()} className="text-sm text-gray-600 hover:underline">
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:174:           <h2 className="font-bold mb-3">Mat hang ({selectedItemIds.size} da chon)</h2>
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:176:           {allRequests.length === 0 ? (
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:182:               {allRequests.map((req) => (
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:190:                       const isSelected = selectedItemIds.has(item.id);
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:197:                             (isSelected
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:204:                             checked={isSelected}
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:218:                               {formatCurrency(item.totalPrice || 0)}
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:221:                           {isSelected && <Check className="w-4 h-4 text-blue-600" />}
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:233:         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow space-y-3 h-fit sticky top-4">
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:236:           {selectedItemIds.size > 0 && (
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:239:                 Da chon: {selectedItemIds.size} mat hang
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:242:                 Tong: {formatCurrency(totalAmount)}
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:313:             type="submit"
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:314:             disabled={loading || selectedItemIds.size === 0}
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form-multi.tsx:317:             {loading ? "Dang tao..." : "Tao PO (" + selectedItemIds.size + " mat hang)"}
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:8: export function CreatePOForm({ request }: { request: any }) {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:22:   const totalAmount = request.items.reduce(
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:23:     (sum: number, item: any) => sum + (item.totalPrice || 0),
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:27:   const handleSubmit = async (e: React.FormEvent) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:47:       const formData = new FormData();
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:53:       formData.append("totalAmount", totalAmount.toString());
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:72:     } finally {
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:79:       <button onClick={() => router.back()} className="text-sm text-gray-600 hover:underline flex items-center gap-1">
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:92:           Tong tien: {formatCurrency(totalAmount)}
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:96:       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow space-y-4">
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:176:             type="submit"
+D:\Project\itams-new-clean\src\components\purchase-orders\create-po-form.tsx:185:             onClick={() => router.back()}
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:10:   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:13:     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:23:     const totalAmount = parseFloat(formData.get("totalAmount") as string);
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:27:     if (!requestId || !supplierName || !expectedDate || !totalAmount) {
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:28:       return NextResponse.json({ error: "Thieu thong tin" }, { status: 400 });
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:36:       const uploadDir = path.join(process.cwd(), "public", "uploads", "po");
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:37:       await mkdir(uploadDir, { recursive: true });
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:39:       await writeFile(path.join(uploadDir, filename), buffer);
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:45:     const year = new Date().getFullYear();
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:48:     const po = await prisma.purchaseOrder.create({
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:54:         expectedDate: new Date(expectedDate),
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:55:         totalAmount,
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:58:         status: "SENT",
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:60:           create: [{ requestId }],
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:65:     return NextResponse.json(po, { status: 201 });
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:67:     console.error("Create PO error:", error);
+D:\Project\itams-new-clean\src\components\purchase-orders\route.ts:68:     return NextResponse.json({ error: error.message }, { status: 500 });
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:15:   totalPrice: number | null;
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:33: export function SelectItemsForPO({ availableRequests }: Props) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:35:   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:38:     setSelectedItems((prev) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:39:       const next = new Set(prev);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:41:         next.delete(itemId);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:43:         next.add(itemId);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:49:   const toggleAllInRequest = (requestId: string, itemIds: string[]) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:56:     setSelectedItems((prev) => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:57:       const allSelected = availableIds.every((id) => prev.has(id));
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:58:       const next = new Set(prev);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:59:       if (allSelected) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:60:         availableIds.forEach((id) => next.delete(id));
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:62:         availableIds.forEach((id) => next.add(id));
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:75:   const getTotalSelected = (): number => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:76:     let total = 0;
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:79:         if (selectedItems.has(item.id) && !item.hasPO) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:80:           total += item.totalPrice || 0;
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:84:     return total;
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:87:   const getTotalSelectedCount = (): number => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:88:     return selectedItems.size;
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:95:       const allItems = req.items;
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:96:       const itemsNeedPO = allItems.filter((i) => !i.hasPO);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:97:       const allSelected = itemsNeedPO.every((i) => selectedItems.has(i.id));
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:98:       if (allSelected && itemsNeedPO.length > 0) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:107:   const handleCreatePO = () => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:108:     if (selectedItems.size === 0) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:113:     const query = Array.from(selectedItems).join(",");
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:114:     router.push("/purchase-orders/new?itemIds=" + encodeURIComponent(query));
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:128:         <button onClick={() => router.back()} className="text-sm text-gray-600 hover:underline">
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:142:       <button onClick={() => router.back()} className="text-sm text-gray-600 hover:underline flex items-center gap-1">
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:155:           const allSelected = req.items.every((i) => selectedItems.has(i.id));
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:176:                     checked={allSelected}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:178:                       toggleAllInRequest(
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:191:                   const isSelected = selectedItems.has(item.id);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:198:                         (isSelected
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:206:                           checked={isSelected}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:227:                                 {formatCurrency(item.totalPrice || 0)}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:232:                         {isSelected && <Check className="w-5 h-5 text-blue-600" />}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:248:                   {getTotalSelectedCount()} mat hang
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:252:                 Tong: {formatCurrency(getTotalSelected())}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:261:               onClick={handleCreatePO}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:262:               disabled={getTotalSelectedCount() === 0}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-items-for-po.tsx:266:               Tao PO ({getTotalSelectedCount()})
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:13:   totalAmount: number | null;
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:22: export function SelectRequestsForPO({ availableRequests }: Props) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:24:   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:26:   const [searchTerm, setSearchTerm] = useState("");
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:29:     setSelectedIds((prev) =>
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:34:   const selectAll = () => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:35:     if (selectedIds.length === availableRequests.length) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:36:       setSelectedIds([]);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:38:       setSelectedIds(availableRequests.map((r) => r.id));
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:44:       searchTerm === "" ||
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:45:       r.requestNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:46:       r.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:47:       r.requester.name.toLowerCase().includes(searchTerm.toLowerCase())
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:50:   const selectedRequests = availableRequests.filter((r) =>
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:51:     selectedIds.includes(r.id)
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:53:   const totalAmount = selectedRequests.reduce(
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:54:     (sum, r) => sum + (r.totalAmount || 0),
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:58:   const handleCreatePO = () => {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:59:     if (selectedIds.length === 0) {
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:65:     const query = selectedIds.join(",");
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:66:     router.push("/purchase-orders/new?requestIds=" + query);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:72:         onClick={() => router.back()}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:103:                 value={searchTerm}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:104:                 onChange={(e) => setSearchTerm(e.target.value)}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:108:                 onClick={selectAll}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:111:                 {selectedIds.length === filteredRequests.length
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:118:               Da chon: {selectedIds.length} / {filteredRequests.length}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:123:                 const isSelected = selectedIds.includes(req.id);
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:130:                       (isSelected
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:138:                         checked={isSelected}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:161:                             {formatCurrency(req.totalAmount || 0)}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:165:                       {isSelected && (
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:182:             {selectedIds.length > 0 ? (
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:185:                   Da chon {selectedIds.length} yeu cau
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:188:                   {selectedRequests.map((r) => (
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:195:                         {formatCurrency(r.totalAmount || 0)}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:203:                     {formatCurrency(totalAmount)}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:214:               onClick={handleCreatePO}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:215:               disabled={selectedIds.length === 0}
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:219:               Tiep tuc tao PO ({selectedIds.length})
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:222:             {selectedIds.length > 0 && (
+D:\Project\itams-new-clean\src\components\purchase-orders\select-requests-for-po.tsx:224:                 onClick={() => setSelectedIds([])}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:12: const statusLabels: Record<string, { vi: string; en: string }> = {
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:14:   PENDING_MANAGER: { vi: "Cho QL", en: "Pending Mgr" },
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:15:   PENDING_IT: { vi: "Cho IT", en: "Pending IT" },
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:17:   COMPLETED: { vi: "Hoan thanh", en: "Completed" },
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:18:   REJECTED: { vi: "Tu choi", en: "Rejected" },
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:21: const assetStatusLabels: Record<string, { vi: string; en: string }> = {
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:22:   NEW: { vi: "Moi", en: "New" },
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:44:     totalRequests: number;
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:45:     completedRequests: number;
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:46:     totalAssets: number;
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:48:     totalPOs: number;
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:49:     totalSpent: number;
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:51:   statusGroups: { status: string; _count: number }[];
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:53:   assetsByStatus: { status: string; _count: number }[];
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:69:     stats, statusGroups, deptData, assetsByStatus,
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:73:   const getStatusName = (s: string) => {
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:74:     const labels = statusLabels[s] || assetStatusLabels[s];
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:100:           label={t("common.total.requests", "Total Requests")}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:101:           value={stats.totalRequests}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:102:           sub={locale === "vi" ? `${stats.completedRequests} hoan thanh` : `${stats.completedRequests} done`}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:107:           label={t("common.total.assets", "Total Assets")}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:108:           value={stats.totalAssets}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:114:           label={t("common.total.pos", "Total POs")}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:115:           value={stats.totalPOs}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:120:           label={t("common.total.spent", "Total Spent")}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:121:           value={formatVND(stats.totalSpent) + " d"}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:130:             {t("common.requests.by.status", "Requests by Status")}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:135:                 data={statusGroups.map((s) => ({
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:136:                   name: getStatusName(s.status),
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:146:                 {statusGroups.map((_, i) => (
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:158:             {t("common.assets.by.status", "Assets by Status")}
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:163:                 data={assetsByStatus.map((s) => ({
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:164:                   name: getStatusName(s.status),
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:174:                 {assetsByStatus.map((_, i) => (
+D:\Project\itams-new-clean\src\components\reports\reports-dashboard.tsx:245:               {t("common.spending.last.6.months", "Spending Last 6 Months")}
+D:\Project\itams-new-clean\src\components\requests\__tests__\new-request.test.tsx:6:     back: vi.fn(),
+D:\Project\itams-new-clean\src\components\requests\__tests__\new-request.test.tsx:9:   useSearchParams: () => new URLSearchParams(),
+D:\Project\itams-new-clean\src\components\requests\__tests__\new-request.test.tsx:25:     expect(mockFn).toHaveBeenCalledWith("test");
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:2: import { createContext, useContext, useState, useEffect } from "react";
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:16:   t: (key: string, fallback?: string) => string;
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:20: const I18nContext = createContext<I18nValue | null>(null);
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:42:         const list = Array.isArray(l) ? l : [];
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:43:         setData(d => ({ ...d, languages: list }));
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:45:         if (list.length === 0) return;
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:49:           if (list.some((x) => x.code === prev)) return prev;
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:53:           if (stored && list.some((x) => x.code === stored)) return stored;
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:56:           const next = list.find((x) => x.isDefault)?.code || list[0].code;
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:99:     t: (key: string, fallback?: string) => {
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:102:       if (fallback !== undefined) return fallback;
+D:\Project\itams-new-clean\src\components\i18n-provider.tsx:118:     throw new Error("useI18n must be used within I18nProvider");
+D:\Project\itams-new-clean\src\components\theme-provider.tsx:2: import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+D:\Project\itams-new-clean\src\components\theme-provider.tsx:4: const ThemeContext = createContext({
+D:\Project\itams-new-clean\src\components\theme-provider.tsx:14:       const saved = localStorage.getItem("theme");
+D:\Project\itams-new-clean\src\components\theme-provider.tsx:15:       if (saved === "dark" || saved === "light") {
+D:\Project\itams-new-clean\src\components\theme-provider.tsx:16:         setTheme(saved);
+D:\Project\itams-new-clean\src\components\theme-provider.tsx:23:       document.documentElement.classList.toggle("dark", theme === "dark");
+D:\Project\itams-new-clean\src\components\theme-toggle.tsx:12:     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
+D:\Project\itams-new-clean\src\components\theme-toggle.tsx:13:     if (saved) {
+D:\Project\itams-new-clean\src\components\theme-toggle.tsx:14:       setTheme(saved);
+D:\Project\itams-new-clean\src\components\theme-toggle.tsx:23:     document.documentElement.classList.toggle("dark", next === "dark");
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:3:   getStatusColor,
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:4:   getStatusLabel,
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:21:   describe("getStatusColor", () => {
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:23:       expect(getStatusColor("DRAFT")).toBe("bg-gray-100 text-gray-700");
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:26:     it("returns correct color for COMPLETED", () => {
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:27:       expect(getStatusColor("COMPLETED")).toBe("bg-green-100 text-green-700");
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:31:       expect(getStatusColor("UNKNOWN")).toBe("bg-gray-100 text-gray-700");
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:35:   describe("getStatusLabel", () => {
+D:\Project\itams-new-clean\src\lib\__tests__\utils.test.ts:37:       expect(getStatusLabel("PENDING_MANAGER")).toBe("Cho Quan ly");
+D:\Project\itams-new-clean\src\lib\audit.ts:7:     | "CREATE"
+D:\Project\itams-new-clean\src\lib\audit.ts:9:     | "DELETE"
+D:\Project\itams-new-clean\src\lib\audit.ts:14:     | "STATUS_CHANGE";
+D:\Project\itams-new-clean\src\lib\audit.ts:18:   newData?: any;
+D:\Project\itams-new-clean\src\lib\audit.ts:25:     await prisma.auditLog.create({
+D:\Project\itams-new-clean\src\lib\audit.ts:33:         newData: params.newData ? JSON.stringify(params.newData) : null,
+D:\Project\itams-new-clean\src\lib\auth.ts:32:   callbacks: {
+D:\Project\itams-new-clean\src\lib\auth.ts:42:           console.log('[next-auth] jwt callback token:', JSON.stringify(token));
+D:\Project\itams-new-clean\src\lib\auth.ts:55:           console.log('[next-auth] session callback session:', JSON.stringify(session));
+D:\Project\itams-new-clean\src\lib\email.ts:11: const transporter = nodemailer.createTransport({
+D:\Project\itams-new-clean\src\lib\email.ts:54:   requestCreated: (data: {
+D:\Project\itams-new-clean\src\lib\email.ts:66:         : `[ITAMS] New request needs approval: ${data.requestNumber}`,
+D:\Project\itams-new-clean\src\lib\email.ts:69:           <div style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+D:\Project\itams-new-clean\src\lib\email.ts:70:             <h2 style="margin: 0;">ITAMS - ${isVi ? "Yeu cau moi" : "New Request"}</h2>
+D:\Project\itams-new-clean\src\lib\email.ts:72:           <div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb;">
+D:\Project\itams-new-clean\src\lib\email.ts:76:               : `${data.requesterName} has created a new request that needs your approval:`}</p>
+D:\Project\itams-new-clean\src\lib\email.ts:77:             <div style="background: white; padding: 15px; border-radius: 6px; margin: 15px 0;">
+D:\Project\itams-new-clean\src\lib\email.ts:81:             <a href="${data.url}" style="display: inline-block; background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">
+D:\Project\itams-new-clean\src\lib\email.ts:82:               ${isVi ? "Xem va duyet" : "View & Approve"}
+D:\Project\itams-new-clean\src\lib\email.ts:93:   requestApproved: (data: {
+D:\Project\itams-new-clean\src\lib\email.ts:108:           <div style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+D:\Project\itams-new-clean\src\lib\email.ts:111:           <div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb;">
+D:\Project\itams-new-clean\src\lib\email.ts:114:             <a href="${data.url}" style="display: inline-block; background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">
+D:\Project\itams-new-clean\src\lib\email.ts:115:               ${isVi ? "Xem chi tiet" : "View Details"}
+D:\Project\itams-new-clean\src\lib\email.ts:123:   requestRejected: (data: {
+D:\Project\itams-new-clean\src\lib\email.ts:135:         : `[ITAMS] Request ${data.requestNumber} rejected`,
+D:\Project\itams-new-clean\src\lib\email.ts:138:           <div style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+D:\Project\itams-new-clean\src\lib\email.ts:141:           <div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb;">
+D:\Project\itams-new-clean\src\lib\email.ts:143:             <p>${isVi ? "Yeu cau cua ban da bi tu choi." : "Your request has been rejected."}</p>
+D:\Project\itams-new-clean\src\lib\email.ts:144:             <div style="background: white; padding: 15px; border-radius: 6px; margin: 15px 0; border-left: 4px solid #ef4444;">
+D:\Project\itams-new-clean\src\lib\email.ts:149:             <a href="${data.url}" style="display: inline-block; background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">
+D:\Project\itams-new-clean\src\lib\email.ts:150:               ${isVi ? "Xem va sua lai" : "View & Edit"}
+D:\Project\itams-new-clean\src\lib\email.ts:158:   requestCompleted: (data: {
+D:\Project\itams-new-clean\src\lib\email.ts:169:         : `[ITAMS] Request ${data.requestNumber} completed`,
+D:\Project\itams-new-clean\src\lib\email.ts:172:           <div style="background: linear-gradient(135deg, #10b981, #047857); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+D:\Project\itams-new-clean\src\lib\email.ts:175:           <div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb;">
+D:\Project\itams-new-clean\src\lib\email.ts:177:             <p>${isVi ? "Yeu cau cua ban da hoan thanh." : "Your request has been completed."}</p>
+D:\Project\itams-new-clean\src\lib\email.ts:178:             <a href="${data.url}" style="display: inline-block; background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">
+D:\Project\itams-new-clean\src\lib\email.ts:179:               ${isVi ? "Xem chi tiet" : "View Details"}
+D:\Project\itams-new-clean\src\lib\email.ts:187:   poCreated: (data: {
+D:\Project\itams-new-clean\src\lib\email.ts:190:     totalAmount: number;
+D:\Project\itams-new-clean\src\lib\email.ts:199:         : `[ITAMS] New PO ${data.poNumber} for IT`,
+D:\Project\itams-new-clean\src\lib\email.ts:202:           <div style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+D:\Project\itams-new-clean\src\lib\email.ts:203:             <h2 style="margin: 0;">ITAMS - ${isVi ? "Don mua hang moi" : "New Purchase Order"}</h2>
+D:\Project\itams-new-clean\src\lib\email.ts:205:           <div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb;">
+D:\Project\itams-new-clean\src\lib\email.ts:206:             <p>${isVi ? "Co don mua hang moi:" : "There is a new purchase order:"}</p>
+D:\Project\itams-new-clean\src\lib\email.ts:207:             <div style="background: white; padding: 15px; border-radius: 6px; margin: 15px 0;">
+D:\Project\itams-new-clean\src\lib\email.ts:210:               <p><strong>${isVi ? "Tong tien" : "Total"}:</strong> ${data.totalAmount.toLocaleString("vi-VN")} d</p>
+D:\Project\itams-new-clean\src\lib\email.ts:211:               <p><strong>${isVi ? "Nguoi tao" : "Created by"}:</strong> ${data.purchaserName}</p>
+D:\Project\itams-new-clean\src\lib\email.ts:213:             <a href="${data.url}" style="display: inline-block; background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">
+D:\Project\itams-new-clean\src\lib\email.ts:214:               ${isVi ? "Xem chi tiet" : "View Details"}
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:20: function normalizePositiveInt(value: number, fallback: number): number {
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:21:   if (!Number.isFinite(value) || value <= 0) return fallback;
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:25: async function readConfigInt(stepName: string, fallback: number): Promise<number> {
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:27:   if (!row) return fallback;
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:28:   return Number.isFinite(row.hoursToApprove) ? row.hoursToApprove : fallback;
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:35:     create: { stepName, hoursToApprove: value },
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:82:       await Promise.all([
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:107: export async function saveExchangeRateSettings(input: {
+D:\Project\itams-new-clean\src\lib\exchange-rate.ts:114:   await Promise.all([
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:9:   createdAt: Date;
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:30:   CREATE TABLE [dbo].[UserGroup] (
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:37:     [createdAt] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:43:   ALTER TABLE [dbo].[UserGroup] ADD [managesLevel] INT NULL
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:48:   CREATE TABLE [dbo].[UserGroupMember] (
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:54:     CONSTRAINT [FK_UserGroupMember_group] FOREIGN KEY ([groupId]) REFERENCES [dbo].[UserGroup]([id]) ON DELETE CASCADE
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:60:   CREATE TABLE [dbo].[UserGroupFlow] (
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:66:     [createdAt] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:75: export async function listGroupsWithMembers() {
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:83:     createdAt: Date;
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:92:     SELECT
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:99:       g.createdAt,
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:108:     ORDER BY g.level ASC, g.createdAt DESC, u.name ASC
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:111:   const map = new Map<string, any>();
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:121:         createdAt: row.createdAt,
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:143: export async function listGroupFlows() {
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:150:     createdAt: Date;
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:158:     SELECT
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:164:       f.createdAt,
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:181:     createdAt: row.createdAt,
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:189: export function statusForGroupLevel(level: number): string {
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:190:   if (level === 2) return "PENDING_LEAD";
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:191:   if (level === 3) return "PENDING_MANAGER";
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:192:   if (level === 4) return "PENDING_ADMIN";
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:193:   return "PENDING_MANAGER";
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:199:     SELECT TOP 1 g.id, g.name, g.level
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:203:     ORDER BY g.level ASC, g.createdAt DESC
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:212:     SELECT TOP 1 u.id, u.name, u.email
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:216:     ORDER BY u.createdAt ASC
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:226:     SELECT TOP 1 m.id, m.name, m.email
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:239: export async function buildApprovalChain(requesterId: string, totalAmount: number) {
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:245:   const flows = await listGroupFlows();
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:246:   const byFrom = new Map<string, Array<(typeof flows)[number]>>();
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:248:     const list = byFrom.get(flow.fromGroupId) || [];
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:249:     list.push(flow);
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:250:     byFrom.set(flow.fromGroupId, list);
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:254:   const visited = new Set<string>();
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:260:       .filter((flow) => totalAmount >= flow.minAmountUsd)
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:266:     visited.add(nextFlow.toGroupId);
+D:\Project\itams-new-clean\src\lib\group-workflow.ts:290:     SELECT g.id AS groupId, g.level
+D:\Project\itams-new-clean\src\lib\prisma.ts:5: export const prisma = globalForPrisma.prisma || new PrismaClient();
+D:\Project\itams-new-clean\src\lib\utils.ts:17:   return new Intl.NumberFormat("vi-VN").format(value) + " d";
+D:\Project\itams-new-clean\src\lib\utils.ts:21:   return new Intl.DateTimeFormat("vi-VN", {
+D:\Project\itams-new-clean\src\lib\utils.ts:27:   }).format(new Date(date));
+D:\Project\itams-new-clean\src\lib\utils.ts:30: export function getStatusColor(status: string) {
+D:\Project\itams-new-clean\src\lib\utils.ts:33:     PENDING_MANAGER: "bg-yellow-100 text-yellow-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:34:     PENDING_LEAD: "bg-amber-100 text-amber-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:35:     PENDING_IT: "bg-blue-100 text-blue-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:36:     PENDING_PURCHASING: "bg-purple-100 text-purple-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:37:     PENDING_ADMIN: "bg-rose-100 text-rose-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:38:     PURCHASING_CREATED_PO: "bg-orange-100 text-orange-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:41:     COMPLETED: "bg-green-100 text-green-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:42:     REJECTED: "bg-red-100 text-red-700",
+D:\Project\itams-new-clean\src\lib\utils.ts:46:   return map[status] || "bg-gray-100 text-gray-700";
+D:\Project\itams-new-clean\src\lib\utils.ts:49: export function getStatusLabel(status: string) {
+D:\Project\itams-new-clean\src\lib\utils.ts:52:     PENDING_MANAGER: "Cho Quan ly",
+D:\Project\itams-new-clean\src\lib\utils.ts:53:     PENDING_LEAD: "Cho Lead",
+D:\Project\itams-new-clean\src\lib\utils.ts:54:     PENDING_IT: "Cho IT",
+D:\Project\itams-new-clean\src\lib\utils.ts:55:     PENDING_PURCHASING: "Cho Mua sam",
+D:\Project\itams-new-clean\src\lib\utils.ts:56:     PENDING_ADMIN: "Cho Admin",
+D:\Project\itams-new-clean\src\lib\utils.ts:57:     PURCHASING_CREATED_PO: "Da tao PO",
+D:\Project\itams-new-clean\src\lib\utils.ts:60:     COMPLETED: "Hoan thanh",
+D:\Project\itams-new-clean\src\lib\utils.ts:61:     REJECTED: "Bi tu choi",
+D:\Project\itams-new-clean\src\lib\utils.ts:65:   return map[status] || status;
+D:\Project\itams-new-clean\src\lib\utils.ts:85:   return new Intl.NumberFormat("vi-VN", {
+D:\Project\itams-new-clean\src\test\db-helper.ts:4: const prisma = new PrismaClient();
+D:\Project\itams-new-clean\src\test\db-helper.ts:26:       await prisma.$executeRawUnsafe(`DELETE FROM "${t}"`);
+D:\Project\itams-new-clean\src\test\db-helper.ts:31: export async function createTestUser(data: any = {}) {
+D:\Project\itams-new-clean\src\test\db-helper.ts:33:   return prisma.user.create({
+D:\Project\itams-new-clean\src\test\db-helper.ts:45: export async function createTestRequest(data: any = {}) {
+D:\Project\itams-new-clean\src\test\db-helper.ts:46:   return prisma.assetRequest.create({
+D:\Project\itams-new-clean\src\test\db-helper.ts:54:       status: data.status || "DRAFT",
+D:\Project\itams-new-clean\src\test\setup.ts:4: global.fetch = (() => Promise.reject(new Error("fetch is not mocked"))) as any;

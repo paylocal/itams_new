@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Globe } from "lucide-react";
+import { Globe, Check } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 
 export default function LoginPage() {
@@ -14,12 +14,23 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showLang, setShowLang] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setShowLang(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const activeLanguages =
     Array.isArray(languages) && languages.length > 0
       ? languages
       : [
-          { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
+          { code: "vi", name: "Tieng Viet", flag: "🇻🇳" },
           { code: "en", name: "English", flag: "🇬🇧" },
         ];
 
@@ -42,42 +53,51 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-        <div className="absolute top-4 right-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md relative">
+        {/* Language selector */}
+        <div className="absolute top-4 right-4" ref={langRef}>
           <button
             onClick={() => setShowLang(!showLang)}
-            className="flex items-center gap-1 px-2 py-1 border rounded text-sm hover:bg-gray-50"
+            className="flex items-center gap-2 px-3 py-1.5 border rounded-full text-sm hover:bg-gray-50 transition"
           >
-            <Globe className="w-3 h-3" />
-            {String(currentLang?.code || locale).toUpperCase()}
+            <Globe className="w-4 h-4 text-blue-600" />
+            <span className="text-base leading-none">{currentLang?.flag || "🌐"}</span>
+            <span className="hidden sm:inline">{currentLang?.name || locale.toUpperCase()}</span>
           </button>
           {showLang && (
-            <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-lg z-10">
-              {activeLanguages.map(
-                (lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      setLocale(lang.code);
-                      setShowLang(false);
-                    }}
-                    className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50"
-                  >
-                    {(lang.flag || "🌐") + " " + (lang.name || lang.code.toUpperCase())}
-                  </button>
-                )
-              )}
+            <div className="absolute right-0 top-full mt-2 bg-white border rounded-xl shadow-xl z-10 min-w-[160px] overflow-hidden">
+              {activeLanguages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    setLocale(lang.code);
+                    setShowLang(false);
+                  }}
+                  className="flex items-center justify-between w-full text-left px-4 py-2 text-sm hover:bg-blue-50 transition"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-base">{lang.flag || "🌐"}</span>
+                    <span>{lang.name || lang.code.toUpperCase()}</span>
+                  </span>
+                  {lang.code === locale && <Check className="w-4 h-4 text-blue-600" />}
+                </button>
+              ))}
             </div>
           )}
         </div>
 
-        <h1 className="text-3xl font-bold text-blue-600 text-center">
-          {t("common.appName", "ITAMS")}
-        </h1>
-        <p className="text-gray-500 text-center mt-2 mb-6">
-          {t("auth.subtitle", "IT Asset Management")}
-        </p>
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-blue-600 rounded-xl mx-auto flex items-center justify-center text-white text-3xl font-bold mb-4">
+            IT
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {t("common.appName", "ITAMS")}
+          </h1>
+          <p className="text-gray-500 mt-2">
+            {t("auth.subtitle", "IT Asset Management")}
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -88,8 +108,8 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="admin@company.com"
+              className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder={t("auth.emailPlaceholder", "name@company.com")}
               required
             />
           </div>
@@ -102,14 +122,14 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="password123"
+              className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder={t("auth.passwordPlaceholder", "Enter password")}
               required
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm">
+            <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -117,22 +137,30 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
           >
             {loading ? t("common.loading", "Loading...") : t("common.login", "Login")}
           </button>
         </form>
 
-        <div className="mt-6 p-3 bg-gray-50 rounded-md text-xs text-gray-600">
-          <p className="font-semibold mb-1">
-            {t("auth.testAccounts", "Test accounts:")}
-          </p>
-          <p>👑 {t("roles.ADMIN", "Administrator")}: admin@company.com / password123</p>
-          <p>👔 {t("roles.MANAGER", "Manager")}: manager@company.com / password123</p>
-          <p>💻 IT: it1@company.com / password123</p>
-          <p>🛒 {t("roles.PURCHASING", "Purchasing")}: purchase@company.com / password123</p>
-          <p>👤 {t("roles.EMPLOYEE", "Employee")}: employee1@company.com / password123</p>
-        </div>
+        {process.env.NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS === "true" && (
+          <div className="mt-6 p-3 bg-gray-50 rounded-lg text-xs text-gray-600">
+            <p className="font-semibold mb-1">{t("auth.testAccounts", "Demo accounts")} (Password123!):</p>
+            <div className="grid grid-cols-2 gap-1">
+              <p>👑 admin@itams.local</p>
+              <p>🎯 leader@itams.local</p>
+              <p>👔 manager@itams.local</p>
+              <p>📋 bod@itams.local</p>
+              <p>💻 it@itams.local</p>
+              <p>🛒 purchase@itams.local</p>
+              <p>👤 employee@itams.local</p>
+            </div>
+          </div>
+        )}
+
+        <p className="text-xs text-gray-400 text-center mt-4">
+          © {new Date().getFullYear()} ITAMS
+        </p>
       </div>
     </div>
   );

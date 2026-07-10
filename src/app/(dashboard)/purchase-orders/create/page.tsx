@@ -8,8 +8,9 @@ export default async function CreatePOSelectPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
-  if (session.user.role !== "PURCHASING" && session.user.role !== "ADMIN") {
-    redirect("/dashboard");
+  // Chi Purchasing duoc tao PO. Admin khong tao PO.
+  if (session.user.role !== "PURCHASING") {
+    redirect("/purchase-orders");
   }
 
   // Lay cac YC da ORDERED (chua co PO)

@@ -33,7 +33,7 @@ export async function POST(
       },
     },
     {
-      db: prisma,
+      db: prisma as any,
       sendEmail,
     }
   );

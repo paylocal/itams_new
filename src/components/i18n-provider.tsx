@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
+import { defaultTranslations } from "@/lib/default-translations";
 
 type LanguageItem = {
   code: string;
@@ -13,11 +14,19 @@ type TranslationMap = Record<string, string>;
 type I18nValue = {
   locale: string;
   setLocale: (l: string) => void;
-  t: (key: string, fallback?: string) => string;
+  t: (key: string, fallback?: string, vars?: Record<string, string | number>) => string;
   languages: LanguageItem[];
 };
 
 const I18nContext = createContext<I18nValue | null>(null);
+
+function interpolate(text: string, vars?: Record<string, string | number>): string {
+  if (!vars) return text;
+  return text.replace(/\{\{(\w+)\}\}/g, (_, name) => {
+    const val = vars[name];
+    return val !== undefined ? String(val) : `{{${name}}}`;
+  });
+}
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState("vi");
@@ -96,10 +105,12 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("locale", l);
       }
     },
-    t: (key: string, fallback?: string) => {
+    t: (key: string, fallback?: string, vars?: Record<string, string | number>) => {
       const translated = data.translations[key];
-      if (translated) return translated;
-      if (fallback !== undefined) return fallback;
+      if (translated) return interpolate(translated, vars);
+      const defaultText = defaultTranslations[locale]?.[key] ?? defaultTranslations["en"]?.[key];
+      if (defaultText) return interpolate(defaultText, vars);
+      if (fallback !== undefined) return interpolate(fallback, vars);
       return key;
     },
     languages: data.languages,

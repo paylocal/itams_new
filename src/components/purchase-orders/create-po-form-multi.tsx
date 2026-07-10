@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Upload, AlertCircle, Check, X } from "lucide-react";
+import { Upload, AlertCircle, Check } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { useI18n } from "../i18n-provider";
 
 interface Item {
   id: string;
@@ -34,7 +35,7 @@ interface Props {
 
 export function CreatePOFormMulti({ availableRequests, preselected, preselectedItems }: Props) {
   const router = useRouter();
-  // Map: itemId -> true/false
+  const { t } = useI18n();
   const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -48,7 +49,6 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
     notes: "",
   });
 
-  // Khoi tao: tick san cac items da preselected
   useEffect(() => {
     if (preselectedItems && preselectedItems.length > 0) {
       const ids = new Set<string>();
@@ -57,7 +57,6 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
       });
       setSelectedItemIds(ids);
     } else if (preselected.length > 0) {
-      // Fallback: tick tat ca items cua cac YC preselected
       const ids = new Set<string>();
       preselected.forEach((req) => {
         req.items.forEach((item) => ids.add(item.id));
@@ -80,7 +79,6 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
 
   const allRequests = preselected.length > 0 ? preselected : availableRequests;
 
-  // Tinh tong tu cac items da chon
   const getSelectedItems = (): Item[] => {
     const result: Item[] = [];
     allRequests.forEach((req) => {
@@ -103,26 +101,26 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
     if (item.deviceModel) {
       return item.deviceModel.brand + " " + item.deviceModel.name;
     }
-    return item.customName || "San pham";
+    return item.customName || t("request.product", "Product");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (selectedItemIds.size === 0) {
-      setError("Vui long chon it nhat 1 mat hang");
+      setError(t("po.selectAtLeastOne", "Please select at least one item"));
       return;
     }
     if (!poFile) {
-      setError("Vui long upload file PO");
+      setError(t("po.uploadFileRequired", "Please upload PO file"));
       return;
     }
     if (!form.expectedDate) {
-      setError("Vui long nhap ngay giao hang du kien");
+      setError(t("po.expectedDateRequired", "Please enter expected delivery date"));
       return;
     }
     if (!form.supplierName) {
-      setError("Vui long nhap ten nha cung cap");
+      setError(t("po.supplierNameRequired", "Please enter supplier name"));
       return;
     }
 
@@ -131,7 +129,6 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
 
     try {
       const formData = new FormData();
-      // Gui tung itemId
       selectedItemIds.forEach((id) => {
         formData.append("itemIds", id);
       });
@@ -149,9 +146,9 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Loi");
+        setError(data.error || t("common.error", "Error"));
       } else {
-        alert("Tao PO thanh cong voi " + selectedItemIds.size + " mat hang!");
+        alert(t("po.createSuccess", "PO created with {{n}} items", { n: selectedItemIds.size }));
         router.push("/purchase-orders");
       }
     } catch (err: any) {
@@ -164,18 +161,20 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
   return (
     <div className="max-w-6xl mx-auto space-y-4">
       <button onClick={() => router.back()} className="text-sm text-gray-600 hover:underline">
-        Quay lai
+        ← {t("common.back", "Back")}
       </button>
-      <h1 className="text-2xl font-bold">Tao PO</h1>
+      <h1 className="text-2xl font-bold">{t("po.create", "Create PO")}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* DANH SACH ITEMS */}
         <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow">
-          <h2 className="font-bold mb-3">Mat hang ({selectedItemIds.size} da chon)</h2>
+          <h2 className="font-bold mb-3">
+            {t("po.itemsTitle", "Items")} ({selectedItemIds.size} {t("po.selectedCount", "selected")})
+          </h2>
 
           {allRequests.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              Khong co mat hang nao
+              {t("po.noItems", "No items")}
             </div>
           ) : (
             <div className="space-y-4 max-h-[500px] overflow-y-auto">
@@ -213,7 +212,7 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
                             </p>
                           </div>
                           <div className="text-right text-xs">
-                            <p>SL: {item.quantity}</p>
+                            <p>{t("common.quantity", "Qty")}: {item.quantity}</p>
                             <p className="font-medium text-blue-700">
                               {formatCurrency(item.totalPrice || 0)}
                             </p>
@@ -231,21 +230,21 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
 
         {/* FORM THONG TIN PO */}
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow space-y-3 h-fit sticky top-4">
-          <h2 className="font-bold">Thong tin PO</h2>
+          <h2 className="font-bold">{t("po.poInfo", "PO Information")}</h2>
 
           {selectedItemIds.size > 0 && (
             <div className="bg-blue-50 border border-blue-200 rounded p-3">
               <p className="text-sm font-medium text-blue-700">
-                Da chon: {selectedItemIds.size} mat hang
+                {t("po.selectedNItems", "{{n}} items selected", { n: selectedItemIds.size })}
               </p>
               <p className="text-xl font-bold text-blue-700 mt-1">
-                Tong: {formatCurrency(totalAmount)}
+                {t("common.total", "Total")}: {formatCurrency(totalAmount)}
               </p>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-medium mb-1">Nha cung cap *</label>
+            <label className="block text-xs font-medium mb-1">{t("supplier.title", "Supplier")} *</label>
             <input
               type="text"
               value={form.supplierName}
@@ -255,7 +254,7 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
             />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1">Nguoi lien he</label>
+            <label className="block text-xs font-medium mb-1">{t("supplier.contact", "Contact")}</label>
             <input
               type="text"
               value={form.supplierContact}
@@ -264,7 +263,7 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
             />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1">SDT</label>
+            <label className="block text-xs font-medium mb-1">{t("common.phone", "Phone")}</label>
             <input
               type="tel"
               value={form.supplierPhone}
@@ -273,7 +272,7 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
             />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1">Ngay giao du kien *</label>
+            <label className="block text-xs font-medium mb-1">{t("po.expectedDate", "Expected delivery")} *</label>
             <input
               type="date"
               value={form.expectedDate}
@@ -283,7 +282,7 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
             />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1">File PO *</label>
+            <label className="block text-xs font-medium mb-1">{t("po.poFile", "PO File")} *</label>
             <input
               type="file"
               accept=".pdf,.doc,.docx,.jpg,.png"
@@ -294,7 +293,7 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
             {poFile && <p className="text-xs text-green-700 mt-1">{poFile.name}</p>}
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1">Ghi chu</label>
+            <label className="block text-xs font-medium mb-1">{t("common.note", "Note")}</label>
             <textarea
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
@@ -314,7 +313,7 @@ export function CreatePOFormMulti({ availableRequests, preselected, preselectedI
             disabled={loading || selectedItemIds.size === 0}
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? "Dang tao..." : "Tao PO (" + selectedItemIds.size + " mat hang)"}
+            {loading ? t("common.creating", "Creating...") : t("po.create", "Create PO")}
           </button>
         </form>
       </div>

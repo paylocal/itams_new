@@ -20,8 +20,8 @@ export function AdminLanguageTabs() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{t("admin.title")}</h1>
-          <p className="text-gray-500 mt-1">{t("admin.subtitle")}</p>
+          <h1 className="text-2xl font-bold">{t("admin.title", "Languages")}</h1>
+          <p className="text-gray-500 mt-1">{t("admin.subtitle", "Manage languages and translations")}</p>
         </div>
       </div>
 
@@ -37,7 +37,7 @@ export function AdminLanguageTabs() {
             }
           >
             <Globe className="w-4 h-4" />
-            {t("admin.tabLanguages")}
+            {t("admin.tabLanguages", "Languages")}
           </button>
           <button
             onClick={() => setTab("translations")}
@@ -49,7 +49,7 @@ export function AdminLanguageTabs() {
             }
           >
             <Type className="w-4 h-4" />
-            {t("admin.tabTranslations")}
+            {t("admin.tabTranslations", "Translations")}
           </button>
         </div>
         <div className="p-6" key={locale + tab}>

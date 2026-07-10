@@ -8,8 +8,9 @@ export default async function SelectItemsPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
-  if (session.user.role !== "PURCHASING" && session.user.role !== "ADMIN") {
-    redirect("/dashboard");
+  // Chi Purchasing duoc tao PO
+  if (session.user.role !== "PURCHASING") {
+    redirect("/purchase-orders");
   }
 
   // Lay YC da ORDERED chua hoan thanh

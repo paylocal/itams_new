@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { ArrowLeft, Check, ShoppingCart, FileText } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { useI18n } from "../i18n-provider";
 
 interface Request {
   id: string;
@@ -21,8 +21,8 @@ interface Props {
 
 export function SelectRequestsForPO({ availableRequests }: Props) {
   const router = useRouter();
+  const { t } = useI18n();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [mode, setMode] = useState<"single" | "multiple">("multiple");
   const [searchTerm, setSearchTerm] = useState("");
 
   const toggleRequest = (id: string) => {
@@ -57,11 +57,10 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
 
   const handleCreatePO = () => {
     if (selectedIds.length === 0) {
-      alert("Vui long chon it nhat 1 yeu cau");
+      alert(t("po.selectAtLeastOneRequest", "Please select at least one request"));
       return;
     }
 
-    // Chuyen sang trang tao PO voi danh sach ID
     const query = selectedIds.join(",");
     router.push("/purchase-orders/new?requestIds=" + query);
   };
@@ -72,14 +71,14 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
         onClick={() => router.back()}
         className="text-sm text-gray-600 hover:underline flex items-center gap-1"
       >
-        <ArrowLeft className="w-4 h-4" /> Quay lai
+        <ArrowLeft className="w-4 h-4" /> {t("common.back", "Back")}
       </button>
 
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Chon yeu cau de tao PO</h1>
+          <h1 className="text-2xl font-bold">{t("po.selectRequestsTitle", "Select requests for PO")}</h1>
           <p className="text-gray-500 mt-1">
-            {availableRequests.length} yeu cau dang cho mua hang
+            {availableRequests.length} {t("po.pendingRequests", "pending requests")}
           </p>
         </div>
       </div>
@@ -87,9 +86,9 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
       {availableRequests.length === 0 ? (
         <div className="bg-white p-12 rounded-lg shadow text-center text-gray-500">
           <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>Khong co yeu cau nao can tao PO</p>
+          <p>{t("po.noRequestsForPO", "No requests need PO")}</p>
           <p className="text-xs mt-2">
-            YC se xuat hien o day sau khi IT duyet
+            {t("po.requestsAppearHint", "Requests appear here after IT approval")}
           </p>
         </div>
       ) : (
@@ -99,7 +98,7 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
             <div className="flex justify-between items-center mb-4">
               <input
                 type="text"
-                placeholder="Tim kiem theo ma, tieu de, nguoi yeu cau..."
+                placeholder={t("po.searchPlaceholder", "Search by code, title, requester...")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-3 py-1.5 text-sm flex-1 mr-2"
@@ -109,13 +108,13 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
                 className="text-sm text-blue-600 hover:underline whitespace-nowrap"
               >
                 {selectedIds.length === filteredRequests.length
-                  ? "Bo chon tat ca"
-                  : "Chon tat ca"}
+                  ? t("po.deselectAll", "Deselect all")
+                  : t("po.selectAll", "Select all")}
               </button>
             </div>
 
             <p className="text-sm text-gray-500 mb-3">
-              Da chon: {selectedIds.length} / {filteredRequests.length}
+              {t("po.selectedCount", "Selected")}: {selectedIds.length} / {filteredRequests.length}
             </p>
 
             <div className="space-y-2 max-h-[500px] overflow-y-auto">
@@ -145,7 +144,7 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
                             {req.requestNumber}
                           </span>
                           <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded">
-                            Cho mua
+                            {t("po.pendingPurchase", "Pending purchase")}
                           </span>
                         </div>
                         <p className="text-sm">{req.title}</p>
@@ -155,7 +154,7 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
                         </p>
                         <div className="flex justify-between items-center mt-2">
                           <span className="text-xs text-gray-500">
-                            {req.items.length} mat hang
+                            {req.items.length} {t("request.items", "items")}
                           </span>
                           <span className="text-sm font-medium text-blue-700">
                             {formatCurrency(req.totalAmount || 0)}
@@ -176,13 +175,13 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
           <div className="bg-white p-6 rounded-lg shadow space-y-4 h-fit sticky top-4">
             <h2 className="font-bold text-lg flex items-center gap-2">
               <ShoppingCart className="w-5 h-5" />
-              Tao PO
+              {t("po.create", "Create PO")}
             </h2>
 
             {selectedIds.length > 0 ? (
               <div className="bg-blue-50 border border-blue-200 rounded p-3">
                 <p className="text-sm font-medium text-blue-700 mb-1">
-                  Da chon {selectedIds.length} yeu cau
+                  {t("po.selectedNRequests", "{{n}} requests selected", { n: selectedIds.length })}
                 </p>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
                   {selectedRequests.map((r) => (
@@ -198,7 +197,7 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
                   ))}
                 </div>
                 <div className="mt-2 pt-2 border-t border-blue-300 flex justify-between font-bold">
-                  <span>Tong:</span>
+                  <span>{t("common.total", "Total")}:</span>
                   <span className="text-blue-700">
                     {formatCurrency(totalAmount)}
                   </span>
@@ -206,7 +205,7 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
               </div>
             ) : (
               <div className="bg-gray-50 border border-dashed rounded p-4 text-center text-gray-500 text-sm">
-                Chon it nhat 1 yeu cau de tao PO
+                {t("po.selectHint", "Select at least one request to create PO")}
               </div>
             )}
 
@@ -216,7 +215,7 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
               className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <ShoppingCart className="w-4 h-4" />
-              Tiep tuc tao PO ({selectedIds.length})
+              {t("po.continueCreate", "Continue to create PO")} ({selectedIds.length})
             </button>
 
             {selectedIds.length > 0 && (
@@ -224,12 +223,12 @@ export function SelectRequestsForPO({ availableRequests }: Props) {
                 onClick={() => setSelectedIds([])}
                 className="w-full bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 text-sm"
               >
-                Bo chon tat ca
+                {t("po.deselectAll", "Deselect all")}
               </button>
             )}
 
             <div className="bg-yellow-50 border border-yellow-200 rounded p-3 text-xs text-yellow-800">
-              💡 Ban co the tao 1 PO chua nhieu yeu cau, hoac moi yeu cau tao 1 PO rieng.
+              💡 {t("po.multipleRequestsHint", "You can create one PO for multiple requests or one PO per request.")}
             </div>
           </div>
         </div>

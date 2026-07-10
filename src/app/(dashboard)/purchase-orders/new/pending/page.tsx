@@ -4,9 +4,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getStatusColor, getStatusLabel, formatCurrency } from "@/lib/utils";
+import { getServerT } from "@/lib/i18n-server";
 
 export default async function PendingPOPage() {
   const session = await getServerSession(authOptions);
+  const { t } = await getServerT();
   if (!session) redirect("/login");
 
   if (session.user.role !== "PURCHASING" && session.user.role !== "ADMIN") {
@@ -32,22 +34,22 @@ export default async function PendingPOPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Yeu cau cho mua hang</h1>
-          <p className="text-gray-500 mt-1">{requests.length} yeu cau can tao PO</p>
+          <h1 className="text-2xl font-bold">{t("po.pendingTitle", "Requests to purchase")}</h1>
+          <p className="text-gray-500 mt-1">{requests.length} {t("po.pendingCount", "requests need PO")}</p>
         </div>
         <Link
           href="/purchase-orders/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
         >
-          Tao PO moi (chon nhieu YC)
+          {t("po.createMulti", "Create PO (multi select)")}
         </Link>
       </div>
 
       {requests.length === 0 ? (
         <div className="bg-white p-12 rounded-lg shadow text-center text-gray-500">
-          Khong co yeu cau nao can mua hang
+          {t("po.noPending", "No requests need purchase")}
         </div>
       ) : (
         <div className="space-y-3">
@@ -67,15 +69,15 @@ export default async function PendingPOPage() {
                   <p className="text-sm text-gray-600 mt-1">
                     {req.requester.name} ({req.requester.department})
                   </p>
-                  <p className="text-sm mt-2">
-                    {req.items.length} mat hang | Tong: <strong>{formatCurrency(req.totalAmount || 0)}</strong>
+                                    <p className="text-sm mt-2">
+                    {req.items.length} {t("po.items", "items")} | {t("po.total", "Total")}: <strong>{formatCurrency(req.totalAmount || 0)}</strong>
                   </p>
                 </div>
                 <Link
                   href={`/purchase-orders/new?requestIds=${req.id}`}
                   className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 self-center"
                 >
-                  Tao PO
+                  {t("po.create", "Create PO")}
                 </Link>
               </div>
             </div>

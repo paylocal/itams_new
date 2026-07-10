@@ -68,7 +68,7 @@ export function SupplierManager() {
 
   async function save() {
     if (!form.name) {
-      alert("Ten khong duoc trong");
+      alert(t("supplier.errorName", "Name is required"));
       return;
     }
     try {
@@ -83,25 +83,25 @@ export function SupplierManager() {
       });
       if (!res.ok) {
         const d = await res.json();
-        alert("Loi: " + (d.error || res.status));
+        alert(t("common.error", "Error") + ": " + (d.error || res.status));
         return;
       }
       await loadSuppliers();
       resetForm();
     } catch (e) {
-      alert("Loi: " + (e as Error).message);
+      alert(t("common.error", "Error") + ": " + (e as Error).message);
     }
   }
 
   async function remove(s: Supplier) {
-    if (!confirm("Xoa " + s.name + "?")) return;
+    if (!confirm(t("supplier.confirmDelete", "Delete {{name}}?", { name: s.name }))) return;
     const res = await fetch("/api/suppliers/" + s.id, {
       method: "DELETE",
     });
     if (res.ok) {
       await loadSuppliers();
     } else {
-      alert("Loi");
+      alert(t("common.error", "Error"));
     }
   }
 
@@ -109,9 +109,9 @@ export function SupplierManager() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-bold">{t("nav.suppliers")}</h2>
+          <h2 className="text-xl font-bold">{t("nav.suppliers", "Suppliers")}</h2>
           <p className="text-sm text-gray-500">
-            Quan ly nha cung cap (Suppliers)
+            {t("supplier.subtitle", "Manage suppliers")}
           </p>
         </div>
         <button
@@ -121,7 +121,7 @@ export function SupplierManager() {
           }}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
         >
-          <Plus className="w-4 h-4" /> {t("admin.addSupplier")}
+          <Plus className="w-4 h-4" /> {t("supplier.add", "Add supplier")}
         </button>
       </div>
 
@@ -129,7 +129,7 @@ export function SupplierManager() {
         <div className="bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-bold">
-              {editing ? "Sua nha cung cap" : "Them moi"}
+              {editing ? t("supplier.edit", "Edit supplier") : t("supplier.add", "Add supplier")}
             </h3>
             <button onClick={resetForm} className="text-gray-500">
               <X className="w-5 h-5" />
@@ -137,37 +137,37 @@ export function SupplierManager() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <input
-              placeholder="Ten nha cung cap *"
+              placeholder={t("supplier.namePlaceholder", "Supplier name *")}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
             />
             <input
-              placeholder="Nguoi lien he"
+              placeholder={t("supplier.contactPlaceholder", "Contact person")}
               value={form.contactName}
               onChange={(e) => setForm({ ...form, contactName: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
             />
             <input
-              placeholder="So dien thoai"
+              placeholder={t("common.phone", "Phone")}
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
             />
             <input
-              placeholder="Email"
+              placeholder={t("common.email", "Email")}
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
             />
             <input
-              placeholder="Ma so thue"
+              placeholder={t("supplier.taxCodePlaceholder", "Tax code")}
               value={form.taxCode}
               onChange={(e) => setForm({ ...form, taxCode: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
             />
             <input
-              placeholder="Dia chi"
+              placeholder={t("common.address", "Address")}
               value={form.address}
               onChange={(e) => setForm({ ...form, address: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
@@ -178,38 +178,38 @@ export function SupplierManager() {
               onClick={save}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              {editing ? "Cap nhat" : "Tao moi"}
+              {editing ? t("common.update", "Update") : t("common.create", "Create")}
             </button>
             <button
               onClick={resetForm}
               className="px-4 py-2 bg-gray-200 rounded"
             >
-              Huy
+              {t("common.cancel", "Cancel")}
             </button>
           </div>
         </div>
       )}
 
       {loading ? (
-        <div className="p-8 text-center text-gray-500">Dang tai...</div>
+        <div className="p-8 text-center text-gray-500">{t("common.loading", "Loading...")}</div>
       ) : (
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
-                <th className="text-left p-3">Ma</th>
-                <th className="text-left p-3">Ten</th>
-                <th className="text-left p-3">Lien he</th>
-                <th className="text-left p-3">SDT</th>
-                <th className="text-left p-3">Email</th>
-                <th className="text-right p-3">Thao tac</th>
+                <th className="text-left p-3">{t("common.code", "Code")}</th>
+                <th className="text-left p-3">{t("common.name", "Name")}</th>
+                <th className="text-left p-3">{t("supplier.contact", "Contact")}</th>
+                <th className="text-left p-3">{t("common.phone", "Phone")}</th>
+                <th className="text-left p-3">{t("common.email", "Email")}</th>
+                <th className="text-right p-3">{t("common.actions", "Actions")}</th>
               </tr>
             </thead>
             <tbody>
               {suppliers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-gray-500">
-                    Chua co nha cung cap
+                    {t("supplier.empty", "No suppliers")}
                   </td>
                 </tr>
               ) : (

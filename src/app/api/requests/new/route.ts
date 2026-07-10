@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { sendEmail, emailTemplates } from "@/lib/email";
-import { buildApprovalChain, ensureGroupWorkflowTables, statusForGroupLevel } from "@/lib/group-workflow";
+import { sendEmail } from "@/lib/email";
 import { getExchangeRateState } from "@/lib/exchange-rate";
+import {
+  getRequiredApprovalSteps,
+  determineInitialStatus,
+  findApproversInGroup,
+} from "@/lib/workflow";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -30,124 +34,57 @@ export async function POST(req: NextRequest) {
     const fx = await getExchangeRateState({ refreshIfAuto: true });
     const totalAmountUsd = fx.effectiveVndPerUsd > 0 ? totalAmount / fx.effectiveVndPerUsd : totalAmount;
 
-    await ensureGroupWorkflowTables();
-    let dynamicChain = await buildApprovalChain(session.user.id, totalAmountUsd);
+    const steps = await getRequiredApprovalSteps(totalAmountUsd);
 
-    // Neu dynamic chain co buoc thieu approver, thu fallback ve quan ly truc tiep
-    if (dynamicChain.length > 0) {
-      const firstStep = dynamicChain[0];
-      const hasMissingApprover = !firstStep.approverId || dynamicChain.some((step) => !step.approverId);
-      if (hasMissingApprover) {
-        const fallbackUser = await prisma.user.findUnique({
-          where: { id: session.user.id },
-          select: { managerId: true },
-        });
-        if (fallbackUser?.managerId) {
-          dynamicChain = [];
-        } else {
-          return NextResponse.json(
-            { error: "Flow co buoc chua map duoc nguoi duyet theo quan he manager" },
-            { status: 400 }
-          );
-        }
+    // Build approval chain by mapping each required step to an approver in the group
+    const approvalChain: Array<{
+      stepNumber: number;
+      groupCode: string;
+      approverId: string;
+      approverEmail: string | null;
+    }> = [];
+    let stepNumber = 1;
+    for (const step of steps) {
+      const approvers = await findApproversInGroup(step.groupCode);
+      if (approvers.length === 0) {
+        return NextResponse.json(
+          { error: `Nhom ${step.groupCode} chua co thanh vien de duyet` },
+          { status: 400 }
+        );
       }
+      const approver = approvers[0];
+      approvalChain.push({
+        stepNumber,
+        groupCode: step.groupCode,
+        approverId: approver.id,
+        approverEmail: approver.email,
+      });
+      stepNumber++;
     }
+
+    // IT step is always last before stock check
+    const itApprovers = await findApproversInGroup("IT");
+    if (itApprovers.length === 0) {
+      return NextResponse.json(
+        { error: "Nhom IT chua co thanh vien" },
+        { status: 400 }
+      );
+    }
+    const itApprover = itApprovers[0];
+    approvalChain.push({
+      stepNumber,
+      groupCode: "IT",
+      approverId: itApprover.id,
+      approverEmail: itApprover.email,
+    });
+
+    const initialStatus = determineInitialStatus(totalAmountUsd, steps);
 
     const count = await prisma.assetRequest.count();
     const year = new Date().getFullYear();
     const requestNumber = `REQ-${year}-${String(count + 1).padStart(5, "0")}`;
 
-    if (dynamicChain.length > 0) {
-      const firstStep = dynamicChain[0];
-
-      const request = await prisma.assetRequest.create({
-        data: {
-          requestNumber,
-          requesterId: session.user.id,
-          title,
-          reason,
-          priority: priority || "NORMAL",
-          totalAmount,
-          status: statusForGroupLevel(firstStep.groupLevel),
-          currentStep: 1,
-          approvalSteps: {
-            create: dynamicChain.map((step, index) => ({
-              stepNumber: index + 1,
-              approverId: step.approverId!,
-            })),
-          },
-          items: {
-            create: items.map((item: any) => ({
-              categoryId: item.categoryId,
-              deviceModelId: item.deviceModelId || null,
-              customName: item.customName || null,
-              quantity: item.quantity || 1,
-              unitPrice: item.unitPrice || null,
-              totalPrice: (item.quantity || 1) * (item.unitPrice || 0),
-              specs: item.specs || null,
-            })),
-          },
-        },
-        include: { items: true, requester: true },
-      });
-
-      try {
-        if (firstStep.approverEmail) {
-          await sendEmail({
-            to: firstStep.approverEmail,
-            subject: "[ITAMS] YC moi can duyet",
-            html:
-              "<p>YC <b>" +
-              request.requestNumber +
-              "</b> can duyet theo flow duoc cau hinh. Gia tri: " +
-              totalAmountUsd.toFixed(2) +
-              " USD (quy doi tu " +
-              totalAmount +
-              " VND, ty gia " +
-              fx.effectiveVndPerUsd +
-              " VND/USD).</p>",
-          });
-        }
-      } catch (e) {
-        console.error("Email error:", e);
-      }
-
-      return NextResponse.json(request, { status: 201 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: {
-        managerId: true,
-        manager: { select: { name: true, email: true } },
-      },
-    });
-
-    if (!user?.managerId) {
-      return NextResponse.json({ error: "Chua co quan ly" }, { status: 400 });
-    }
-
-    const thresholdConfig = await prisma.sLAConfig.findUnique({
-      where: { stepName: "LEAD_APPROVAL_THRESHOLD_USD" },
-    });
-    const leadThreshold = thresholdConfig?.hoursToApprove ?? 5000;
-    const requireLeadApproval = totalAmountUsd > leadThreshold;
-
-    const leadUser = requireLeadApproval
-      ? await prisma.user.findFirst({
-          where: { role: "LEAD", isActive: true },
-          select: { id: true, name: true, email: true },
-        })
-      : null;
-
-    if (requireLeadApproval && !leadUser) {
-      return NextResponse.json(
-        { error: "Don vuot nguong nhung chua cau hinh nguoi duyet LEAD" },
-        { status: 400 }
-      );
-    }
-
-    const legacyRequest = await prisma.assetRequest.create({
+    const request = await prisma.assetRequest.create({
       data: {
         requestNumber,
         requesterId: session.user.id,
@@ -155,13 +92,14 @@ export async function POST(req: NextRequest) {
         reason,
         priority: priority || "NORMAL",
         totalAmount,
-        status: "PENDING_MANAGER",
+        totalAmountUsd,
+        status: initialStatus,
         currentStep: 1,
         approvalSteps: {
-          create: [
-            { stepNumber: 1, approverId: user.managerId },
-            ...(leadUser ? [{ stepNumber: 2, approverId: leadUser.id }] : []),
-          ],
+          create: approvalChain.map((step) => ({
+            stepNumber: step.stepNumber,
+            approverId: step.approverId,
+          })),
         },
         items: {
           create: items.map((item: any) => ({
@@ -175,49 +113,28 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
-      include: { items: true, requester: true },
+      include: { items: true, requester: true, approvalSteps: { include: { approver: true } } },
     });
 
-    // Gui email cho manager
+    // Send email to first approver
+    const firstStep = approvalChain[0];
     try {
-      if (user.manager?.email) {
-        const template = emailTemplates.requestCreated({
-          requestNumber: legacyRequest.requestNumber,
-          title: legacyRequest.title,
-          requesterName: session.user.name || "",
-          managerName: user.manager.name,
-          url:
-            (process.env.NEXTAUTH_URL || "http://localhost:3000") +
-            "/approvals",
-        });
+      if (firstStep.approverEmail) {
         await sendEmail({
-          to: user.manager.email,
-          subject: template.subject,
-          html: template.html,
-        });
-      }
-
-      if (leadUser?.email) {
-        await sendEmail({
-          to: leadUser.email,
-          subject: "[ITAMS] Co yc vuot nguong can Lead duyet",
-          html:
-            "<p>YC <b>" +
-            legacyRequest.requestNumber +
-            "</b> co tong gia tri " +
-            totalAmountUsd.toFixed(2) +
-            " USD (quy doi tu " +
-            totalAmount +
-            " VND, ty gia " +
-            fx.effectiveVndPerUsd +
-            " VND/USD), se can Lead duyet sau buoc Manager.</p>",
+          to: firstStep.approverEmail,
+          subject: "[ITAMS] YC moi can duyet",
+          html: `
+            <p>YC <b>${request.requestNumber}</b> can duyet.</p>
+            <p>Gia tri: ${totalAmountUsd.toFixed(2)} USD (quy doi tu ${totalAmount} VND, ty gia ${fx.effectiveVndPerUsd} VND/USD).</p>
+            <p><a href="${process.env.NEXTAUTH_URL || "http://localhost:3000"}/approvals">Xem danh sach duyet</a></p>
+          `,
         });
       }
     } catch (e) {
       console.error("Email error:", e);
     }
 
-    return NextResponse.json(legacyRequest, { status: 201 });
+    return NextResponse.json(request, { status: 201 });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });

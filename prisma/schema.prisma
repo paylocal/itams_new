@@ -8,19 +8,21 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  name          String
-  passwordHash  String
-  role          String   @default("EMPLOYEE")
-  department    String?
-  position      String?
-  managerId     String?
-  manager       User?    @relation("ManagerEmployee", fields: [managerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  subordinates  User[]   @relation("ManagerEmployee")
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  name               String
+  passwordHash       String
+  role               String   @default("EMPLOYEE")
+  department         String?
+  position           String?
+  managerId          String?
+  manager            User?    @relation("ManagerEmployee", fields: [managerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subordinates       User[]   @relation("ManagerEmployee")
+  isActive           Boolean  @default(true)
+  mustChangePassword Boolean  @default(false)
+  lastPasswordChangeAt DateTime @default(now())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   requestsCreated    AssetRequest[]      @relation("Requester")
   approvalsGiven     ApprovalStep[]
@@ -28,6 +30,17 @@ model User {
   handoverAsEmployee Handover[]          @relation("EmployeeHandover")
   handoverAsIT       Handover[]          @relation("ITHandover")
   userGroups         UserGroupMember[]
+  passwordHistory    PasswordHistory[]
+}
+
+model PasswordHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  passwordHash String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model UserGroup {
@@ -35,6 +48,7 @@ model UserGroup {
   code        String   @unique
   name        String
   level       Int      @default(1)
+  managesLevel Int?
   description String?
   createdAt   DateTime @default(now())
 
@@ -62,12 +76,28 @@ model WorkflowRule {
   value           Decimal  @db.Decimal(18, 2)
   category        String?
   priority        String?
+  requiredGroupId String?
   requiredLevel   Int
   isActive        Boolean  @default(true)
+  order           Int      @default(0)
   createdAt       DateTime @default(now())
 
   groupId   String?
   group     UserGroup? @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model PasswordPolicy {
+  id                     String   @id @default(cuid())
+  minLength              Int      @default(8)
+  requireUppercase       Boolean  @default(true)
+  requireLowercase       Boolean  @default(true)
+  requireNumber          Boolean  @default(true)
+  requireSpecial         Boolean  @default(true)
+  passwordExpiryDays     Int      @default(90)
+  preventReuseCount      Int      @default(3)
+  lockoutAfterFailedAttempts Int?  @default(5)
+  isActive               Boolean  @default(true)
+  updatedAt              DateTime @updatedAt
 }
 
 model AssetRequest {
@@ -82,6 +112,7 @@ model AssetRequest {
   currentStep   Int        @default(1)
   isLocked      Boolean    @default(false)
   totalAmount   Decimal?  @db.Decimal(18, 2)
+  totalAmountUsd Decimal? @db.Decimal(18, 2)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   completedAt   DateTime?
@@ -105,6 +136,7 @@ model RequestItem {
   unitPrice     Decimal? @db.Decimal(18, 2)
   totalPrice    Decimal? @db.Decimal(18, 2)
   specs         String?
+  poItems       POItem[]
 }
 
 model ApprovalStep {
@@ -125,6 +157,8 @@ model ApprovalStep {
 model PurchaseOrder {
   id              String       @id @default(cuid())
   poNumber        String       @unique
+  supplierId      String?
+  supplier        Supplier?    @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   supplierName    String
   supplierContact String?
   supplierPhone   String?
@@ -161,6 +195,7 @@ model POItem {
   po            PurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   requestItemId String?
   requestItem   RequestItem?  @relation(fields: [requestItemId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  requestId     String?
   productName   String
   quantity      Int      @default(1)
   unitPrice     Decimal  @db.Decimal(18, 2)
@@ -185,6 +220,8 @@ model Asset {
   currentHolder   User?         @relation("CurrentHolder", fields: [currentHolderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   assignedDate    DateTime?
   location        String?
+  notes           String?
+  receivedDate    DateTime?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 

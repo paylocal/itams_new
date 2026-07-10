@@ -143,7 +143,7 @@ export function AssetsList({ assets: initial }: { assets: Asset[] }) {
                 <th className="text-left p-3">{t("assets.status", "Status")}</th>
                 <th className="text-left p-3">{t("assets.holder", "Holder")}</th>
                 <th className="text-left p-3">{t("assets.location", "Location")}</th>
-                <th className="text-right p-3">QR</th>
+                <th className="text-right p-3">{t("assets.qr", "QR")}</th>
               </tr>
             </thead>
             <tbody>
@@ -157,7 +157,7 @@ export function AssetsList({ assets: initial }: { assets: Asset[] }) {
                   <td className="p-3">
                     <p className="font-medium">{asset.name}</p>
                     {asset.brand && <p className="text-xs text-gray-500">{asset.brand} {asset.model}</p>}
-                    {asset.serialNumber && <p className="text-xs text-gray-400">SN: {asset.serialNumber}</p>}
+                    {asset.serialNumber && <p className="text-xs text-gray-400">{t("assets.serial", "SN")}: {asset.serialNumber}</p>}
                   </td>
                   <td className="p-3 text-gray-600">{getCategoryLabel(asset.category)}</td>
                   <td className="p-3">
@@ -185,7 +185,7 @@ export function AssetsList({ assets: initial }: { assets: Asset[] }) {
                     <Link
                       href={`/assets/${asset.id}/qr`}
                       className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs hover:bg-blue-100"
-                      title="QR"
+                      title={t("assets.qr", "QR")}
                     >
                       <QrCode className="w-3 h-3" /> QR
                     </Link>

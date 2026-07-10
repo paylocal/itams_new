@@ -12,18 +12,16 @@ export default async function NewPOPage({
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
-  if (session.user.role !== "PURCHASING" && session.user.role !== "ADMIN") {
-    redirect("/dashboard");
+  // Chi Purchasing duoc tao PO. Admin chi xem.
+  if (session.user.role !== "PURCHASING") {
+    redirect("/purchase-orders");
   }
 
-  // Lay cac items da chon tu URL
   let selectedItemIds: string[] = [];
 
   if (searchParams.itemIds) {
-    // Format moi: itemIds=id1,id2,id3
     selectedItemIds = decodeURIComponent(searchParams.itemIds).split(",");
   } else if (searchParams.requestIds) {
-    // Fallback: lay tat ca items cua cac YC
     const requestIds = searchParams.requestIds.split(",");
     const items = await prisma.requestItem.findMany({
       where: { requestId: { in: requestIds } },
@@ -36,7 +34,6 @@ export default async function NewPOPage({
     redirect("/purchase-orders/select-items");
   }
 
-  // Lay thong tin cac items
   const items = await prisma.requestItem.findMany({
     where: { id: { in: selectedItemIds } },
     include: {
@@ -50,7 +47,6 @@ export default async function NewPOPage({
     },
   });
 
-  // Group theo request
   const requestMap = new Map<
     string,
     {

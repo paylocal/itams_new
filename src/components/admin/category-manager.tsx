@@ -52,7 +52,7 @@ export function CategoryManager() {
 
   async function save() {
     if (!form.code || !form.name) {
-      alert("Code va name khong duoc trong");
+      alert(t("category.errorRequired", "Code and name are required"));
       return;
     }
     try {
@@ -67,25 +67,25 @@ export function CategoryManager() {
       });
       if (!res.ok) {
         const d = await res.json();
-        alert("Loi: " + (d.error || res.status));
+        alert(t("common.error", "Error") + ": " + (d.error || res.status));
         return;
       }
       await loadCategories();
       resetForm();
     } catch (e) {
-      alert("Loi: " + (e as Error).message);
+      alert(t("common.error", "Error") + ": " + (e as Error).message);
     }
   }
 
   async function remove(cat: Category) {
-    if (!confirm("Xoa " + cat.name + "?")) return;
+    if (!confirm(t("category.confirmDelete", "Delete {{name}}?", { name: cat.name }))) return;
     const res = await fetch("/api/device-categories/" + cat.id, {
       method: "DELETE",
     });
     if (res.ok) {
       await loadCategories();
     } else {
-      alert("Loi khi xoa");
+      alert(t("category.deleteError", "Error deleting category"));
     }
   }
 
@@ -93,9 +93,9 @@ export function CategoryManager() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-bold">{t("nav.categories")}</h2>
+          <h2 className="text-xl font-bold">{t("nav.categories", "Categories")}</h2>
           <p className="text-sm text-gray-500">
-            Quan ly cac danh muc thiet bi (Laptop, Desktop, ...)
+            {t("category.subtitle", "Manage device categories (Laptop, Desktop, ...)")}
           </p>
         </div>
         <button
@@ -105,7 +105,7 @@ export function CategoryManager() {
           }}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
         >
-          <Plus className="w-4 h-4" /> {t("admin.addCategory")}
+          <Plus className="w-4 h-4" /> {t("category.add", "Add category")}
         </button>
       </div>
 
@@ -113,7 +113,7 @@ export function CategoryManager() {
         <div className="bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-bold">
-              {editing ? "Sua danh muc" : "Them moi"}
+              {editing ? t("category.edit", "Edit category") : t("category.add", "Add category")}
             </h3>
             <button onClick={resetForm} className="text-gray-500">
               <X className="w-5 h-5" />
@@ -121,14 +121,14 @@ export function CategoryManager() {
           </div>
           <div className="grid grid-cols-3 gap-3">
             <input
-              placeholder="Code (LAPTOP, DESKTOP) *"
+              placeholder={t("category.codePlaceholder", "Code (LAPTOP, DESKTOP) *")}
               value={form.code}
               onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
               disabled={!!editing}
               className="border rounded px-3 py-2 text-sm"
             />
             <input
-              placeholder="Ten hien thi *"
+              placeholder={t("category.namePlaceholder", "Display name *")}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="border rounded px-3 py-2 text-sm"
@@ -139,7 +139,7 @@ export function CategoryManager() {
                 checked={form.hasModel}
                 onChange={(e) => setForm({ ...form, hasModel: e.target.checked })}
               />
-              Co chon model
+              {t("category.hasModel", "Has model selection")}
             </label>
           </div>
           <div className="flex gap-2 mt-3">
@@ -147,37 +147,37 @@ export function CategoryManager() {
               onClick={save}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              {editing ? "Cap nhat" : "Tao moi"}
+              {editing ? t("common.update", "Update") : t("common.create", "Create")}
             </button>
             <button
               onClick={resetForm}
               className="px-4 py-2 bg-gray-200 rounded"
             >
-              Huy
+              {t("common.cancel", "Cancel")}
             </button>
           </div>
         </div>
       )}
 
       {loading ? (
-        <div className="p-8 text-center text-gray-500">Dang tai...</div>
+        <div className="p-8 text-center text-gray-500">{t("common.loading", "Loading...")}</div>
       ) : (
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
-                <th className="text-left p-3">Code</th>
-                <th className="text-left p-3">Ten</th>
-                <th className="text-left p-3">Model</th>
-                <th className="text-center p-3">So model</th>
-                <th className="text-right p-3">Thao tac</th>
+                <th className="text-left p-3">{t("category.code", "Code")}</th>
+                <th className="text-left p-3">{t("category.name", "Name")}</th>
+                <th className="text-left p-3">{t("category.model", "Model")}</th>
+                <th className="text-center p-3">{t("category.modelCount", "Model count")}</th>
+                <th className="text-right p-3">{t("common.actions", "Actions")}</th>
               </tr>
             </thead>
             <tbody>
               {categories.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center text-gray-500">
-                    Chua co danh muc
+                    {t("category.empty", "No categories")}
                   </td>
                 </tr>
               ) : (
@@ -191,11 +191,11 @@ export function CategoryManager() {
                     <td className="p-3">
                       {c.hasModel ? (
                         <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                          Co
+                          {t("common.yes", "Yes")}
                         </span>
                       ) : (
                         <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                          Khong
+                          {t("common.no", "No")}
                         </span>
                       )}
                     </td>
