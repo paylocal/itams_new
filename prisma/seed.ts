@@ -4,7 +4,20 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  // 1. Seed default password policy
+  // 1. Seed default languages
+  const defaultLanguages = [
+    { code: "vi", name: "Tiếng Việt", flag: "🇻🇳", isActive: true, isDefault: true },
+    { code: "en", name: "English", flag: "🇬🇧", isActive: true, isDefault: false },
+  ];
+  for (const lang of defaultLanguages) {
+    await prisma.language.upsert({
+      where: { code: lang.code },
+      update: { name: lang.name, flag: lang.flag, isActive: lang.isActive },
+      create: lang,
+    });
+  }
+
+  // 2. Seed default password policy
   await prisma.passwordPolicy.upsert({
     where: { id: "default" },
     update: {},
@@ -22,7 +35,7 @@ async function main() {
     },
   });
 
-  // 2. Seed default user groups
+  // 3. Seed default user groups
   const groups = [
     { code: "EMPLOYEE", name: "Nhan vien", level: 1, managesLevel: null },
     { code: "LEADER", name: "Nhom Leader", level: 2, managesLevel: 1 },
@@ -42,7 +55,7 @@ async function main() {
     groupMap[g.code] = upserted.id;
   }
 
-  // 3. Seed workflow rules based on amount thresholds in USD
+  // 4. Seed workflow rules based on amount thresholds in USD
   const workflowRules = [
     { name: "Leader approval", value: 0, requiredLevel: 2, groupCode: "LEADER", order: 1 },
     { name: "Manager approval", value: 1000, requiredLevel: 3, groupCode: "MANAGER", order: 2 },

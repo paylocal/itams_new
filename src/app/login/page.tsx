@@ -30,7 +30,7 @@ export default function LoginPage() {
     Array.isArray(languages) && languages.length > 0
       ? languages
       : [
-          { code: "vi", name: "Tieng Viet", flag: "🇻🇳" },
+          { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
           { code: "en", name: "English", flag: "🇬🇧" },
         ];
 
@@ -149,22 +149,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {process.env.NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS === "true" && (
-          <div className="mt-6 p-3 bg-gray-50 rounded-lg text-xs text-gray-600">
-            <p className="font-semibold mb-1">{t("auth.testAccounts", "Demo accounts")} (Password123!):</p>
-            <div className="grid grid-cols-2 gap-1">
-              <p>👑 admin@itams.local</p>
-              <p>🎯 leader@itams.local</p>
-              <p>👔 manager@itams.local</p>
-              <p>📋 bod@itams.local</p>
-              <p>💻 it@itams.local</p>
-              <p>🛒 purchase@itams.local</p>
-              <p>👤 employee@itams.local</p>
-            </div>
-          </div>
-        )}
-
-        <p className="text-xs text-gray-400 text-center mt-4">
+        <p className="text-xs text-gray-400 text-center mt-6">
           © {new Date().getFullYear()} ITAMS
         </p>
       </div>

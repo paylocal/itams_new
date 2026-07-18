@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { defaultTranslations } from "@/lib/default-translations";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { locale: string } }
 ) {
+  const locale = params.locale;
   const language = await prisma.language.findFirst({
-    where: { code: params.locale, isActive: true },
+    where: { code: locale, isActive: true },
     include: { translations: true },
   });
 
@@ -25,21 +26,23 @@ export async function GET(
       include: { translations: true },
     }));
 
-  if (!language && !defaultLanguage) return NextResponse.json({});
-
   const dict: Record<string, string> = {};
 
-  // Start with default language so missing keys in any locale still render valid text.
+  // 1. Start with in-code defaults for the requested locale, fallback to default locale.
+  const fallbackLocale = defaultTranslations[locale] ? locale : "vi";
+  Object.assign(dict, defaultTranslations[fallbackLocale] || defaultTranslations["vi"] || {});
+
+  // 2. Override with default language from DB (admin customizations).
   if (defaultLanguage) {
     defaultLanguage.translations.forEach((t) => {
-      dict[t.key] = t.value;
+      if (t.value) dict[t.key] = t.value;
     });
   }
 
-  // Override with requested locale values.
+  // 3. Override with requested locale values from DB.
   if (language) {
     language.translations.forEach((t) => {
-      dict[t.key] = t.value;
+      if (t.value) dict[t.key] = t.value;
     });
   }
 
