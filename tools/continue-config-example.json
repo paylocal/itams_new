@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "apply-diff": {
+      "command": "python",
+      "args": ["D:/Project/itams-new-clean/tools/mcp_apply_diff.py"]
+    }
+  }
+}

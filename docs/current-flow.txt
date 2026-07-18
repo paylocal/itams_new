@@ -1,0 +1,168 @@
+﻿===============================================
+FLOW HIỆN TẠI - TỪ TẠO YÊU CẦU ĐẾN BÀN GIAO
+Phần mềm: ITAMS (đề xuất đổi thành Quản lý yêu cầu và tài sản)
+===============================================
+
+1. TỔNG QUAN
+--------------
+Hệ thống hiện tại quản lý yêu cầu tài sản IT (laptop, máy in, phụ kiện...).
+Có 6 vai trò chính:
+  - EMPLOYEE: Nhân viên tạo yêu cầu, nhận tài sản, ký bàn giao.
+  - LEAD: Duyệt cấp đầu tiên (trưởng nhóm/leader).
+  - MANAGER: Duyệt cấp quản lý bộ phận.
+  - BOD: Duyệt cấp ban giám đốc (cho yêu cầu giá trị lớn).
+  - IT_STAFF: Kiểm tra kho, nhập kho, bàn giao tài sản.
+  - PURCHASING: Tạo đơn mua hàng (PO), theo dõi giao hàng.
+  - ADMIN: Quản trị hệ thống, cấu hình luồng duyệt.
+
+2. TẠO YÊU CẦU (Request)
+------------------------
+Người thực hiện: EMPLOYEE
+Đường dẫn: /requests/new
+Dữ liệu nhập:
+  - Tiêu đề yêu cầu (title)
+  - Lý do (reason)
+  - Mức độ ưu tiên (priority): LOW / NORMAL / HIGH / URGENT
+  - Danh sách hàng cần xin:
+      + Danh mục (categoryId)
+      + Model thiết bị (deviceModelId) - tùy chọn
+      + Tên tùy chỉnh (customName) - nếu không có model
+      + Số lượng (quantity)
+      + Đơn giá ước tính (unitPrice)
+      + Ghi chú kỹ thuật (specs)
+Hệ thống tự động:
+  - Tính tổng tiền VND và quy đổi USD theo tỷ giá.
+  - Xác định các cấp duyệt cần thiết dựa trên ngưỡng giá (WorkflowRule).
+  - Sinh mã yêu cầu: REQ-YYYY-XXXXX.
+  - Gán người duyệt cho từng bước (lấy người đầu tiên trong nhóm duyệt).
+  - Trạng thái ban đầu:
+      + PENDING_LEADER (nếu có duyệt LEADER)
+      + PENDING_MANAGER (nếu không có LEADER nhưng có MANAGER)
+      + PENDING_BOD (nếu chỉ có BOD)
+      + PENDING_IT (nếu không cần cấp nào)
+  - Gửi email thông báo đến người duyệt bước 1.
+
+3. PHÊ DUYỆT (Approval)
+----------------------
+Đường dẫn: /approvals
+Người thực hiện: LEAD, MANAGER, BOD (theo bước), ADMIN (bypass quyền).
+Xử lý:
+  - Người duyệt hiện tại (currentStep) có thể chọn APPROVED hoặc REJECTED.
+  - REJECTED:
+      + Bắt buộc nhập lý do.
+      + Trạng thái yêu cầu quay về DRAFT.
+      + Gửi email cho người tạo.
+  - APPROVED:
+      + Ghi nhận người duyệt, thời gian, ghi chú.
+      + Chuyển sang bước kế tiếp (nextStep).
+      + Cập nhật trạng thái theo nhóm người duyệt kế tiếp:
+          . LEADER -> PENDING_LEADER
+          . MANAGER -> PENDING_MANAGER
+          . BOD -> PENDING_BOD
+          . IT -> PENDING_STOCK_CHECK
+      + Nếu hết bước -> chuyển sang PENDING_STOCK_CHECK.
+      + Gửi email thông báo cho người duyệt kế tiếp hoặc IT/requester.
+
+4. KIỂM TRA KHO (Stock Check)
+-----------------------------
+Người thực hiện: IT_STAFF / thành viên nhóm IT / ADMIN
+Điều kiện: Yêu cầu ở trạng thái PENDING_STOCK_CHECK.
+Kết quả:
+  - Đủ hàng (hasStock = true):
+      + Trạng thái -> COMPLETED.
+      + Gửi email cho requester: liên hệ IT để nhận và ký bàn giao.
+  - Thiếu hàng (hasStock = false):
+      + Trạng thái -> ORDERED.
+      + Gửi email cho nhóm PURCHASING: cần tạo PO để mua hàng.
+
+5. TẠO ĐƠN MUA HÀNG (Purchase Order - PO)
+------------------------------------------
+Người thực hiện: PURCHASING / ADMIN
+Đường dẫn: /purchase-orders/select-items hoặc /purchase-orders/create
+Dữ liệu nhập:
+  - Tên nhà cung cấp (supplierName)
+  - Liên hệ nhà cung cấp (supplierContact, supplierPhone)
+  - Ngày dự kiến giao (expectedDate)
+  - Ghi chú (notes)
+  - File đính kèm PO (poFile) - tùy chọn
+  - Danh sách requestItemId cần mua
+Hệ thống tự động:
+  - Sinh mã PO: PO-YYYY-XXXXX.
+  - Tính tổng tiền PO.
+  - Liên kết PO với các yêu cầu (requests) tương ứng.
+  - Tạo POItem cho từng request item.
+  - Kiểm tra nếu tất cả items của một yêu cầu đã có PO và yêu cầu đang ORDERED -> tự động chuyển yêu cầu sang COMPLETED.
+
+6. NHẬN HÀNG VỀ KHO (Receive PO)
+-------------------------------
+Người thực hiện: IT_STAFF / thành viên nhóm IT / ADMIN
+Đường dẫn: /purchase-orders/[id]/receive
+Xử lý:
+  - Cập nhật PO -> DELIVERED.
+  - Ghi nhận ngày nhận hàng thực tế (actualDate).
+  - Tạo tài sản (Asset) từ PO:
+      + Mỗi quantity tạo 1 asset riêng.
+      + Sinh mã tài sản (assetTag) theo danh mục.
+      + Sinh QR code.
+      + Trạng thái: IN_STOCK.
+  - Kiểm tra nếu tất cả items của yêu cầu đã được nhập đủ số lượng -> cập nhật yêu cầu -> DELIVERED.
+
+7. BÀN GIAO TÀI SẢN (Handover)
+-----------------------------
+Người thực hiện: IT_STAFF / thành viên nhóm IT / ADMIN
+Đường dẫn: /handovers/new
+Dữ liệu nhập:
+  - Yêu cầu (requestId)
+  - Nhân viên nhận (employeeId)
+  - Ngày bàn giao (handoverDate)
+  - Danh sách tài sản (assetIds)
+Hệ thống tự động:
+  - Sinh mã biên bản: BBBG-YYYY-XXXXX.
+  - Trạng thái ban đầu: PENDING_EMPLOYEE_SIGN.
+  - Tạo HandoverItem cho từng tài sản.
+
+8. KÝ BÀN GIAO (Sign Handover)
+------------------------------
+Đường dẫn: /handovers/[id]
+Bước 1 - Nhân viên ký (EMPLOYEE):
+  - Chỉ nhân viên trong biên bản được ký.
+  - Trạng thái chuyển -> PENDING_IT_SIGN.
+Bước 2 - IT ký (IT_STAFF):
+  - Cập nhật biên bản -> COMPLETED.
+  - Cập nhật tài sản:
+      + currentHolderId = employeeId
+      + status = ASSIGNED
+      + assignedDate = now
+      + location = phòng ban nhân viên
+  - Ghi lịch sử tài sản (assetHistory).
+  - Cập nhật yêu cầu -> COMPLETED (nếu chưa hoàn thành).
+
+9. CÁC TRẠNG THÁI YÊU CẦU
+--------------------------
+  DRAFT                 - Yêu cầu bị từ chối, chỉnh sửa lại
+  PENDING_LEADER        - Chờ Leader duyệt
+  PENDING_MANAGER       - Chờ Manager duyệt
+  PENDING_BOD           - Chờ BOD duyệt
+  PENDING_STOCK_CHECK   - Chờ IT kiểm tra kho
+  ORDERED               - Đã chuyển sang mua hàng
+  DELIVERED             - Hàng đã về kho
+  COMPLETED             - Đã bàn giao / hoàn tất
+  REJECTED              - Bị từ chối (hiện dùng DRAFT)
+
+10. CÁC VẤN ĐỀ CẦN XEM XÉT
+---------------------------
+  - Tên phần mềm "ITAMS" cần đổi thành "Quản lý yêu cầu và tài sản" cho phù hợp toàn công ty.
+  - Flow hiện tại tập trung IT asset; nếu mở rộng cho toàn công ty cần thêm loại yêu cầu (văn phòng phẩm, dịch vụ, tài sản chung...).
+  - Quy tắc duyệt chỉ dựa trên số tiền; có thể cần thêm điều kiện theo danh mục, bộ phận, số lượng.
+  - Khi yêu cầu đủ hàng trong kho, hệ thống chuyển COMPLETED nhưng chưa tự động tạo biên bản bàn giao; IT phải tạo tay.
+  - Không có chức năng thu hồi tài sản, bảo trì, thanh lý.
+  - PO chỉ liên kết 1 chiều với requestItem; chưa rõ ràng việc mua một phần.
+
+11. ĐỀ XUẤT ĐIỀU CHỈNH (chờ xác nhận)
+-------------------------------------
+  - Đổi tên phần mềm trong giao diện, email, báo cáo.
+  - Bổ sung loại yêu cầu (requestType) để phân biệt: mua mới, cấp phát từ kho, sửa chữa, thu hồi...
+  - Cải tiến luồng duyệt linh hoạt hơn (theo bộ phận + số tiền + loại tài sản).
+  - Tự động tạo biên bản bàn giao khi đủ hàng trong kho.
+  - Bổ sung dashboard theo bộ phận, theo tháng.
+  - Thêm chức năng thu hồi, bảo trì, thanh lý tài sản.

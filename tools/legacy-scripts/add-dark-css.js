@@ -1,0 +1,81 @@
+const fs = require("fs");
+const path = require("path");
+
+const file = path.join(__dirname, "src", "app", "globals.css");
+let content = fs.readFileSync(file, "utf-8");
+
+const darkCSS = `
+
+/* Dark mode */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.dark .bg-white {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+.dark .bg-gray-50 {
+  background: #0f172a;
+}
+
+.dark .bg-gray-100 {
+  background: #334155;
+}
+
+.dark .text-gray-500 {
+  color: #94a3b8;
+}
+
+.dark .text-gray-600 {
+  color: #cbd5e1;
+}
+
+.dark .text-gray-700 {
+  color: #e2e8f0;
+}
+
+.dark .border-gray-200 {
+  border-color: #334155;
+}
+
+.dark .border {
+  border-color: #334155;
+}
+
+.dark .shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+.dark .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+.dark .hover\\:bg-gray-50:hover {
+  background: #1e293b;
+}
+
+.dark .hover\\:bg-gray-100:hover {
+  background: #334155;
+}
+`;
+
+if (!content.includes(".dark {")) {
+  content = content + darkCSS;
+  fs.writeFileSync(file, content);
+  console.log("Added dark mode CSS");
+}

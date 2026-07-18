@@ -1,0 +1,63 @@
+# Model Selection Rules for ITAMS Project
+
+## Primary: Ollama Cloud (Kimi K2.7 Code) ☁️
+**Use when:**
+- Reading project structure or multiple files (>3 files)
+- Architecture/design questions
+- Analyzing complex logic (workflow, email, exchange rate)
+- Refactoring large modules
+- Context size > 50K tokens
+- Need 256K context window
+
+**Avoid when:**
+- Credits < 20% remaining (check via PowerShell script)
+- Network is slow/unstable
+- Simple single-line edits
+
+## Secondary: Ollama Local (Qwen 2.5 Coder 3b) 🤖
+**Use when:**
+- Simple code edits (single file, <100 lines changed)
+- Bug fixes with clear description
+- Quick Q&A about specific code
+- File creation with clear spec
+- Context < 50K tokens
+- Ollama Cloud unavailable/slow
+
+**Avoid when:**
+- Need to understand multiple files at once
+- Complex refactoring across modules
+
+## Tertiary: GitHub Copilot Pro ⚡
+**Use when:**
+- Inline completion while typing
+- Quick chat (no tool calls needed)
+- Short single-line questions
+- No file reading/writing required
+
+**Avoid when:**
+- Need to read/edit files
+- Complex multi-step tasks
+
+## Automatic Switching Rules
+
+### Switch FROM Ollama Cloud TO Local when:
+- 2 consecutive failures/timeouts from Cloud
+- Cloud response time > 30 seconds
+- User mentions "credits" or "token limit"
+- Daily Cloud usage > 80% of plan
+
+### Switch FROM Local TO Cloud when:
+- Local model gives wrong/incomplete answer 2+ times
+- Need to read >3 files in one task
+- Task involves architecture decisions
+- User asks "analyze" or "review" large code
+
+### Switch TO Copilot when:
+- Task is just inline completion
+- User is typing and wants quick suggestion
+- No tools needed
+
+## Token Budget Tracking
+- Ollama Cloud: ~80% of monthly credits
+- Local: unlimited (free)
+- Copilot Pro: 300 premium requests/month (check usage)

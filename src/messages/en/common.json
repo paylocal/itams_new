@@ -1,0 +1,61 @@
+{
+  "common": {
+    "appName": "Quản lý yêu cầu và tài sản",
+    "welcome": "Welcome",
+    "login": "Login",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading...",
+    "total": "Total",
+    "status": "Status",
+    "actions": "Actions",
+    "back": "Back"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "requests": "Requests",
+    "createRequest": "Create Request",
+    "approvals": "Approvals",
+    "assets": "Assets",
+    "purchaseOrders": "Purchase Orders",
+    "categories": "Categories",
+    "suppliers": "Suppliers",
+    "users": "Users",
+    "userGroups": "User Groups",
+    "handovers": "Handovers",
+    "reports": "Reports"
+  },
+  "roles": {
+    "ADMIN": "Administrator",
+    "MANAGER": "Manager",
+    "LEAD": "Lead",
+    "IT_STAFF": "IT Staff",
+    "PURCHASING": "Purchasing",
+    "EMPLOYEE": "Employee"
+  },
+  "status": {
+    "DRAFT": "Draft",
+    "PENDING_MANAGER": "Pending Manager",
+    "PENDING_LEAD": "Pending Lead",
+    "PENDING_IT": "Pending IT",
+    "ORDERED": "Ordered",
+    "COMPLETED": "Completed",
+    "REJECTED": "Rejected"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "totalRequests": "Total Requests",
+    "pending": "Pending",
+    "completed": "Completed",
+    "myAssets": "My Assets"
+  },
+  "po": {
+    "create": "Create PO from Requests"
+  }
+}
