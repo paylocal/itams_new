@@ -92,13 +92,13 @@ async function main() {
   const passwordHash = await bcrypt.hash(defaultPassword, 10);
 
   const demoUsers = [
-    { email: "admin@itams.local", name: "Administrator", role: "ADMIN", groups: ["IT"] },
-    { email: "leader@itams.local", name: "Leader User", role: "LEAD", groups: ["LEADER"] },
-    { email: "manager@itams.local", name: "Manager User", role: "MANAGER", groups: ["MANAGER"] },
-    { email: "bod@itams.local", name: "BOD User", role: "ADMIN", groups: ["BOD"] },
-    { email: "it@itams.local", name: "IT Staff", role: "IT_STAFF", groups: ["IT"] },
-    { email: "purchase@itams.local", name: "Purchasing Staff", role: "PURCHASING", groups: ["PURCHASING"] },
-    { email: "employee@itams.local", name: "Employee One", role: "EMPLOYEE", groups: ["EMPLOYEE"] },
+    { email: "admin@ql-yc-ts.local", name: "Administrator", role: "ADMIN", groups: ["IT"] },
+    { email: "leader@ql-yc-ts.local", name: "Leader User", role: "LEAD", groups: ["LEADER"] },
+    { email: "manager@ql-yc-ts.local", name: "Manager User", role: "MANAGER", groups: ["MANAGER"] },
+    { email: "bod@ql-yc-ts.local", name: "BOD User", role: "ADMIN", groups: ["BOD"] },
+    { email: "it@ql-yc-ts.local", name: "IT Staff", role: "IT_STAFF", groups: ["IT"] },
+    { email: "purchase@ql-yc-ts.local", name: "Purchasing Staff", role: "PURCHASING", groups: ["PURCHASING"] },
+    { email: "employee@ql-yc-ts.local", name: "Employee One", role: "EMPLOYEE", groups: ["EMPLOYEE"] },
   ];
 
   for (const u of demoUsers) {

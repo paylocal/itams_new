@@ -5,7 +5,7 @@ import { prisma } from "./prisma";
 import { getActivePasswordPolicy, isPasswordExpired } from "./password-policy";
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET || "itams-secret-key-12345",
+  secret: process.env.NEXTAUTH_SECRET || "qlyc-ts-secret-key-12345",
   providers: [
     CredentialsProvider({
       name: "credentials",
